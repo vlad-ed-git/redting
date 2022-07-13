@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:redting/core/local_storage.dart';
+import 'package:redting/core/data/local_storage.dart';
 
 import 'firebase_options.dart';
 
@@ -17,7 +17,7 @@ class MainAppInit {
 
   static Future<bool> _initLocalStorage() async {
     try {
-      await CoreLocalStorage.init();
+      await LocalStorage.init();
       return true;
     } catch (e) {
       return false;

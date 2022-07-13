@@ -5,7 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0343c0f-6e2a-4b70-94b8-be5d411a5c67" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/components/app_name_std_style.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/data/hive_names.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/data/hive_type_ids.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/platform/network_info.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/utils/service_result.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/local/auth_user_hive.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/local/local_auth.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/remote/fire_auth.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/remote/remote_auth.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/data/entities/auth_user_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/data/entities/auth_user_entity.g.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/data/repositories/auth_repository_impl.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/domain/models/auth_user.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/domain/repositories/auth_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/domain/use_cases/get_auth_user.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/bloc/auth_user_bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/bloc/auth_user_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/bloc/auth_user_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/res/dimens.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/local_storage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/data/local_storage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/splash/presentation/pages/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/presentation/pages/splash_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main_init.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main_init.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/strings.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/widget_test.dart" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,29 +50,47 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="2BtmsAUyiRQ2R5y14rbO1Hd4sKJ" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/features/auth/data/entities" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/features/auth/data/entities" />
+      <recent name="$PROJECT_DIR$/lib/features/auth" />
       <recent name="$PROJECT_DIR$/lib/features/splash" />
       <recent name="$PROJECT_DIR$/lib/features/profile" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/features/auth/presentation/state" />
       <recent name="$PROJECT_DIR$/lib/core" />
+      <recent name="$PROJECT_DIR$/lib/core/data" />
+      <recent name="$PROJECT_DIR$/lib/features/auth/presentation/pages" />
+      <recent name="$PROJECT_DIR$/lib/core/domain" />
     </key>
   </component>
   <component name="RunManager">
@@ -63,5 +109,20 @@
       <updated>1657733964576</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
