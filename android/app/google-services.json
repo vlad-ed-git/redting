@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "309040849360",
+    "project_id": "redting-d5504",
+    "storage_bucket": "redting-d5504.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309040849360:android:e67558df37e022f4bc99d5",
+        "android_client_info": {
+          "package_name": "com.redting.developers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "309040849360-lg9rimchd162dtq9h4v3tl7urjfjjv1p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5Fs1bokNE96VvZoLSKIhfa88lcm9-w8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "309040849360-lg9rimchd162dtq9h4v3tl7urjfjjv1p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "309040849360-dp5v0231nl0abmm6q9amsr5o6bt0vhmj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.redting"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309040849360:android:99ec9b6a37f50e1ebc99d5",
+        "android_client_info": {
+          "package_name": "com.redting_developers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "309040849360-lg9rimchd162dtq9h4v3tl7urjfjjv1p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5Fs1bokNE96VvZoLSKIhfa88lcm9-w8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "309040849360-lg9rimchd162dtq9h4v3tl7urjfjjv1p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "309040849360-dp5v0231nl0abmm6q9amsr5o6bt0vhmj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.redting"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
