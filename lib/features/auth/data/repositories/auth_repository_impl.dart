@@ -5,8 +5,8 @@ import 'package:redting/features/auth/domain/models/auth_user.dart';
 import 'package:redting/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final RemoteAuth remoteAuth;
-  final LocalAuth localAuth;
+  final RemoteAuthSource remoteAuth;
+  final LocalAuthSource localAuth;
 
   AuthRepositoryImpl({
     required this.remoteAuth,
@@ -14,11 +14,13 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<AuthUser?> getAuthUser() async {
-    RemoteServiceResult result = remoteAuth.getAuthUser();
+  Future<OperationResult> getAuthUser() async {
+    OperationResult result = remoteAuth.getAuthUser();
+    if (result.errorOccurred) return result;
+
     if (result.data is AuthUser) {
       await localAuth.cacheAuthUser(authUser: result.data);
     }
-    return localAuth.getAuthUser();
+    return OperationResult(data: localAuth.getAuthUser());
   }
 }

@@ -1,11 +1,11 @@
-import 'package:redting/features/auth/domain/models/auth_user.dart';
+import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/auth/domain/repositories/auth_repository.dart';
 
 class GetAuthenticatedUserCase {
   final AuthRepository repository;
-  GetAuthenticatedUserCase(this.repository);
+  GetAuthenticatedUserCase({required this.repository});
 
-  Future<AuthUser?> call() async {
+  Future<OperationResult> execute() async {
     return await repository.getAuthUser();
   }
 }

@@ -1,5 +1,5 @@
-import 'package:redting/features/auth/domain/models/auth_user.dart';
+import 'package:redting/core/utils/service_result.dart';
 
 abstract class AuthRepository {
-  Future<AuthUser?> getAuthUser();
+  Future<OperationResult> getAuthUser();
 }

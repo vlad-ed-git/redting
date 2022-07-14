@@ -4,9 +4,9 @@ import 'package:redting/res/routes.dart';
 import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MainAppInit.init();
+  await MainAppInit.initApp();
   //todo - app check before release
   runApp(const MyApp());
 }
