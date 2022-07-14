@@ -19,3 +19,12 @@ var fiveColorOpaqueGradient = LinearGradient(
       appTheme.colorScheme.inversePrimary.withOpacity(0.8),
       appTheme.colorScheme.inversePrimary,
     ]);
+
+var threeColorOpaqueGradientTB = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      appTheme.colorScheme.inversePrimary.withOpacity(0.1),
+      appTheme.colorScheme.inversePrimary.withOpacity(0.4),
+      appTheme.colorScheme.inversePrimary.withOpacity(0.6),
+    ]);

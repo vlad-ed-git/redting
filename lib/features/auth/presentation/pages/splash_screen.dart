@@ -8,6 +8,7 @@ import 'package:redting/features/auth/di/auth_di.dart';
 import 'package:redting/features/auth/presentation/state/auth_user_bloc.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
+import 'package:redting/res/routes.dart';
 import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
@@ -21,20 +22,25 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return ScreenContainer(
-        child: Scaffold(
-      extendBodyBehindAppBar: true,
-      body: Container(
-        decoration: BoxDecoration(gradient: fiveColorOpaqueGradient),
-        child: Padding(
-            padding: const EdgeInsets.all(paddingMd),
-            child: GlassCard(
-              constraints: const BoxConstraints(
-                  minWidth: 300, maxWidth: 300, minHeight: 200),
-              child: BlocProvider(
-                  lazy: false,
-                  create: (BuildContext blocProviderContext) => authDiInstance<
-                      AuthUserBloc>(), // provide the local bloc instance
+    return BlocProvider(
+      lazy: false,
+      create: (BuildContext blocProviderContext) =>
+          authDiInstance<AuthUserBloc>(),
+      child: BlocListener<AuthUserBloc, AuthUserState>(
+        listener: (context, state) {
+          if (state is LoadedAuthUserState) _goToHome();
+          if (state is NoAuthUserFoundState) _goToLogin();
+        },
+        child: ScreenContainer(
+            child: Scaffold(
+          extendBodyBehindAppBar: true,
+          body: Container(
+            decoration: BoxDecoration(gradient: fiveColorOpaqueGradient),
+            child: Padding(
+                padding: const EdgeInsets.all(paddingMd),
+                child: GlassCard(
+                  constraints: const BoxConstraints(
+                      minWidth: 300, maxWidth: 300, minHeight: 200),
                   child: BlocBuilder<AuthUserBloc, AuthUserState>(
                       builder: (blocContext, state) {
                     return Column(
@@ -53,13 +59,13 @@ class _SplashScreenState extends State<SplashScreen> {
                             _getLoadingIndicator(),
                           if (state is ErrorLoadingAuthUserState)
                             _getErrorTxt(),
-                          if (state is LoadedAuthUserState) _goToHome(),
-                          if (state is NoAuthUserFoundState) _goToLogin()
                         ]);
-                  })),
-            )),
+                  }),
+                )),
+          ),
+        )),
       ),
-    ));
+    );
   }
 
   Widget _initialize(BuildContext blocContext) {
@@ -94,13 +100,12 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Widget _goToLogin() {
-    //todo navigate away
-    return const SizedBox.shrink();
+  //navigation
+  _goToLogin() {
+    Navigator.pushNamed(context, loginRoute);
   }
 
-  Widget _goToHome() {
+  _goToHome() {
     //todo navigate away
-    return const SizedBox.shrink();
   }
 }

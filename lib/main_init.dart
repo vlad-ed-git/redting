@@ -31,4 +31,8 @@ class MainAppInit {
   static void _initDependencies() {
     auth_di.init();
   }
+
+  static void dispose() {
+    LocalStorage.dispose();
+  }
 }

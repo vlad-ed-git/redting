@@ -1,40 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0343c0f-6e2a-4b70-94b8-be5d411a5c67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/core/components/cards/glass_card.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/components/gradients/primary_gradients.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/core/components/screens/screen_container.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/di/auth_di.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/domain/use_cases/auth_use_cases.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/state/auth_user_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/state/auth_user_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/state/auth_user_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/components/selectors/country_selector.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/components/text_input/outlined_txtfield.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/auth/presentation/pages/login_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/res/countries.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/core/components/app_name_std_style.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/components/text/app_name_std_style.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/core/data/local_storage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/data/local_storage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/core/utils/service_result.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/utils/service_result.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/data/data_sources/local/auth_user_hive.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/local/auth_user_hive.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/data/data_sources/local/local_auth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/local/local_auth.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/data/data_sources/remote/fire_auth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/remote/fire_auth.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/data/data_sources/remote/remote_auth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/remote/remote_auth.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/data/repositories/auth_repository_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/data/repositories/auth_repository_impl.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/domain/repositories/auth_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/domain/repositories/auth_repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/domain/use_cases/get_auth_user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/domain/use_cases/get_auth_user.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/presentation/bloc/auth_user_bloc.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/presentation/bloc/auth_user_event.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/presentation/bloc/auth_user_state.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/components/gradients/primary_gradients.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/components/gradients/primary_gradients.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/auth/presentation/pages/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/presentation/pages/splash_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main_init.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main_init.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/res/fonts.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/fonts.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/dimens.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/dimens.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/routes.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/res/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/strings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
