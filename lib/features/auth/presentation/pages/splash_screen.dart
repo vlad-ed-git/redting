@@ -55,8 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                           if (state is InitialAuthUserState)
                             _initialize(blocContext),
-                          if (state is LoadingAuthUserState)
-                            _getLoadingIndicator(),
+                          if (state is LoadingState) _getLoadingIndicator(),
                           if (state is ErrorLoadingAuthUserState)
                             _getErrorTxt(),
                         ]);
@@ -102,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   //navigation
   _goToLogin() {
-    Navigator.pushNamed(context, loginRoute);
+    Navigator.pushReplacementNamed(context, loginRoute);
   }
 
   _goToHome() {
