@@ -53,6 +53,11 @@ class UpdatingVerificationVideoFailedState extends UserProfileState {
 
 class LoadingVerificationVideoCodeState extends UserProfileState {}
 
+class LoadingVerificationVideoCodeFailedState extends UserProfileState {
+  final String errMsg;
+  LoadingVerificationVideoCodeFailedState(this.errMsg);
+}
+
 class LoadedVerificationVideoCodeState extends UserProfileState {
   final String verificationVideoCode;
   LoadedVerificationVideoCodeState(this.verificationVideoCode);

@@ -17,6 +17,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       : super(UserProfileInitialState()) {
     on<LoadUserProfileEvent>(_onLoadUserProfileEvent);
     on<ChangeProfilePhotoEvent>(_onChangeProfilePhotoEvent);
+    on<ChangeVerificationVideoEvent>(_onChangeVerificationVideoEvent);
+    on<GetVerificationVideoCodeEvent>(_onGetVerificationVideoCodeEvent);
   }
 
   FutureOr<void> _onLoadUserProfileEvent(
@@ -35,6 +37,37 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       emit(UpdatingProfilePhotoFailedState(result.errorMessage!));
     } else {
       emit(UpdatedProfilePhotoState(result.data as String));
+    }
+  }
+
+  FutureOr<void> _onChangeVerificationVideoEvent(
+      ChangeVerificationVideoEvent event,
+      Emitter<UserProfileState> emit) async {
+    emit(UpdatingVerificationVideoState(event.videoFile));
+
+    OperationResult result =
+        await profileUseCases.uploadVerificationVideoUseCase.execute(
+      file: event.videoFile,
+    );
+    if (result.errorOccurred) {
+      emit(UpdatingVerificationVideoFailedState(result.errorMessage!));
+    } else {
+      emit(UpdatedVerificationVideoState(result.data));
+    }
+  }
+
+  FutureOr<void> _onGetVerificationVideoCodeEvent(
+      GetVerificationVideoCodeEvent event,
+      Emitter<UserProfileState> emit) async {
+    emit(LoadingVerificationVideoCodeState());
+
+    OperationResult result =
+        await profileUseCases.generateVideoVerificationCodeUseCase.execute();
+
+    if (result.errorOccurred) {
+      emit(LoadingVerificationVideoCodeFailedState(result.errorMessage!));
+    } else {
+      emit(LoadedVerificationVideoCodeState(result.data));
     }
   }
 }

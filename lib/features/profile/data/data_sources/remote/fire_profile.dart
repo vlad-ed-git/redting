@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/res/string_arrays.dart';
 import 'package:redting/res/strings.dart';
 
 const String userProfileCollection = "users";
@@ -59,30 +60,6 @@ class FireProfile implements RemoteProfileDataSource {
   @override
   Future<OperationResult> generateVerificationWord() async {
     try {
-      final List<String> vowels = ['A', 'E', 'I', 'O', 'U'];
-      final List<String> consonants = [
-        'B',
-        'C',
-        'D',
-        'F',
-        'G',
-        'H',
-        'J',
-        'K',
-        'L',
-        'M',
-        'N',
-        'P',
-        'Q',
-        'R',
-        'S',
-        'T',
-        'V',
-        'X',
-        'Z',
-        'W',
-        'Y'
-      ];
       final List<int> possibleWordsLengths = [6, 8, 10]; //must be evens
 
       final random = Random();
@@ -93,11 +70,11 @@ class FireProfile implements RemoteProfileDataSource {
       while (verificationWord.length < randomLength) {
         String randomConsonant = consonants[random.nextInt(consonants.length)];
         String randomVowel = vowels[random.nextInt(vowels.length)];
-        verificationWord = randomConsonant + randomVowel;
+        verificationWord = "$verificationWord$randomConsonant$randomVowel";
       }
       return OperationResult(data: verificationWord);
     } catch (e) {
-      return OperationResult(errorOccurred: true);
+      return OperationResult(errorOccurred: true, errorMessage: "$e");
     }
   }
 

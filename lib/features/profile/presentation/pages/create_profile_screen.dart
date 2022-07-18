@@ -43,6 +43,18 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   final int twentyFourYears = 365 * 24;
   final int hundredTwentyYears = 365 * 120;
 
+  //PROFILE PHOTO
+  String? _profilePhoto;
+  File? _selectedLocalPhotoFile;
+  bool _isUploadingPhoto = false;
+
+  //VERIFICATION VIDEO
+  String? _verificationCode;
+  bool _loadingVerificationCode = false;
+  bool _isUploadingVideo = false;
+  String? _profileVerificationVideo;
+  File? _createdLocalVideoFile;
+
   @override
   void initState() {
     _nameController = TextEditingController();
@@ -52,11 +64,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     _bDayController = TextEditingController();
     super.initState();
   }
-
-  //PROFILE PHOTO
-  String? _profilePhoto;
-  File? _selectedLocalPhotoFile;
-  bool _isUploadingPhoto = false;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +82,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             listener: _listenToStateChange,
             child: BlocBuilder<UserProfileBloc, UserProfileState>(
                 builder: (blocContext, state) {
+              if (state is UserProfileInitialState) {
+                _onInitState(blocContext);
+              }
               return ScreenContainer(
                   child: Scaffold(
                       extendBodyBehindAppBar: true,
@@ -133,7 +143,22 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                         const SizedBox(
                                           height: paddingStd,
                                         ),
-                                        VerificationVideo(),
+                                        VerificationVideo(
+                                          loadingVerificationCode:
+                                              _loadingVerificationCode,
+                                          isUploadingVideo: _isUploadingVideo,
+                                          verificationCode: _verificationCode,
+                                          localVideoFile:
+                                              _createdLocalVideoFile,
+                                          profileVerificationVideo:
+                                              _profileVerificationVideo,
+                                          onChanged:
+                                              (File? createdLocalVideoFile) {
+                                            _onNewVerificationVideo(
+                                                createdLocalVideoFile,
+                                                blocContext);
+                                          },
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -193,6 +218,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   }
 
   /// STATE CHANGE
+  void _onInitState(BuildContext blocContext) {
+    //get the verification code asap
+    UserProfileBloc event = BlocProvider.of<UserProfileBloc>(blocContext);
+    event.add(GetVerificationVideoCodeEvent());
+  }
+
   void _listenToStateChange(BuildContext context, UserProfileState state) {
     /// PROFILE PHOTO
     if (state is UpdatingProfilePhotoState) {
@@ -215,6 +246,50 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         _showSnack(state.errMsg);
       });
     }
+
+    /// VERIFICATION VIDEO CODE
+    if (state is LoadingVerificationVideoCodeState) {
+      setState(() {
+        _loadingVerificationCode = true;
+      });
+    }
+
+    if (state is LoadedVerificationVideoCodeState) {
+      setState(() {
+        _verificationCode = state.verificationVideoCode;
+        _loadingVerificationCode = false;
+      });
+    }
+
+    if (state is LoadingVerificationVideoCodeFailedState) {
+      setState(() {
+        _showSnack(state.errMsg);
+      });
+    }
+
+    /// VERIFICATION VIDEO
+    if (state is UpdatingVerificationVideoState) {
+      setState(() {
+        _isUploadingVideo = true;
+      });
+    }
+
+    if (state is UpdatedVerificationVideoState) {
+      setState(() {
+        _isUploadingVideo = false;
+        _profileVerificationVideo = state.videoUrl;
+        _showSnack(uploadingVerificationVideSuccess, isError: false);
+      });
+    }
+
+    if (state is UpdatingVerificationVideoFailedState) {
+      setState(() {
+        _isUploadingVideo = false;
+        _profileVerificationVideo = null;
+        _createdLocalVideoFile = null;
+        _showSnack(state.errMsg);
+      });
+    }
   }
 
   /// EVENTS
@@ -225,6 +300,15 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     });
     UserProfileBloc event = BlocProvider.of<UserProfileBloc>(blocContext);
     event.add(ChangeProfilePhotoEvent(file));
+  }
+
+  void _onNewVerificationVideo(File? file, BuildContext blocContext) {
+    if (_isUploadingVideo || file == null) return;
+    setState(() {
+      _createdLocalVideoFile = file;
+    });
+    UserProfileBloc event = BlocProvider.of<UserProfileBloc>(blocContext);
+    event.add(ChangeVerificationVideoEvent(file));
   }
 
   /// GENDER
