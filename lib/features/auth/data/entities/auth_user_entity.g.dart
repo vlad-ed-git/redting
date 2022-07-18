@@ -17,14 +17,19 @@ class AuthUserEntityAdapter extends TypeAdapter<AuthUserEntity> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AuthUserEntity(
-      fields[0] as String,
-      fields[1] as String,
+      userId: fields[1] as String,
+      phoneNumber: fields[0] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, AuthUserEntity obj) {
-    writer.writeByte(0);
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.phoneNumber)
+      ..writeByte(1)
+      ..write(obj.userId);
   }
 
   @override
@@ -43,12 +48,12 @@ class AuthUserEntityAdapter extends TypeAdapter<AuthUserEntity> {
 // **************************************************************************
 
 AuthUserEntity _$AuthUserEntityFromJson(Map json) => AuthUserEntity(
-      json['userId'] as String,
-      json['phoneNumber'] as String,
+      userId: json['userId'] as String,
+      phoneNumber: json['phoneNumber'] as String,
     );
 
 Map<String, dynamic> _$AuthUserEntityToJson(AuthUserEntity instance) =>
     <String, dynamic>{
-      'userId': instance.userId,
       'phoneNumber': instance.phoneNumber,
+      'userId': instance.userId,
     };

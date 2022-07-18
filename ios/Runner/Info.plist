@@ -2,6 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key></key>
+	<string></string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+    <key>CFBundleGetInfoString</key>
+    <string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>REDTING needs access to your microphone to take and upload videos for your profile</string>
+	<key>NSCameraUsageDescription</key>
+	<string>REDTING needs access to your camera to take and upload  photos and videos for your REDTING profile</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>REDTING needs access to your photos to select photos for your REDTING profile</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

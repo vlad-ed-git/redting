@@ -6,12 +6,24 @@ import 'package:redting/features/auth/domain/models/auth_user.dart';
 part 'auth_user_entity.g.dart';
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
-@HiveType(typeId: auth_user_type_id)
-class AuthUserEntity extends AuthUser {
-  AuthUserEntity(@HiveField(0) String userId, @HiveField(1) String phoneNumber)
-      : super(userId: userId, phoneNumber: phoneNumber);
+@HiveType(typeId: authUserTypeId)
+class AuthUserEntity implements AuthUser {
+  @HiveField(0)
+  @override
+  String phoneNumber;
+
+  @HiveField(1)
+  @override
+  String userId;
+
+  AuthUserEntity({required this.userId, required this.phoneNumber});
 
   factory AuthUserEntity.fromJson(Map<String, dynamic> json) =>
       _$AuthUserEntityFromJson(json);
   Map<String, dynamic> toJson() => _$AuthUserEntityToJson(this);
+
+  @override
+  bool isSameAs(AuthUser user) {
+    return user.userId == userId;
+  }
 }

@@ -4,16 +4,20 @@ import 'package:redting/features/auth/data/data_sources/local/local_auth.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
 
 class AuthUserHive implements LocalAuthSource {
-  final String _userKey = "auth_user_key";
-  final Box _usersHiveBox = Hive.box<AuthUser?>(auth_user_box);
+  final Box _usersHiveBox = Hive.box<AuthUser?>(authUserBox);
 
   @override
   Future<void> cacheAuthUser({required AuthUser authUser}) async {
-    await _usersHiveBox.put(_userKey, authUser);
+    await _usersHiveBox.put(authUserKey, authUser);
   }
 
   @override
   AuthUser? getAuthUser() {
-    return _usersHiveBox.get(_userKey);
+    return _usersHiveBox.get(authUserKey);
+  }
+
+  @override
+  Future signUserOut() async {
+    await _usersHiveBox.delete(authUserKey);
   }
 }

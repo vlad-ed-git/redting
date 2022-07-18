@@ -2,8 +2,10 @@ const appName = 'REDTING';
 const appNameFirstWord = 'RED';
 const appNameLastWord = 'TING';
 
+const initAppErr = "Something went wrong! Please restart app";
+
 //splash screen
-const loadingAuthUser = 'Initializing ...';
+const loadingAuthUser = 'Authenticating ...';
 const loadingAuthUserErr = 'Something went wrong! Please restart app!';
 
 //login screen
@@ -22,4 +24,34 @@ const signInTerms =
 const invalidVerificationCode =
     "The code you entered is invalid. Please try again";
 const failedToVerifyUnknown =
-    "Timeout or connection error occurred! Please retry";
+    "Timeout or connection error occurred! Please resend code & verify again";
+const failedToCacheAuthUser = "Failed to save your credentials! Please retry";
+
+//profile screen
+const createProfileError =
+    "failed to create your profile! Please check your connection & retry";
+const deleteProfileError =
+    "failed to delete your profile! Please check your connection & retry";
+const updateProfileError =
+    "failed to update your profile! ! Please check your connection & retry";
+const getProfileError =
+    "failed to fetch your profile! Please check your connection & retry";
+const nameHint = "Your name";
+const titleLbl = "Title";
+const titleHint = "art lover";
+const bioLbl = "Bio";
+const bioHint = "my friends say I am ...";
+const gender = "Gender";
+const maleGender = "Male";
+const femaleGender = "Female";
+const otherGenderHint = "I am ...";
+const birthDay = "Birthday";
+
+//profile photo
+const uploadingPhotoErr = "Failed to update your profile photo";
+const uploadingPhotoSuccess = "Profile photo updated";
+const uploadingVerificationVideoErr =
+    "Failed to update your verification video";
+const uploadingVerificationVideSuccess = "Verification video updated";
+const errPickingPhotoGallery =
+    "Failed to pick profile photo.\nHave you provided REDTING with access to the gallery in settings?";

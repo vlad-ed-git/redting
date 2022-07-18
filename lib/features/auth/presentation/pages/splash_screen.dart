@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/cards/glass_card.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
+import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
 import 'package:redting/core/components/text/app_name_std_style.dart';
-import 'package:redting/features/auth/di/auth_di.dart';
+import 'package:redting/features/auth/domain/models/auth_user.dart';
 import 'package:redting/features/auth/presentation/state/auth_user_bloc.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
@@ -22,19 +24,28 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final screenWidth = size.width;
+    final screenHeight = size.height;
     return BlocProvider(
       lazy: false,
       create: (BuildContext blocProviderContext) =>
-          authDiInstance<AuthUserBloc>(),
+          GetIt.instance<AuthUserBloc>(),
       child: BlocListener<AuthUserBloc, AuthUserState>(
         listener: (context, state) {
-          if (state is LoadedAuthUserState) _goToHome();
-          if (state is NoAuthUserFoundState) _goToLogin();
+          if (state is UserSignedInState) {
+            _goToProfileScreen(authUser: state.authUser);
+          }
+          if (state is NoAuthUserFoundState) {
+            _goToLogin();
+          }
         },
         child: ScreenContainer(
             child: Scaffold(
           extendBodyBehindAppBar: true,
           body: Container(
+            constraints:
+                BoxConstraints(minHeight: screenHeight, minWidth: screenWidth),
             decoration: BoxDecoration(gradient: fiveColorOpaqueGradient),
             child: Padding(
                 padding: const EdgeInsets.all(paddingMd),
@@ -55,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                           if (state is InitialAuthUserState)
                             _initialize(blocContext),
-                          if (state is LoadingState) _getLoadingIndicator(),
+                          if (state is LoadingAuthState) _getLoadingIndicator(),
                           if (state is ErrorLoadingAuthUserState)
                             _getErrorTxt(),
                         ]);
@@ -79,11 +90,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _getLoadingIndicator() {
-    return Center(
-      child: CircularProgressIndicator(
-        color: appTheme.colorScheme.primary,
-        backgroundColor: appTheme.colorScheme.primaryContainer,
-      ),
+    return const Center(
+      child: CircularProgress(),
     );
   }
 
@@ -104,7 +112,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushReplacementNamed(context, loginRoute);
   }
 
-  _goToHome() {
-    //todo navigate away
+  _goToProfileScreen({required AuthUser authUser}) {
+    Navigator.pushReplacementNamed(context, createProfileRoute,
+        arguments: authUser);
   }
 }

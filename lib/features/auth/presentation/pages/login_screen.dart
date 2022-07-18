@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
+import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
 import 'package:redting/core/components/selectors/country_selector.dart';
 import 'package:redting/core/components/text_input/outlined_txtfield.dart';
 import 'package:redting/core/components/text_input/six_code_input.dart';
-import 'package:redting/features/auth/di/auth_di.dart';
 import 'package:redting/features/auth/presentation/state/auth_user_bloc.dart';
 import 'package:redting/res/countries.dart';
 import 'package:redting/res/dimens.dart';
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocProvider(
         lazy: false,
         create: (BuildContext blocProviderContext) =>
-            authDiInstance<AuthUserBloc>(),
+            GetIt.instance<AuthUserBloc>(),
         child: BlocListener<AuthUserBloc, AuthUserState>(
           listener: _listenToStateChange,
           child: BlocBuilder<AuthUserBloc, AuthUserState>(
@@ -64,28 +65,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration:
                           BoxDecoration(gradient: threeColorOpaqueGradientTB),
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: paddingMd, horizontal: paddingLg),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  loginTitle,
-                                  style: appTextTheme.headline2,
-                                ),
-                                const SizedBox(
-                                  height: paddingStd,
-                                ),
-                                if (_step == LoginSteps.getPhone)
-                                  ..._getPhoneStepWidgets(),
-                                if (_step == LoginSteps.verifyPhone)
-                                  ..._getVerificationStepWidgets(blocContext),
-                                const SizedBox(
-                                  height: paddingSm,
-                                ),
-                                _getContinueBtn(blocContext)
-                              ])),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: paddingMd, horizontal: paddingLg),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                loginTitle,
+                                style: appTextTheme.headline2,
+                              ),
+                              const SizedBox(
+                                height: paddingStd,
+                              ),
+                              if (_step == LoginSteps.getPhone)
+                                ..._getPhoneStepWidgets(),
+                              if (_step == LoginSteps.verifyPhone)
+                                ..._getVerificationStepWidgets(blocContext),
+                              const SizedBox(
+                                height: paddingSm,
+                              ),
+                              _getContinueBtn(blocContext)
+                            ]),
+                      ),
                     ),
                   )),
             ));
@@ -258,14 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Visibility(
                     visible: _isLoading,
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        backgroundColor: appTheme.colorScheme.inversePrimary,
-                        color: appTheme.colorScheme.primary,
-                      ),
-                    ),
+                    child: const CircularProgress(),
                   ),
                   Expanded(
                     child: Text(
@@ -324,11 +319,14 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = false;
         _step = LoginSteps.signedIn;
         //GO BACK TO SPLASH
-        Navigator.pushReplacementNamed(context, splashRoute);
+        Navigator.pushReplacementNamed(
+          context,
+          splashRoute,
+        );
       });
     }
 
-    if (state is LoadingState) {
+    if (state is LoadingAuthState) {
       setState(() {
         _isLoading = true;
       });

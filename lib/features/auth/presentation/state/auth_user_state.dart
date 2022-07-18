@@ -5,12 +5,7 @@ abstract class AuthUserState {}
 
 class InitialAuthUserState extends AuthUserState {}
 
-class LoadingState extends AuthUserState {}
-
-class LoadedAuthUserState extends AuthUserState {
-  final AuthUser authUser;
-  LoadedAuthUserState(this.authUser);
-}
+class LoadingAuthState extends AuthUserState {}
 
 class ErrorLoadingAuthUserState extends AuthUserState {}
 
@@ -34,7 +29,10 @@ class SigningUserInFailedState extends AuthUserState {
   SigningUserInFailedState(this.errMsg);
 }
 
-class UserSignedInState extends AuthUserState {}
+class UserSignedInState extends AuthUserState {
+  final AuthUser authUser;
+  UserSignedInState(this.authUser);
+}
 
 /// login steps / mode
 class GetPhoneState extends AuthUserState {}

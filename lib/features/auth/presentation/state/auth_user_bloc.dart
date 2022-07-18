@@ -4,10 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/auth/data/utils/phone_verification_result.dart';
+import 'package:redting/features/auth/domain/models/auth_user.dart';
+import 'package:redting/features/auth/domain/use_cases/auth_use_cases.dart';
 import 'package:redting/res/strings.dart';
-
-import '../../domain/models/auth_user.dart';
-import '../../domain/use_cases/auth_use_cases.dart';
 
 part 'auth_user_event.dart';
 part 'auth_user_state.dart';
@@ -26,13 +25,13 @@ class AuthUserBloc extends Bloc<AuthUserEvent, AuthUserState> {
   FutureOr<void> _onLoadAuthUserEvent(
       LoadAuthUserEvent event, Emitter<AuthUserState> emit) async {
     //loading
-    emit(LoadingState());
+    emit(LoadingAuthState());
 
     OperationResult result = await authUseCases.getAuthenticatedUser.execute();
     if (result.errorOccurred) {
       emit(ErrorLoadingAuthUserState());
     } else if (result.data is AuthUser) {
-      emit(LoadedAuthUserState(result.data as AuthUser));
+      emit(UserSignedInState(result.data as AuthUser));
     } else if (result.data == null) {
       emit(NoAuthUserFoundState());
     }
@@ -43,7 +42,7 @@ class AuthUserBloc extends Bloc<AuthUserEvent, AuthUserState> {
   FutureOr<void> _verifyAuthUserEvent(
       VerifyAuthUserEvent event, Emitter<AuthUserState> emit) async {
     //loading
-    emit(LoadingState());
+    emit(LoadingAuthState());
     authUseCases.sendVerificationCodeUseCase.execute(
       phone: event.phoneNumber,
       code: event.countryCode,
@@ -72,7 +71,7 @@ class AuthUserBloc extends Bloc<AuthUserEvent, AuthUserState> {
         emit(SigningUserInFailedState(
             signInResult.errorMessage ?? unknownCodeSendingErr));
       } else {
-        emit(UserSignedInState());
+        emit(UserSignedInState(signInResult.data as AuthUser));
       }
     }
 
@@ -86,7 +85,7 @@ class AuthUserBloc extends Bloc<AuthUserEvent, AuthUserState> {
   FutureOr<void> _signInAuthUserEvent(
       SignInAuthUserEvent event, Emitter<AuthUserState> emit) async {
     //loading
-    emit(LoadingState());
+    emit(LoadingAuthState());
     OperationResult signInResult = await authUseCases.signUserInUseCase
         .execute(smsCode: event.smsCode, verificationId: event.verificationId);
 
@@ -94,7 +93,7 @@ class AuthUserBloc extends Bloc<AuthUserEvent, AuthUserState> {
       emit(SigningUserInFailedState(
           signInResult.errorMessage ?? unknownCodeSendingErr));
     } else {
-      emit(UserSignedInState());
+      emit(UserSignedInState(signInResult.data as AuthUser));
     }
   }
 

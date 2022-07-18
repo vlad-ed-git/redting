@@ -1,1 +1,3 @@
-const auth_user_type_id = 1;
+const authUserTypeId = 1;
+const userGenderTypeId = 2;
+const userProfileTypeId = 3;

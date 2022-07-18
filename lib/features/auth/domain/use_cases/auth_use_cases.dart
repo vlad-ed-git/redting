@@ -10,4 +10,6 @@ class AuthUseCases {
       {required this.sendVerificationCodeUseCase,
       required this.getAuthenticatedUser,
       required this.signUserInUseCase});
+
+  /// TODO USE CASES [UPDATE - phone number & registerCountry ]
 }

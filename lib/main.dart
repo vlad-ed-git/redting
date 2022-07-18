@@ -7,13 +7,13 @@ import 'package:redting/res/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MainAppInit.initApp();
-  //todo - app check before release
-  runApp(const MyApp());
+  bool isInitProperly = await MainAppInit.initApp();
+  runApp(MyApp(isInit: isInitProperly)); //todo - app check before release
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool isInit;
+  const MyApp({Key? key, required this.isInit}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();

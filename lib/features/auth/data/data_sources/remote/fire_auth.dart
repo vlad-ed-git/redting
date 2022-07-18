@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/auth/data/data_sources/remote/remote_auth.dart';
+import 'package:redting/features/auth/data/entities/auth_user_entity.dart';
 import 'package:redting/features/auth/data/utils/fire_verification_result.dart';
-import 'package:redting/features/auth/domain/models/auth_user.dart';
 import 'package:redting/res/strings.dart';
 
 class FireAuth implements RemoteAuthSource {
@@ -15,10 +15,11 @@ class FireAuth implements RemoteAuthSource {
       if (user == null) return OperationResult();
 
       return OperationResult(
-          data: AuthUser(userId: user.uid, phoneNumber: user.phoneNumber!));
+          data:
+              AuthUserEntity(userId: user.uid, phoneNumber: user.phoneNumber!));
     } catch (e) {
       /// probably phone number is unset
-      return OperationResult(errorOccurred: true);
+      return OperationResult(errorOccurred: true, errorMessage: "$e");
     }
   }
 
@@ -83,5 +84,10 @@ class FireAuth implements RemoteAuthSource {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: smsCode);
     return await signInWithCredentials(credential);
+  }
+
+  @override
+  Future signUserOut() async {
+    await _auth.signOut();
   }
 }

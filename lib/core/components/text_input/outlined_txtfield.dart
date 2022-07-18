@@ -16,7 +16,7 @@ class OutlinedTxtField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle? txtStyle = keyboardType == TextInputType.phone
-        ? appTextTheme.headline5?.copyWith(letterSpacing: 1.2)
+        ? appTextTheme.headline5?.copyWith(letterSpacing: 2)
         : appTextTheme.bodyText1;
     return TextField(
       textInputAction: txtInputAction ?? TextInputAction.next,

@@ -3,6 +3,7 @@ import 'package:redting/features/auth/data/utils/phone_verification_result.dart'
 
 abstract class AuthRepository {
   Future<OperationResult> getAuthUser();
+  Future signOut();
   void sendVerificationCode(String phone, String countryCode, int? resendToken,
       Function(PhoneVerificationResult result) callback);
   Future<OperationResult> signInUser(

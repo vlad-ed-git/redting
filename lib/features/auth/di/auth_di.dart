@@ -14,8 +14,8 @@ import 'package:redting/features/auth/presentation/state/auth_user_bloc.dart';
 /// FACTORY - instantiated every time we request
 ///  SINGLETON - only a single instance is created
 
-final GetIt authDiInstance = GetIt.instance;
 void init() {
+  final GetIt authDiInstance = GetIt.instance;
   //auth bloc
   authDiInstance
       .registerFactory(() => AuthUserBloc(authUseCases: authDiInstance()));
