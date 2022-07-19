@@ -31,7 +31,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       ChangeProfilePhotoEvent event, Emitter<UserProfileState> emit) async {
     emit(UpdatingProfilePhotoState(event.photoFile));
     OperationResult result = await profileUseCases.uploadProfilePhotoUseCase
-        .execute(file: event.photoFile);
+        .execute(file: event.photoFile, filename: event.filename);
 
     if (result.errorOccurred) {
       emit(UpdatingProfilePhotoFailedState(result.errorMessage!));

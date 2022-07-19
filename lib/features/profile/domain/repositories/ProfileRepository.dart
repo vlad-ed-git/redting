@@ -35,7 +35,8 @@ abstract class ProfileRepository {
     required String verificationVideoUrl,
   });
 
-  Future<OperationResult> uploadProfilePhoto({required File file});
+  Future<OperationResult> uploadProfilePhoto(
+      {required File file, required String filename});
 
   Future<OperationResult> uploadVerificationVideo({required File file});
   Future<OperationResult> generateVerificationWord();

@@ -8,7 +8,8 @@ class LoadUserProfileEvent extends UserProfileEvent {}
 /// verification profile
 class ChangeProfilePhotoEvent extends UserProfileEvent {
   final File photoFile;
-  ChangeProfilePhotoEvent(this.photoFile);
+  final String filename;
+  ChangeProfilePhotoEvent(this.photoFile, this.filename);
 }
 
 /// verification video

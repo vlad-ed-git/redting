@@ -9,14 +9,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0343c0f-6e2a-4b70-94b8-be5d411a5c67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/res/string_arrays.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/components/flutter_patches/custom_stateful_builder.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/camera_dialog.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote/fire_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote/fire_profile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote/remote_profile_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote/remote_profile_source.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/data/repositories/profile_repository_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/repositories/profile_repository_impl.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/repositories/ProfileRepository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/repositories/ProfileRepository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/upload_profile_photo_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/upload_profile_photo_usecase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/components/profile_photo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/profile_photo.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/components/verification_video.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/verification_video.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/pages/create_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/pages/create_profile_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_state.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/strings.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -43,11 +43,12 @@ class FireProfile implements RemoteProfileDataSource {
   }
 
   @override
-  Future<OperationResult> uploadProfilePhoto({required File file}) async {
+  Future<OperationResult> uploadProfilePhoto(
+      {required File file, required String filename}) async {
     try {
       final storageRef = _storage.ref();
       final photoRef = storageRef.child(
-          "$usersProfilePhotosBucket/${_auth.currentUser!.uid}/$userProfilePhotosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}.jpg");
+          "$usersProfilePhotosBucket/${_auth.currentUser!.uid}/$userProfilePhotosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}_$filename");
       await photoRef.putFile(file);
       String downloadUrl = await photoRef.getDownloadURL();
       return OperationResult(data: downloadUrl);

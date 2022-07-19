@@ -53,6 +53,8 @@ dependencies:
   flutter_bloc: ^8.0.1
   image_picker: ^0.8.5+3
   cached_network_image: ^3.2.1
+  camera: ^0.10.0
+  video_player: ^2.4.5
 
 dev_dependencies:
   change_app_package_name: ^1.1.0

@@ -186,8 +186,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<OperationResult> uploadProfilePhoto({required File file}) async {
-    return await _remoteProfileDataSource.uploadProfilePhoto(file: file);
+  Future<OperationResult> uploadProfilePhoto(
+      {required File file, required String filename}) async {
+    return await _remoteProfileDataSource.uploadProfilePhoto(
+        file: file, filename: filename);
   }
 
   @override
@@ -196,7 +198,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<OperationResult> uploadVerificationVideo({required File file}) async {
-    return await _remoteProfileDataSource.uploadVerificationVideo(file: file);
+  Future<OperationResult> uploadVerificationVideo({
+    required File file,
+  }) async {
+    return await _remoteProfileDataSource.uploadVerificationVideo(
+      file: file,
+    );
   }
 }

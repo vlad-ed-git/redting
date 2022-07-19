@@ -55,3 +55,9 @@ const uploadingVerificationVideoErr =
 const uploadingVerificationVideSuccess = "Verification video updated";
 const errPickingPhotoGallery =
     "Failed to pick profile photo.\nHave you provided REDTING with access to the gallery in settings?";
+
+//CAMERA
+const failedToInitializeCamera =
+    "Failed to initialize camera! This app requires selfie camera access to function properly. Please check your permissions settings & restart app.";
+const pleaseSay = "PRESS RECORD & SAY ";
+const failedToRecord = "Camera setup failed! Please try again";

@@ -10,7 +10,7 @@ import 'package:redting/res/theme.dart';
 
 class ProfilePhoto extends StatelessWidget {
   final String? profilePhoto;
-  final Function(File? file) onChange;
+  final Function(File? file, String? filename) onChange;
   final Function(String errMsg) onError;
   final bool isLoading;
   final File? localPhoto;
@@ -44,7 +44,8 @@ class ProfilePhoto extends StatelessWidget {
       );
 
       File? newFile = pickedFile != null ? File(pickedFile.path) : null;
-      onChange(newFile);
+      String? filename = pickedFile?.name;
+      onChange(newFile, filename);
     } catch (e) {
       onError(errPickingPhotoGallery);
     }

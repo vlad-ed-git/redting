@@ -124,9 +124,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                           onError: (String err) {
                                             _showSnack(err);
                                           },
-                                          onChange: (File? file) {
+                                          onChange:
+                                              (File? file, String? filename) {
                                             _onNewProfileImage(
-                                                file, blocContext);
+                                                file, filename, blocContext);
                                           },
                                         ),
                                         const SizedBox(
@@ -144,6 +145,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                           height: paddingStd,
                                         ),
                                         VerificationVideo(
+                                          onCameraError: (String err) {
+                                            _showSnack(err);
+                                          },
                                           loadingVerificationCode:
                                               _loadingVerificationCode,
                                           isUploadingVideo: _isUploadingVideo,
@@ -293,13 +297,14 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   }
 
   /// EVENTS
-  void _onNewProfileImage(File? file, BuildContext blocContext) {
-    if (_isUploadingPhoto || file == null) return;
+  void _onNewProfileImage(
+      File? file, String? filename, BuildContext blocContext) {
+    if (_isUploadingPhoto || file == null || filename == null) return;
     setState(() {
       _selectedLocalPhotoFile = file;
     });
     UserProfileBloc event = BlocProvider.of<UserProfileBloc>(blocContext);
-    event.add(ChangeProfilePhotoEvent(file));
+    event.add(ChangeProfilePhotoEvent(file, filename));
   }
 
   void _onNewVerificationVideo(File? file, BuildContext blocContext) {

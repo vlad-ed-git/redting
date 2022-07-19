@@ -8,7 +8,8 @@ abstract class RemoteProfileDataSource {
   Future<OperationResult> updateUserProfile({required UserProfile profile});
   Future<OperationResult> deleteUserProfile({required UserProfile profile});
   Future<UserProfile?> createUserProfile({required UserProfile profile});
-  Future<OperationResult> uploadProfilePhoto({required File file});
+  Future<OperationResult> uploadProfilePhoto(
+      {required File file, required String filename});
   Future<OperationResult> uploadVerificationVideo({required File file});
   Future<OperationResult> generateVerificationWord();
 }
