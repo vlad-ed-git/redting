@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 
 abstract class ProfileRepository {
   Future<OperationResult> getUserProfile();
@@ -16,7 +17,7 @@ abstract class ProfileRepository {
     String? bio,
     String? title,
     DateTime? birthDay,
-    String? verificationVideoUrl,
+    UserVerificationVideo? verificationVideo,
   });
 
   Future<OperationResult> deleteUserProfile({required UserProfile profile});
@@ -32,12 +33,14 @@ abstract class ProfileRepository {
     required String registerCountry,
     required String title,
     required DateTime birthDay,
-    required String verificationVideoUrl,
+    required UserVerificationVideo verificationVideo,
   });
 
   Future<OperationResult> uploadProfilePhoto(
       {required File file, required String filename});
 
-  Future<OperationResult> uploadVerificationVideo({required File file});
+  Future<OperationResult> uploadVerificationVideo(
+      {required File file, required String verificationCode});
   Future<OperationResult> generateVerificationWord();
+  Future<OperationResult> deleteVerificationVideo();
 }

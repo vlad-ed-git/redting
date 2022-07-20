@@ -15,7 +15,10 @@ class ChangeProfilePhotoEvent extends UserProfileEvent {
 /// verification video
 class ChangeVerificationVideoEvent extends UserProfileEvent {
   final File videoFile;
-  ChangeVerificationVideoEvent(this.videoFile);
+  final String verificationCode;
+  ChangeVerificationVideoEvent(this.videoFile, this.verificationCode);
 }
+
+class DeleteVerificationVideoEvent extends UserProfileEvent {}
 
 class GetVerificationVideoCodeEvent extends UserProfileEvent {}

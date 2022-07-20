@@ -1,5 +1,6 @@
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
 
 class CreateProfileUseCase {
@@ -18,7 +19,7 @@ class CreateProfileUseCase {
     required String title,
     required DateTime birthDay,
     bool isBanned = false,
-    required String verificationVideoUrl,
+    required UserVerificationVideo verificationVideo,
   }) async {
     return await profileRepository.createUserProfile(
         name: name,
@@ -30,6 +31,6 @@ class CreateProfileUseCase {
         registerCountry: registerCountry,
         title: title,
         birthDay: birthDay,
-        verificationVideoUrl: verificationVideoUrl);
+        verificationVideo: verificationVideo);
   }
 }

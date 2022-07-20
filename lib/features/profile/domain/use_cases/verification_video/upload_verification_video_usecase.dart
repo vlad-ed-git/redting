@@ -7,7 +7,9 @@ class UploadVerificationVideoUseCase {
   final ProfileRepository profileRepository;
   UploadVerificationVideoUseCase({required this.profileRepository});
 
-  Future<OperationResult> execute({required File file}) async {
-    return await profileRepository.uploadVerificationVideo(file: file);
+  Future<OperationResult> execute(
+      {required File file, required String verificationCode}) async {
+    return await profileRepository.uploadVerificationVideo(
+        file: file, verificationCode: verificationCode);
   }
 }

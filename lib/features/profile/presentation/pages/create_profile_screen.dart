@@ -10,8 +10,9 @@ import 'package:redting/core/components/text/app_name_std_style.dart';
 import 'package:redting/core/components/text_input/unstyled_input_txt.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/features/profile/presentation/components/profile_photo.dart';
-import 'package:redting/features/profile/presentation/components/verification_video.dart';
+import 'package:redting/features/profile/presentation/components/verification_video_editor.dart';
 import 'package:redting/features/profile/presentation/state/user_profile_bloc.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
@@ -51,8 +52,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   //VERIFICATION VIDEO
   String? _verificationCode;
   bool _loadingVerificationCode = false;
-  bool _isUploadingVideo = false;
-  String? _profileVerificationVideo;
+  bool _isProcessingVideo = false;
+  UserVerificationVideo? _profileVerificationVideo;
   File? _createdLocalVideoFile;
 
   @override
@@ -144,22 +145,26 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                         const SizedBox(
                                           height: paddingStd,
                                         ),
-                                        VerificationVideo(
+                                        VerificationVideoEditor(
+                                          isVerified:
+                                              _profileVerificationVideo != null,
                                           onCameraError: (String err) {
                                             _showSnack(err);
                                           },
                                           loadingVerificationCode:
                                               _loadingVerificationCode,
-                                          isUploadingVideo: _isUploadingVideo,
+                                          isProcessingVideo: _isProcessingVideo,
                                           verificationCode: _verificationCode,
                                           localVideoFile:
                                               _createdLocalVideoFile,
-                                          profileVerificationVideo:
-                                              _profileVerificationVideo,
                                           onChanged:
                                               (File? createdLocalVideoFile) {
-                                            _onNewVerificationVideo(
+                                            _onNewVerificationVideoRecorded(
                                                 createdLocalVideoFile,
+                                                blocContext);
+                                          },
+                                          discardLocalVideo: () {
+                                            _onDeleteVerificationVideo(
                                                 blocContext);
                                           },
                                         ),
@@ -167,58 +172,59 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: paddingMd),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      UnStyledTxtInput(
-                                        controller: _titleController,
-                                        hint: titleHint,
-                                        label: titleLbl,
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      const SizedBox(
-                                        height: paddingStd,
-                                      ),
-                                      UnStyledTxtInput(
-                                        controller: _bioController,
-                                        hint: bioHint,
-                                        label: bioLbl,
-                                        maxCharacters: 120,
-                                        keyboardType: TextInputType.multiline,
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      const SizedBox(
-                                        height: paddingStd,
-                                      ),
-                                      Text(
-                                        gender,
-                                        style: appTextTheme.subtitle2
-                                            ?.copyWith(color: Colors.black45),
-                                      ),
-                                      const SizedBox(
-                                        height: paddingStd,
-                                      ),
-                                      _getGenderWidgets(),
-                                      const SizedBox(
-                                        height: paddingStd,
-                                      ),
-                                      _getBirthdayPicker(),
-                                      const SizedBox(
-                                        height: paddingStd,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                _profileNonMediaSection(),
                               ],
                             ),
                           ),
                         ),
                       )));
             })));
+  }
+
+  _profileNonMediaSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: paddingMd),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          UnStyledTxtInput(
+            controller: _titleController,
+            hint: titleHint,
+            label: titleLbl,
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(
+            height: paddingStd,
+          ),
+          UnStyledTxtInput(
+            controller: _bioController,
+            hint: bioHint,
+            label: bioLbl,
+            maxCharacters: 120,
+            keyboardType: TextInputType.multiline,
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(
+            height: paddingStd,
+          ),
+          Text(
+            gender,
+            style: appTextTheme.subtitle2?.copyWith(color: Colors.black45),
+          ),
+          const SizedBox(
+            height: paddingStd,
+          ),
+          _getGenderWidgets(),
+          const SizedBox(
+            height: paddingStd,
+          ),
+          _getBirthdayPicker(),
+          const SizedBox(
+            height: paddingStd,
+          ),
+        ],
+      ),
+    );
   }
 
   /// STATE CHANGE
@@ -274,24 +280,46 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     /// VERIFICATION VIDEO
     if (state is UpdatingVerificationVideoState) {
       setState(() {
-        _isUploadingVideo = true;
+        _isProcessingVideo = true;
       });
     }
 
     if (state is UpdatedVerificationVideoState) {
       setState(() {
-        _isUploadingVideo = false;
-        _profileVerificationVideo = state.videoUrl;
-        _showSnack(uploadingVerificationVideSuccess, isError: false);
+        _isProcessingVideo = false;
+        _profileVerificationVideo = state.userVerificationVideo;
+        _showSnack(successUploadingVerificationVideo, isError: false);
       });
     }
 
     if (state is UpdatingVerificationVideoFailedState) {
       setState(() {
-        _isUploadingVideo = false;
+        _isProcessingVideo = false;
         _profileVerificationVideo = null;
         _createdLocalVideoFile = null;
         _showSnack(state.errMsg);
+      });
+    }
+
+    //deleting
+    if (state is DeletedVerificationVideoState) {
+      setState(() {
+        _profileVerificationVideo = null;
+        _isProcessingVideo = false;
+        _createdLocalVideoFile = null;
+      });
+    }
+
+    if (state is DeletingVerificationVideoFailedState) {
+      setState(() {
+        _isProcessingVideo = false;
+        _showSnack(state.errMsg);
+      });
+    }
+
+    if (state is DeletingVerificationVideoState) {
+      setState(() {
+        _isProcessingVideo = true;
       });
     }
   }
@@ -307,13 +335,18 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     event.add(ChangeProfilePhotoEvent(file, filename));
   }
 
-  void _onNewVerificationVideo(File? file, BuildContext blocContext) {
-    if (_isUploadingVideo || file == null) return;
+  void _onNewVerificationVideoRecorded(File? file, BuildContext blocContext) {
+    if (_isProcessingVideo || file == null || _verificationCode == null) return;
     setState(() {
       _createdLocalVideoFile = file;
     });
     UserProfileBloc event = BlocProvider.of<UserProfileBloc>(blocContext);
-    event.add(ChangeVerificationVideoEvent(file));
+    event.add(ChangeVerificationVideoEvent(file, _verificationCode!));
+  }
+
+  void _onDeleteVerificationVideo(BuildContext blocContext) {
+    UserProfileBloc event = BlocProvider.of<UserProfileBloc>(blocContext);
+    event.add(DeleteVerificationVideoEvent());
   }
 
   /// GENDER
@@ -322,11 +355,11 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _getGender(value: UserGender.female, lbl: femaleGender),
-        const VerticalDivider(
+        const SizedBox(
           width: paddingStd,
         ),
         _getGender(value: UserGender.male, lbl: maleGender),
-        const VerticalDivider(
+        const SizedBox(
           width: paddingStd,
         ),
         Expanded(

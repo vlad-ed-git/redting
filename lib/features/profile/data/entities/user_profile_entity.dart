@@ -4,8 +4,11 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:redting/core/data/hive_type_ids.dart';
 import 'package:redting/core/utils/flutter_fire_date_time_utils.dart';
 import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
+import 'package:redting/features/profile/data/entities/user_verification_video_entity.dart';
+import 'package:redting/features/profile/data/utils/user_verification_video_converter.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 
 part 'user_profile_entity.g.dart';
 
@@ -71,7 +74,8 @@ class UserProfileEntity implements UserProfile {
 
   @HiveField(13)
   @override
-  Map<DateTime, String> verificationVideo;
+  @UserVerificationVideoConverter()
+  UserVerificationVideo verificationVideo;
 
   UserProfileEntity({
     required this.name,
@@ -87,16 +91,32 @@ class UserProfileEntity implements UserProfile {
     required this.birthDay,
     required this.isBanned,
     required UserGenderEntity gender,
-    Map<DateTime, String>? verificationVideo,
-  })  : gender = mapUserGenderEntityToDomainModel(gender),
-        verificationVideo = verificationVideo ?? {};
+    required this.verificationVideo,
+  }) : gender = mapUserGenderEntityToDomainModel(gender);
 
+  @override
   factory UserProfileEntity.fromJson(Map<String, dynamic> json) =>
       _$UserProfileEntityFromJson(json);
+
+  @override
   Map<String, dynamic> toJson() => _$UserProfileEntityToJson(this);
 
   @override
   bool isSameAs(UserProfile user) {
     return user.userId == userId;
   }
+
+  @override
+  UserProfile fromJson(Map<String, dynamic> json) {
+    return UserProfileEntity.fromJson(json);
+  }
+}
+
+UserVerificationVideoEntity mapToUserVerificationVideoEntity(
+    UserVerificationVideo vVideo) {
+  return UserVerificationVideoEntity(
+    videoUrl: vVideo.videoUrl,
+    verificationCode: vVideo.verificationCode,
+    userId: vVideo.userId,
+  );
 }

@@ -50,15 +50,22 @@ const birthDay = "Birthday";
 //profile photo
 const uploadingPhotoErr = "Failed to update your profile photo";
 const uploadingPhotoSuccess = "Profile photo updated";
-const uploadingVerificationVideoErr =
-    "Failed to update your verification video";
-const uploadingVerificationVideSuccess = "Verification video updated";
 const errPickingPhotoGallery =
     "Failed to pick profile photo.\nHave you provided REDTING with access to the gallery in settings?";
 
 //CAMERA
-const failedToInitializeCamera =
-    "Failed to initialize camera! This app requires selfie camera access to function properly. Please check your permissions settings & restart app.";
-const pleaseSay = "PRESS RECORD & SAY ";
-const failedToRecord = "Camera setup failed! Please try again";
+const returnedVideoWasNullErr = "No video was received!";
 const verificationVideoTitle = "REDTING Verification";
+const verificationVideoInstructions =
+    "Record a short clip (6 SECONDS MAX) of yourself saying the fun word below!";
+const verificationVideoHint =
+    "Only the first 6 seconds of the video will be taken.";
+const verificationVideoInstructionsGotIt = "I'M READY";
+const verificationVideoKeep = "KEEP";
+const verificationVideoDelete = "RE TAKE";
+const deletingVerificationVideoFailed =
+    "failed to delete your verification video!";
+const errorUploadingVerificationVideo =
+    "Failed to upload your verification video! check your connection & retry";
+const successUploadingVerificationVideo =
+    "Your verification video has been saved";

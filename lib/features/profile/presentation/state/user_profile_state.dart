@@ -42,8 +42,8 @@ class UpdatingVerificationVideoState extends UserProfileState {
 }
 
 class UpdatedVerificationVideoState extends UserProfileState {
-  final String videoUrl;
-  UpdatedVerificationVideoState(this.videoUrl);
+  final UserVerificationVideo userVerificationVideo;
+  UpdatedVerificationVideoState(this.userVerificationVideo);
 }
 
 class UpdatingVerificationVideoFailedState extends UserProfileState {
@@ -51,6 +51,17 @@ class UpdatingVerificationVideoFailedState extends UserProfileState {
   UpdatingVerificationVideoFailedState(this.errMsg);
 }
 
+//deleting the video
+class DeletingVerificationVideoState extends UserProfileState {}
+
+class DeletingVerificationVideoFailedState extends UserProfileState {
+  final String errMsg;
+  DeletingVerificationVideoFailedState(this.errMsg);
+}
+
+class DeletedVerificationVideoState extends UserProfileState {}
+
+//getting a code
 class LoadingVerificationVideoCodeState extends UserProfileState {}
 
 class LoadingVerificationVideoCodeFailedState extends UserProfileState {

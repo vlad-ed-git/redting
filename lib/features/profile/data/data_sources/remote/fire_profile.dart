@@ -1,10 +1,12 @@
 import 'dart:io';
 import "dart:math";
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
+import 'package:redting/features/profile/data/entities/user_verification_video_entity.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/res/string_arrays.dart';
 import 'package:redting/res/strings.dart';
@@ -12,11 +14,16 @@ import 'package:redting/res/strings.dart';
 const String userProfileCollection = "users";
 const String archivedProfilesCollection = "archived_users";
 const String usersProfilePhotosBucket = "profilePhotos";
-const String userProfilePhotosBucket = "myProfilePhotos";
+const String thisUserProfilePhotosBucket = "myProfilePhotos";
+
+const String verificationVideosCollection = "users_verification_videos";
+const String usersVerificationVideosBucket = "verificationVideos";
+const String thisUserVerificationVideosBucket = "myVerificationVideos";
 
 class FireProfile implements RemoteProfileDataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Future<UserProfile?> createUserProfile({required UserProfile profile}) {
@@ -48,7 +55,7 @@ class FireProfile implements RemoteProfileDataSource {
     try {
       final storageRef = _storage.ref();
       final photoRef = storageRef.child(
-          "$usersProfilePhotosBucket/${_auth.currentUser!.uid}/$userProfilePhotosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}_$filename");
+          "$usersProfilePhotosBucket/${_auth.currentUser!.uid}/$thisUserProfilePhotosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}_$filename");
       await photoRef.putFile(file);
       String downloadUrl = await photoRef.getDownloadURL();
       return OperationResult(data: downloadUrl);
@@ -80,8 +87,41 @@ class FireProfile implements RemoteProfileDataSource {
   }
 
   @override
-  Future<OperationResult> uploadVerificationVideo({required File file}) {
-    // TODO: implement uploadVerificationVideo
-    throw UnimplementedError();
+  Future<OperationResult> uploadVerificationVideo(
+      {required File file, required String verificationCode}) async {
+    try {
+      final storageRef = _storage.ref();
+      final videoRef = storageRef.child(
+          "$usersVerificationVideosBucket/${_auth.currentUser!.uid}/$thisUserVerificationVideosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}_verification_video${verificationCode.trim()}");
+      await videoRef.putFile(file);
+      String verificationVideoUrl = await videoRef.getDownloadURL();
+      UserVerificationVideoEntity usersVerificationVideo =
+          UserVerificationVideoEntity(
+              userId: _auth.currentUser!.uid,
+              verificationCode: verificationCode,
+              videoUrl: verificationVideoUrl);
+      await _firestore
+          .collection(verificationVideosCollection)
+          .doc(_auth.currentUser!.uid)
+          .set(usersVerificationVideo.toJson());
+      return OperationResult(data: usersVerificationVideo);
+    } catch (e) {
+      return OperationResult(
+          errorMessage: errorUploadingVerificationVideo, errorOccurred: true);
+    }
+  }
+
+  @override
+  Future<OperationResult> deleteVerificationVideo() async {
+    try {
+      await _firestore
+          .collection(verificationVideosCollection)
+          .doc(_auth.currentUser!.uid)
+          .delete();
+      return OperationResult();
+    } catch (e) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: deletingVerificationVideoFailed);
+    }
   }
 }

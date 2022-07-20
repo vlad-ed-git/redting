@@ -17,27 +17,27 @@ class UserProfileEntityAdapter extends TypeAdapter<UserProfileEntity> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserProfileEntity(
-      name: fields[0] as String,
-      userId: fields[1] as String,
-      phoneNumber: fields[2] as String,
-      profilePhotoUrl: fields[3] as String,
-      genderOther: fields[4] as String?,
-      bio: fields[6] as String,
-      registerCountry: fields[7] as String,
-      title: fields[8] as String,
-      createdOn: fields[9] as DateTime,
-      lastUpdatedOn: fields[10] as DateTime,
-      birthDay: fields[11] as DateTime,
-      isBanned: fields[12] as bool,
-      gender: fields[5] as UserGenderEntity,
-      verificationVideo: (fields[13] as Map?)?.cast<DateTime, String>(),
-    );
+        name: fields[0] as String,
+        userId: fields[1] as String,
+        phoneNumber: fields[2] as String,
+        profilePhotoUrl: fields[3] as String,
+        genderOther: fields[4] as String?,
+        bio: fields[6] as String,
+        registerCountry: fields[7] as String,
+        title: fields[8] as String,
+        createdOn: fields[9] as DateTime,
+        lastUpdatedOn: fields[10] as DateTime,
+        birthDay: fields[11] as DateTime,
+        isBanned: fields[12] as bool,
+        gender: fields[5] as UserGenderEntity,
+        verificationVideo: fields[13] as UserVerificationVideoEntity);
   }
 
   @override
   void write(BinaryWriter writer, UserProfileEntity obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(13)
+      ..write(obj.verificationVideo)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -63,9 +63,7 @@ class UserProfileEntityAdapter extends TypeAdapter<UserProfileEntity> {
       ..writeByte(11)
       ..write(obj.birthDay)
       ..writeByte(12)
-      ..write(obj.isBanned)
-      ..writeByte(13)
-      ..write(obj.verificationVideo);
+      ..write(obj.isBanned);
   }
 
   @override
@@ -84,26 +82,24 @@ class UserProfileEntityAdapter extends TypeAdapter<UserProfileEntity> {
 // **************************************************************************
 
 UserProfileEntity _$UserProfileEntityFromJson(Map json) => UserProfileEntity(
-      name: json['name'] as String,
-      userId: json['userId'] as String,
-      phoneNumber: json['phoneNumber'] as String,
-      profilePhotoUrl: json['profilePhotoUrl'] as String,
-      genderOther: json['genderOther'] as String?,
-      bio: json['bio'] as String,
-      registerCountry: json['registerCountry'] as String,
-      title: json['title'] as String,
-      createdOn:
-          const TimestampConverter().fromJson(json['createdOn'] as Timestamp),
-      lastUpdatedOn: const TimestampConverter()
-          .fromJson(json['lastUpdatedOn'] as Timestamp),
-      birthDay:
-          const TimestampConverter().fromJson(json['birthDay'] as Timestamp),
-      isBanned: json['isBanned'] as bool,
-      gender: $enumDecode(_$UserGenderEntityEnumMap, json['gender']),
-      verificationVideo: (json['verificationVideo'] as Map?)?.map(
-        (k, e) => MapEntry(DateTime.parse(k as String), e as String),
-      ),
-    );
+    name: json['name'] as String,
+    userId: json['userId'] as String,
+    phoneNumber: json['phoneNumber'] as String,
+    profilePhotoUrl: json['profilePhotoUrl'] as String,
+    genderOther: json['genderOther'] as String?,
+    bio: json['bio'] as String,
+    registerCountry: json['registerCountry'] as String,
+    title: json['title'] as String,
+    createdOn:
+        const TimestampConverter().fromJson(json['createdOn'] as Timestamp),
+    lastUpdatedOn:
+        const TimestampConverter().fromJson(json['lastUpdatedOn'] as Timestamp),
+    birthDay:
+        const TimestampConverter().fromJson(json['birthDay'] as Timestamp),
+    isBanned: json['isBanned'] as bool,
+    gender: $enumDecode(_$UserGenderEntityEnumMap, json['gender']),
+    verificationVideo: const UserVerificationVideoConverter()
+        .fromJson(json['verificationVideo'] as UserVerificationVideoEntity));
 
 Map<String, dynamic> _$UserProfileEntityToJson(UserProfileEntity instance) =>
     <String, dynamic>{
@@ -121,8 +117,8 @@ Map<String, dynamic> _$UserProfileEntityToJson(UserProfileEntity instance) =>
           const TimestampConverter().toJson(instance.lastUpdatedOn),
       'birthDay': const TimestampConverter().toJson(instance.birthDay),
       'isBanned': instance.isBanned,
-      'verificationVideo': instance.verificationVideo
-          .map((k, e) => MapEntry(k.toIso8601String(), e)),
+      'verificationVideo': const UserVerificationVideoConverter()
+          .toJson(instance.verificationVideo)
     };
 
 const _$UserGenderEntityEnumMap = {

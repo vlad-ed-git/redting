@@ -1,5 +1,6 @@
 import 'package:redting/core/utils/flutter_fire_date_time_utils.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 
 abstract class UserProfile {
   String name;
@@ -12,8 +13,7 @@ abstract class UserProfile {
   String registerCountry;
   String title;
 
-  @TimestampConverter()
-  Map<DateTime, String> verificationVideo;
+  UserVerificationVideo verificationVideo;
 
   @TimestampConverter()
   DateTime createdOn;
@@ -40,8 +40,10 @@ abstract class UserProfile {
     required this.lastUpdatedOn,
     required this.birthDay,
     required this.isBanned,
-    Map<DateTime, String>? verificationVideo,
-  }) : verificationVideo = verificationVideo ?? {};
+    required this.verificationVideo,
+  });
 
   bool isSameAs(UserProfile user);
+  UserProfile fromJson(Map<String, dynamic> json);
+  Map<String, dynamic> toJson();
 }

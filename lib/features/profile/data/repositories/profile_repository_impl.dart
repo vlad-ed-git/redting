@@ -7,6 +7,7 @@ import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
 import 'package:redting/res/strings.dart';
 
@@ -29,7 +30,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       required String registerCountry,
       required String title,
       required DateTime birthDay,
-      required String verificationVideoUrl}) async {
+      required UserVerificationVideo verificationVideo}) async {
     UserProfile profile = _createUserProfileInstance(
         name: name,
         userId: userId,
@@ -42,7 +43,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         title: title,
         birthDay: birthDay,
         isBanned: false,
-        verificationVideoUrl: verificationVideoUrl);
+        verificationVideo: verificationVideo);
 
     //remote
     UserProfile? savedProfile =
@@ -74,8 +75,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       required String title,
       required DateTime birthDay,
       bool isBanned = false,
-      required String verificationVideoUrl,
-      DateTime? verificationVideoCreatedOn}) {
+      required UserVerificationVideo verificationVideo}) {
     return UserProfileEntity(
         name: name,
         userId: userId,
@@ -90,9 +90,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         lastUpdatedOn: DateTime.now(),
         birthDay: birthDay,
         isBanned: isBanned,
-        verificationVideo: {
-          verificationVideoCreatedOn ?? DateTime.now(): verificationVideoUrl
-        });
+        verificationVideo: mapToUserVerificationVideoEntity(verificationVideo));
   }
 
   @override
@@ -141,19 +139,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       String? bio,
       String? title,
       DateTime? birthDay,
-      String? verificationVideoUrl}) async {
-    //should have at-least one
-    final verificationVideoUrls =
-        oldProfile.verificationVideo.values.toList(growable: false);
-    final verificationVideoDates =
-        oldProfile.verificationVideo.keys.toList(growable: false);
-
-    String newVerificationVideoUrl =
-        verificationVideoUrl ?? verificationVideoUrls.last;
-    DateTime? newVerificationVideoCreatedOn = verificationVideoUrl != null
-        ? DateTime.now()
-        : verificationVideoDates.last;
-
+      UserVerificationVideo? verificationVideo}) async {
     UserProfile newProfile = _createUserProfileInstance(
         name: oldProfile.name,
         userId: oldProfile.userId,
@@ -166,8 +152,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         title: title ?? oldProfile.title,
         birthDay: birthDay ?? oldProfile.birthDay,
         isBanned: oldProfile.isBanned,
-        verificationVideoCreatedOn: newVerificationVideoCreatedOn,
-        verificationVideoUrl: newVerificationVideoUrl);
+        verificationVideo: verificationVideo ?? oldProfile.verificationVideo);
 
     //remote
     OperationResult result =
@@ -198,11 +183,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<OperationResult> uploadVerificationVideo({
-    required File file,
-  }) async {
+  Future<OperationResult> uploadVerificationVideo(
+      {required File file, required String verificationCode}) async {
     return await _remoteProfileDataSource.uploadVerificationVideo(
-      file: file,
-    );
+        file: file, verificationCode: verificationCode);
+  }
+
+  @override
+  Future<OperationResult> deleteVerificationVideo() async {
+    return await _remoteProfileDataSource.deleteVerificationVideo();
   }
 }

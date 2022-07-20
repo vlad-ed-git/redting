@@ -21,7 +21,9 @@ var appTextTheme = TextTheme(
   bodyText2: GoogleFonts.faunaOne(
       fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
   button: GoogleFonts.faunaOne(
-      fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+  ),
   caption: GoogleFonts.faunaOne(
       fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
   overline: GoogleFonts.faunaOne(
