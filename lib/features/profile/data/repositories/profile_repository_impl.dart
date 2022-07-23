@@ -5,6 +5,8 @@ import 'package:redting/features/profile/data/data_sources/local/local_profile_s
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
 import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
+import 'package:redting/features/profile/data/utils/compressors/image_compressor.dart';
+import 'package:redting/features/profile/data/utils/compressors/video_compressor.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
@@ -14,9 +16,14 @@ import 'package:redting/res/strings.dart';
 class ProfileRepositoryImpl implements ProfileRepository {
   final RemoteProfileDataSource _remoteProfileDataSource;
   final LocalProfileDataSource _localProfileDataSource;
+  final VideoCompressor _videoCompressor;
+  final ImageCompressor _imageCompressor;
 
   ProfileRepositoryImpl(
-      this._remoteProfileDataSource, this._localProfileDataSource);
+      this._remoteProfileDataSource,
+      this._localProfileDataSource,
+      this._videoCompressor,
+      this._imageCompressor);
 
   @override
   Future<OperationResult> createUserProfile(
@@ -27,10 +34,47 @@ class ProfileRepositoryImpl implements ProfileRepository {
       String? genderOther,
       required UserGender gender,
       required String bio,
-      required String registerCountry,
       required String title,
-      required DateTime birthDay,
-      required UserVerificationVideo verificationVideo}) async {
+      required DateTime? birthDay,
+      required String registerCountry,
+      required UserVerificationVideo? verificationVideo}) async {
+    //check the data
+
+    if (name.isEmpty) {
+      return OperationResult(errorOccurred: true, errorMessage: nameMissingErr);
+    }
+    if (userId.isEmpty || phoneNumber.isEmpty) {
+      return OperationResult(
+          errorOccurred: true,
+          errorMessage: userIdOrPhoneNumberMissingDuringProfileCreateErr);
+    }
+    if (profilePhotoUrl.isEmpty) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: emptyProfilePhotoErr);
+    }
+    if (verificationVideo == null) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: noVerificationVideo);
+    }
+    if (!UserProfile.isValidGender(gender: gender, genderOther: genderOther)) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: noGenderSpecified);
+    }
+    if ((bio.isEmpty || bio.length < UserProfile.userBioMinLen)) {
+      return OperationResult(errorOccurred: true, errorMessage: bioIsEmptyErr);
+    }
+    if (title.isEmpty || title.length < UserProfile.userTitleMinLen) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: titleIsEmptyErr);
+    }
+    if (title.length > UserProfile.userTitleMaxLen) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: titleIsTooLongErr);
+    }
+    if (!UserProfile.isOfLegalAge(birthDay: birthDay)) {
+      return OperationResult(errorOccurred: true, errorMessage: bDayNotSet);
+    }
+
     UserProfile profile = _createUserProfileInstance(
         name: name,
         userId: userId,
@@ -41,7 +85,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         bio: bio,
         registerCountry: registerCountry,
         title: title,
-        birthDay: birthDay,
+        birthDay: birthDay!,
         isBanned: false,
         verificationVideo: verificationVideo);
 
@@ -54,8 +98,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
 
     //local
-    OperationResult result =
-        await _localProfileDataSource.cacheUserProfile(profile: savedProfile);
+    OperationResult result = await _localProfileDataSource
+        .cacheAndReturnUserProfile(profile: savedProfile);
     if (result.errorOccurred) {
       return OperationResult(
           errorOccurred: true, errorMessage: createProfileError);
@@ -63,6 +107,52 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return result;
   }
 
+  /// FETCH
+  @override
+  Future<OperationResult> getUserProfile() async {
+    //remote
+    final OperationResult result =
+        await _remoteProfileDataSource.getUserProfile();
+
+    if (result.errorOccurred) return result;
+
+    //update cache
+    if (result.data is UserProfile) {
+      return await _localProfileDataSource.cacheAndReturnUserProfile(
+          profile: result.data as UserProfile);
+    }
+
+    return result;
+  }
+
+  /// UPLOADS
+  @override
+  Future<OperationResult> uploadProfilePhoto(
+      {required File file, required String filename}) async {
+    return await _remoteProfileDataSource.uploadProfilePhoto(
+        file: file, filename: filename, imageCompressor: _imageCompressor);
+  }
+
+  @override
+  Future<OperationResult> generateVerificationWord() async {
+    return await _remoteProfileDataSource.generateVerificationWord();
+  }
+
+  @override
+  Future<OperationResult> uploadVerificationVideo(
+      {required File file, required String verificationCode}) async {
+    return await _remoteProfileDataSource.uploadVerificationVideo(
+        file: file,
+        verificationCode: verificationCode,
+        compressor: _videoCompressor);
+  }
+
+  @override
+  Future<OperationResult> deleteVerificationVideo() async {
+    return await _remoteProfileDataSource.deleteVerificationVideo();
+  }
+
+  /// INSTANCE CREATION
   UserProfile _createUserProfileInstance(
       {required String name,
       required String userId,
@@ -81,7 +171,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         userId: userId,
         phoneNumber: phoneNumber,
         profilePhotoUrl: profilePhotoUrl,
-        gender: mapUserGenderToDataEntity(gender),
+        genderEntity: mapUserGenderToDataEntity(gender),
         genderOther: genderOther,
         bio: bio,
         registerCountry: registerCountry,
@@ -90,107 +180,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
         lastUpdatedOn: DateTime.now(),
         birthDay: birthDay,
         isBanned: isBanned,
-        verificationVideo: mapToUserVerificationVideoEntity(verificationVideo));
-  }
-
-  @override
-  Future<OperationResult> deleteUserProfile(
-      {required UserProfile profile}) async {
-    //remote
-    OperationResult result =
-        await _remoteProfileDataSource.deleteUserProfile(profile: profile);
-    if (!result.errorOccurred) {
-      //local
-      result =
-          await _localProfileDataSource.clearUserProfileCache(profile: profile);
-    }
-
-    if (result.errorOccurred) {
-      return OperationResult(
-          errorMessage: deleteProfileError, errorOccurred: true);
-    }
-    return result;
-  }
-
-  @override
-  Future<OperationResult> getUserProfile() async {
-    //remote
-    final UserProfile? profile =
-        await _remoteProfileDataSource.getUserProfile();
-
-    //update cache
-    if (profile != null) {
-      await _localProfileDataSource.cacheUserProfile(profile: profile);
-    }
-
-    //always read from cache
-    UserProfile? userProfile =
-        await _localProfileDataSource.getCachedUserProfile();
-    return OperationResult(data: userProfile);
-  }
-
-  @override
-  Future<OperationResult> updateUserProfile(
-      {required UserProfile oldProfile,
-      String? name,
-      String? profilePhotoUrl,
-      String? genderOther,
-      UserGender? gender,
-      String? bio,
-      String? title,
-      DateTime? birthDay,
-      UserVerificationVideo? verificationVideo}) async {
-    UserProfile newProfile = _createUserProfileInstance(
-        name: oldProfile.name,
-        userId: oldProfile.userId,
-        phoneNumber: oldProfile.phoneNumber,
-        profilePhotoUrl: profilePhotoUrl ?? oldProfile.profilePhotoUrl,
-        gender: gender ?? oldProfile.gender,
-        genderOther: genderOther ?? oldProfile.genderOther,
-        bio: bio ?? oldProfile.bio,
-        registerCountry: oldProfile.registerCountry,
-        title: title ?? oldProfile.title,
-        birthDay: birthDay ?? oldProfile.birthDay,
-        isBanned: oldProfile.isBanned,
-        verificationVideo: verificationVideo ?? oldProfile.verificationVideo);
-
-    //remote
-    OperationResult result =
-        await _remoteProfileDataSource.updateUserProfile(profile: newProfile);
-    if (!result.errorOccurred) {
-      //local
-      result = await _localProfileDataSource.updateUserProfileCache(
-          profile: newProfile);
-    }
-
-    if (result.errorOccurred) {
-      return OperationResult(
-          errorMessage: updateProfileError, errorOccurred: true);
-    }
-    return result;
-  }
-
-  @override
-  Future<OperationResult> uploadProfilePhoto(
-      {required File file, required String filename}) async {
-    return await _remoteProfileDataSource.uploadProfilePhoto(
-        file: file, filename: filename);
-  }
-
-  @override
-  Future<OperationResult> generateVerificationWord() async {
-    return await _remoteProfileDataSource.generateVerificationWord();
-  }
-
-  @override
-  Future<OperationResult> uploadVerificationVideo(
-      {required File file, required String verificationCode}) async {
-    return await _remoteProfileDataSource.uploadVerificationVideo(
-        file: file, verificationCode: verificationCode);
-  }
-
-  @override
-  Future<OperationResult> deleteVerificationVideo() async {
-    return await _remoteProfileDataSource.deleteVerificationVideo();
+        verificationVideo: verificationVideo);
   }
 }

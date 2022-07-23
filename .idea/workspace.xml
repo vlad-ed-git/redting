@@ -9,41 +9,78 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0343c0f-6e2a-4b70-94b8-be5d411a5c67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/features/profile/data/entities/user_verification_video_entity.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/profile/data/entities/user_verification_video_entity.g.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/profile/data/utils/user_verification_video_converter.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/profile/domain/models/user_verification_video.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/verification_video/delete_verification_video_usecase.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/verification_video_editor.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/components/buttons/main_elevated_btn.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/core/di/core_dependencies.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/entities/dating_profile_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/entities/dating_profile_entity.g.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/entities/sexual_orientation_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/entities/sexual_orientation_entity.g.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/local/hive_dating_profile.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/local/local_dating_profile_source.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/remote/fire_dating_profile.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/remote/remote_dating_profile_source.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/repository/dating_profile_repo_impl.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/di/dating_profile_di.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/models/dating_profile.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/models/sexual_orientation.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/repository/dating_profile_repo.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/crud/create_dating_profile.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/crud/get_dating_profile.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/crud/update_dating_profile.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/dating_profile_usecases.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/photos/add_photo_usecase.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/pages/create_dating_profile_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/home/presentation/pages/home_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/profile/data/utils/compressors/image_compressor.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/profile/data/utils/compressors/video_compressor.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/splash/di/splash_di.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/splash/domain/current_user_status_util.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/splash/domain/splash_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/splash/state/current_user_bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/splash/state/current_user_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/splash/state/current_user_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/splash/usecases/fetch_current_user.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/data/hive_names.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/data/hive_names.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/core/data/hive_type_ids.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/data/hive_type_ids.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/data/local_storage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/data/local_storage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/auth/data/data_sources/remote/fire_auth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/data/data_sources/remote/fire_auth.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/auth/data/entities/auth_user_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/data/entities/auth_user_entity.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/auth/data/entities/auth_user_entity.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/data/entities/auth_user_entity.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/auth/di/auth_di.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/di/auth_di.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/auth/domain/models/auth_user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/domain/models/auth_user.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/auth/presentation/pages/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/presentation/pages/login_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/auth/presentation/pages/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/splash/splash_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/data/data_sources/local/hive_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/data_sources/local/hive_profile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/data/data_sources/local/local_profile_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/data_sources/local/local_profile_source.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote/fire_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote/fire_profile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote/remote_profile_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote/remote_profile_source.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/data/entities/user_profile_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/entities/user_profile_entity.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/data/entities/user_profile_entity.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/entities/user_profile_entity.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/data/entities/user_verification_video_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/entities/user_verification_video_entity.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/data/repositories/profile_repository_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/data/repositories/profile_repository_impl.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/data/utils/user_verification_video_converter.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/di/profile_di.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/di/profile_di.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/models/user_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/models/user_profile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/repositories/ProfileRepository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/repositories/ProfileRepository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/create_profile_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/create_profile_usecase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/delete_profile_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/delete_profile_usecase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/generate_verification_video_code_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/verification_video/generate_verification_video_code_usecase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/get_profile_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/get_profile_usecase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/create_profile_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/create_profile_usecase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/delete_profile_usecase.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/update_profile_usecase.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile_usecases.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile_usecases.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/update_profile_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/update_profile_usecase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/upload_profile_photo_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile_photo/upload_profile_photo_usecase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/upload_verification_video_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/verification_video/upload_verification_video_usecase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/components/verification_video.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/components/video_recorder.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/components/verification_video_editor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/verification_video_editor.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/pages/create_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/pages/create_profile_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_bloc.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_event.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_state.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/res/fonts.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/fonts.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main_init.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main_init.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/routes.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/res/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/strings.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
@@ -88,25 +125,25 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/features/profile" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/features/dating_profile" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/features/dating_profile" />
       <recent name="$PROJECT_DIR$/lib/features/profile" />
       <recent name="$PROJECT_DIR$/lib/features/profile/data/data_sources/local" />
       <recent name="$PROJECT_DIR$/lib/features/profile/data" />
       <recent name="$PROJECT_DIR$/lib/features/auth/data/entities" />
-      <recent name="$PROJECT_DIR$/lib/features/auth" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile" />
-      <recent name="$PROJECT_DIR$/lib/features/profile/domain/use_cases/verification_video" />
-      <recent name="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile_photo" />
-      <recent name="$PROJECT_DIR$/lib/features/profile/data/data_sources/remote" />
-      <recent name="$PROJECT_DIR$/lib/features/profile/domain/models" />
+      <recent name="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/photos" />
+      <recent name="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/crud" />
+      <recent name="$PROJECT_DIR$/lib/features/home/presentation/pages" />
+      <recent name="$PROJECT_DIR$/lib/features/splash/domain" />
+      <recent name="$PROJECT_DIR$/lib/features/splash" />
     </key>
   </component>
   <component name="RunManager">

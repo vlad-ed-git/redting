@@ -15,8 +15,10 @@ class FireAuth implements RemoteAuthSource {
       if (user == null) return OperationResult();
 
       return OperationResult(
-          data:
-              AuthUserEntity(userId: user.uid, phoneNumber: user.phoneNumber!));
+          data: AuthUserEntity(
+        userId: user.uid,
+        phoneNumber: user.phoneNumber!,
+      ));
     } catch (e) {
       /// probably phone number is unset
       return OperationResult(errorOccurred: true, errorMessage: "$e");

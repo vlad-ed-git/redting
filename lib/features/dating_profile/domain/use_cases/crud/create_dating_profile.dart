@@ -1,0 +1,29 @@
+import 'package:redting/core/utils/service_result.dart';
+import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
+import 'package:redting/features/dating_profile/domain/repository/dating_profile_repo.dart';
+import 'package:redting/features/profile/domain/models/user_gender.dart';
+
+class CreateDatingProfileUseCase {
+  final DatingProfileRepo _repository;
+  CreateDatingProfileUseCase(
+    this._repository,
+  );
+
+  Future<OperationResult> execute(
+      String userId,
+      List<String> photos,
+      SexualOrientation myOrientation,
+      int minAgePreference,
+      int maxAgePreference,
+      UserGender? genderPreference,
+      List<SexualOrientation> orientationsPreference) async {
+    return await _repository.createDatingProfile(
+        userId,
+        photos,
+        myOrientation,
+        minAgePreference,
+        maxAgePreference,
+        genderPreference,
+        orientationsPreference);
+  }
+}

@@ -30,15 +30,15 @@ class UserVerificationVideoEntity implements UserVerificationVideo {
   Map<String, dynamic> toJson() => _$UserVerificationVideoEntityToJson(this);
 
   @override
+  UserVerificationVideo fromJson(Map<String, dynamic> json) {
+    return UserVerificationVideoEntity.fromJson(json);
+  }
+
+  @override
   bool isSameAs(UserVerificationVideo userVerificationVideo) {
     return userVerificationVideo.userId == userVerificationVideo.userId &&
         userVerificationVideo.videoUrl == userVerificationVideo.videoUrl &&
         userVerificationVideo.verificationCode ==
             userVerificationVideo.verificationCode;
-  }
-
-  @override
-  UserVerificationVideo fromJson(Map<String, dynamic> json) {
-    return UserVerificationVideoEntity.fromJson(json);
   }
 }

@@ -7,7 +7,7 @@ import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
 import 'package:redting/core/components/text/app_name_std_style.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
-import 'package:redting/features/auth/presentation/state/auth_user_bloc.dart';
+import 'package:redting/features/splash/state/current_user_bloc.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
 import 'package:redting/res/routes.dart';
@@ -30,14 +30,36 @@ class _SplashScreenState extends State<SplashScreen> {
     return BlocProvider(
       lazy: false,
       create: (BuildContext blocProviderContext) =>
-          GetIt.instance<AuthUserBloc>(),
-      child: BlocListener<AuthUserBloc, AuthUserState>(
+          GetIt.instance<CurrentUserBloc>(),
+      child: BlocListener<CurrentUserBloc, CurrentUserState>(
         listener: (context, state) {
-          if (state is UserSignedInState) {
-            _goToProfileScreen(authUser: state.authUser);
-          }
-          if (state is NoAuthUserFoundState) {
-            _goToLogin();
+          if (state is LoadedCurrentUserState) {
+            bool shouldLogin = state.authUser == null;
+            bool shouldCreateProfile =
+                state.authUser != null && state.userProfile == null;
+            bool shouldCreateDatingProfile = state.authUser != null &&
+                state.userProfile != null &&
+                state.datingProfile == null;
+            bool shouldGoHome = state.authUser != null &&
+                state.userProfile != null &&
+                state.datingProfile != null;
+
+            if (shouldLogin) {
+              _goToLogin();
+            }
+
+            if (shouldCreateProfile) {
+              print(state.userProfile);
+              _goToProfileScreen(authUser: state.authUser!);
+            }
+
+            if (shouldCreateDatingProfile) {
+              _goToDatingProfile(authUser: state.authUser!);
+            }
+
+            if (shouldGoHome) {
+              _goToHome();
+            }
           }
         },
         child: ScreenContainer(
@@ -52,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: GlassCard(
                   constraints: const BoxConstraints(
                       minWidth: 300, maxWidth: 300, minHeight: 200),
-                  child: BlocBuilder<AuthUserBloc, AuthUserState>(
+                  child: BlocBuilder<CurrentUserBloc, CurrentUserState>(
                       builder: (blocContext, state) {
                     return Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -64,11 +86,11 @@ class _SplashScreenState extends State<SplashScreen> {
                               large: true,
                             ),
                           ),
-                          if (state is InitialAuthUserState)
-                            _initialize(blocContext),
-                          if (state is LoadingAuthState) _getLoadingIndicator(),
-                          if (state is ErrorLoadingAuthUserState)
-                            _getErrorTxt(),
+                          if (state is InitialState) _initialize(blocContext),
+                          if (state is LoadingCurrentUserState)
+                            _getLoadingIndicator(),
+                          if (state is ErrorLoadingCurrentUserState)
+                            _errorWidget(),
                         ]);
                   }),
                 )),
@@ -79,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _initialize(BuildContext blocContext) {
-    BlocProvider.of<AuthUserBloc>(blocContext).add(LoadAuthUserEvent());
+    BlocProvider.of<CurrentUserBloc>(blocContext).add(LoadCurrentUserEvent());
     return Center(
       child: Text(
         loadingAuthUser,
@@ -95,7 +117,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Widget _getErrorTxt() {
+  Widget _errorWidget() {
     return Center(
       child: Text(
         loadingAuthUserErr,
@@ -108,12 +130,21 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   //navigation
-  _goToLogin() {
+  void _goToLogin() {
     Navigator.pushReplacementNamed(context, loginRoute);
   }
 
-  _goToProfileScreen({required AuthUser authUser}) {
+  void _goToProfileScreen({required AuthUser authUser}) {
     Navigator.pushReplacementNamed(context, createProfileRoute,
+        arguments: authUser);
+  }
+
+  void _goToHome() {
+    Navigator.pushReplacementNamed(context, homeRoute);
+  }
+
+  void _goToDatingProfile({required AuthUser authUser}) {
+    Navigator.pushReplacementNamed(context, createDatingProfileRoute,
         arguments: authUser);
   }
 }

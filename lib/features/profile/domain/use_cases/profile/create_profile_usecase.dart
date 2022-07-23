@@ -15,11 +15,10 @@ class CreateProfileUseCase {
     String? genderOther,
     required UserGender gender,
     required String bio,
-    required String registerCountry,
     required String title,
-    required DateTime birthDay,
-    bool isBanned = false,
-    required UserVerificationVideo verificationVideo,
+    required DateTime? birthDay,
+    required String registerCountry,
+    required UserVerificationVideo? verificationVideo,
   }) async {
     return await profileRepository.createUserProfile(
         name: name,
@@ -28,8 +27,8 @@ class CreateProfileUseCase {
         profilePhotoUrl: profilePhotoUrl,
         gender: gender,
         bio: bio,
-        registerCountry: registerCountry,
         title: title,
+        registerCountry: registerCountry,
         birthDay: birthDay,
         verificationVideo: verificationVideo);
   }

@@ -14,7 +14,7 @@ import 'package:redting/features/auth/presentation/state/auth_user_bloc.dart';
 /// FACTORY - instantiated every time we request
 ///  SINGLETON - only a single instance is created
 
-void init() {
+GetIt init() {
   final GetIt authDiInstance = GetIt.instance;
   //auth bloc
   authDiInstance
@@ -47,4 +47,6 @@ void init() {
 
   //local data source
   authDiInstance.registerLazySingleton<LocalAuthSource>(() => AuthUserHive());
+
+  return authDiInstance;
 }

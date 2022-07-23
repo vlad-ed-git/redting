@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:redting/core/components/buttons/main_elevated_btn.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
-import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
 import 'package:redting/core/components/selectors/country_selector.dart';
 import 'package:redting/core/components/text_input/outlined_txtfield.dart';
@@ -251,27 +251,13 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 200, maxWidth: 200),
-          child: ElevatedButton(
-              onPressed: () {
-                _onClickedContinue(blocContext);
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Visibility(
-                    visible: _isLoading,
-                    child: const CircularProgress(),
-                  ),
-                  Expanded(
-                    child: Text(
-                      loginBtn.toUpperCase(),
-                      style: appTextTheme.button
-                          ?.copyWith(fontWeight: FontWeight.w700),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              )),
+          child: MainElevatedBtn(
+          onPressed: () {
+          _onClickedContinue(blocContext);
+          },
+       lbl: loginBtn,
+            showLoading: _isLoading,
+          ),
         ),
       ],
     );

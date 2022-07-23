@@ -6,7 +6,8 @@ const initAppErr = "Something went wrong! Please restart app";
 
 //splash screen
 const loadingAuthUser = 'Authenticating ...';
-const loadingAuthUserErr = 'Something went wrong! Please restart app!';
+const loadingAuthUserErr =
+    'Checking your auth status failed! Please restart the app';
 
 //login screen
 const loginTitle = "Login";
@@ -69,3 +70,34 @@ const errorUploadingVerificationVideo =
     "Failed to upload your verification video! check your connection & retry";
 const successUploadingVerificationVideo =
     "Your verification video has been saved";
+
+//create profile
+const createProfileBtn = "GET IN";
+const createProfileOnGoing = "Creating profile...";
+const createProfileSuccess = "Awesome! Your profile was created.";
+const createProfileFail =
+    "Failed to create your profile. Please check your connection & retry";
+const userIdOrPhoneNumberMissingDuringProfileCreateErr =
+    "OOps! Looks like you are logged out! Please restart the app";
+const emptyProfilePhotoErr = "A profile photo is required";
+const noVerificationVideo = "A verification video is required";
+const noGenderSpecified = "Please state your gender";
+const bioIsEmptyErr = "Mmmh! That bio is too short it seems.";
+const titleIsEmptyErr = "Please provide your title";
+const titleIsTooLongErr = "Mmmh! Your title is too long. Please abbreviate it";
+const bDayNotSet = "Your birthday is required. You must be at least 18 to join";
+const nameMissingErr = "Please provide your name";
+
+//dating profile
+
+const uploadingDatingProfilePhotoErr =
+    "Failed to upload your photo! Please try again.";
+const deletingDatingProfilePhotoErr =
+    "Failed to delete your RedTing profile photo! Please retry";
+const createDatingProfileErr =
+    "Failed to create your RedTing profile! Please try again.";
+const deleteDatingProfileErr =
+    "Failed to delete your RedTing profile! Please retry";
+const getDatingProfileErr = "Failed to get your RedTing profile! Please retry";
+const updateDatingProfileErr =
+    "Failed to update your RedTing profile changes! Please retry";

@@ -6,9 +6,7 @@ import 'package:redting/features/profile/data/data_sources/remote/remote_profile
 import 'package:redting/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/create_profile_usecase.dart';
-import 'package:redting/features/profile/domain/use_cases/profile/delete_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_profile_usecase.dart';
-import 'package:redting/features/profile/domain/use_cases/profile/update_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/upload_profile_photo_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_usecases.dart';
 import 'package:redting/features/profile/domain/use_cases/verification_video/delete_verification_video_usecase.dart';
@@ -19,7 +17,7 @@ import 'package:redting/features/profile/presentation/state/user_profile_bloc.da
 /// FACTORY - instantiated every time we request
 ///  SINGLETON - only a single instance is created
 
-void init() {
+GetIt init() {
   final GetIt profileDiInstance = GetIt.instance;
   //auth bloc
   profileDiInstance.registerFactory<UserProfileBloc>(
@@ -28,8 +26,6 @@ void init() {
   //useCases
   profileDiInstance.registerLazySingleton<ProfileUseCases>(() =>
       ProfileUseCases(
-          updateProfileUseCase: profileDiInstance(),
-          deleteProfileUseCase: profileDiInstance(),
           createProfileUseCase: profileDiInstance(),
           getProfileUseCase: profileDiInstance(),
           uploadProfilePhotoUseCase: profileDiInstance(),
@@ -42,12 +38,6 @@ void init() {
 
   profileDiInstance.registerLazySingleton<CreateProfileUseCase>(
       () => CreateProfileUseCase(profileRepository: profileDiInstance()));
-
-  profileDiInstance.registerLazySingleton<UpdateProfileUseCase>(
-      () => UpdateProfileUseCase(profileRepository: profileDiInstance()));
-
-  profileDiInstance.registerLazySingleton<DeleteProfileUseCase>(
-      () => DeleteProfileUseCase(profileRepository: profileDiInstance()));
 
   profileDiInstance.registerLazySingleton<UploadProfilePhotoUseCase>(
       () => UploadProfilePhotoUseCase(profileRepository: profileDiInstance()));
@@ -62,9 +52,10 @@ void init() {
   profileDiInstance.registerLazySingleton<DeleteVerificationVideoUseCase>(
       () => DeleteVerificationVideoUseCase(profileDiInstance()));
 
-  //auth repository
-  profileDiInstance.registerLazySingleton<ProfileRepository>(
-      () => ProfileRepositoryImpl(profileDiInstance(), profileDiInstance()));
+  //repository
+  profileDiInstance.registerLazySingleton<ProfileRepository>(() =>
+      ProfileRepositoryImpl(profileDiInstance(), profileDiInstance(),
+          profileDiInstance(), profileDiInstance()));
 
   //remote data source
   profileDiInstance
@@ -73,4 +64,6 @@ void init() {
   //local data source
   profileDiInstance
       .registerLazySingleton<LocalProfileDataSource>(() => UserProfileHive());
+
+  return profileDiInstance;
 }

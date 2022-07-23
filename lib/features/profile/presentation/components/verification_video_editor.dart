@@ -98,7 +98,7 @@ class _VerificationVideoEditorState extends State<VerificationVideoEditor> {
         child: Icon(
           Icons.verified_user_rounded,
           size: 24,
-          color: Colors.green.withOpacity(0.6),
+          color: appTheme.colorScheme.inversePrimary,
         ),
       );
     }

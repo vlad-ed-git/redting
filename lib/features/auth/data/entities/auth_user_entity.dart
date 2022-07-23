@@ -10,13 +10,16 @@ part 'auth_user_entity.g.dart';
 class AuthUserEntity implements AuthUser {
   @HiveField(0)
   @override
-  String phoneNumber;
+  String userId;
 
   @HiveField(1)
   @override
-  String userId;
+  String phoneNumber;
 
-  AuthUserEntity({required this.userId, required this.phoneNumber});
+  AuthUserEntity({
+    required this.userId,
+    required this.phoneNumber,
+  });
 
   factory AuthUserEntity.fromJson(Map<String, dynamic> json) =>
       _$AuthUserEntityFromJson(json);

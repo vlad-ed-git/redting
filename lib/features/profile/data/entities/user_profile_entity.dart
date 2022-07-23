@@ -5,14 +5,11 @@ import 'package:redting/core/data/hive_type_ids.dart';
 import 'package:redting/core/utils/flutter_fire_date_time_utils.dart';
 import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
 import 'package:redting/features/profile/data/entities/user_verification_video_entity.dart';
-import 'package:redting/features/profile/data/utils/user_verification_video_converter.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 
 part 'user_profile_entity.g.dart';
-
-//todo sexual orientation
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
 @HiveType(typeId: userProfileTypeId)
@@ -38,8 +35,7 @@ class UserProfileEntity implements UserProfile {
   String? genderOther;
 
   @HiveField(5)
-  @override
-  UserGender gender;
+  UserGenderEntity genderEntity;
 
   @HiveField(6)
   @override
@@ -74,7 +70,6 @@ class UserProfileEntity implements UserProfile {
 
   @HiveField(13)
   @override
-  @UserVerificationVideoConverter()
   UserVerificationVideo verificationVideo;
 
   UserProfileEntity({
@@ -90,9 +85,9 @@ class UserProfileEntity implements UserProfile {
     required this.lastUpdatedOn,
     required this.birthDay,
     required this.isBanned,
-    required UserGenderEntity gender,
+    required this.genderEntity,
     required this.verificationVideo,
-  }) : gender = mapUserGenderEntityToDomainModel(gender);
+  });
 
   @override
   factory UserProfileEntity.fromJson(Map<String, dynamic> json) =>
@@ -110,13 +105,14 @@ class UserProfileEntity implements UserProfile {
   UserProfile fromJson(Map<String, dynamic> json) {
     return UserProfileEntity.fromJson(json);
   }
-}
 
-UserVerificationVideoEntity mapToUserVerificationVideoEntity(
-    UserVerificationVideo vVideo) {
-  return UserVerificationVideoEntity(
-    videoUrl: vVideo.videoUrl,
-    verificationCode: vVideo.verificationCode,
-    userId: vVideo.userId,
-  );
+  @override
+  UserGender getGender() {
+    return mapUserGenderEntityToDomainModel(genderEntity);
+  }
+
+  @override
+  setGender(UserGender gender) {
+    genderEntity = mapUserGenderToDataEntity(gender);
+  }
 }

@@ -5,6 +5,7 @@ abstract class UserProfileState {}
 
 class UserProfileInitialState extends UserProfileState {}
 
+/// USER PROFILE GET
 class LoadingUserProfileState extends UserProfileState {}
 
 class LoadedUserProfileState extends UserProfileState {
@@ -18,6 +19,19 @@ class ErrorLoadingUserProfileState extends UserProfileState {
 }
 
 class NoAuthUserFoundState extends UserProfileState {}
+
+/// USER PROFILE CREATING
+class CreatingUserProfileState extends UserProfileState {}
+
+class CreatedUserProfileState extends UserProfileState {
+  final UserProfile profile;
+  CreatedUserProfileState({required this.profile});
+}
+
+class ErrorCreatingUserProfileState extends UserProfileState {
+  final String? errMsg;
+  ErrorCreatingUserProfileState({required this.errMsg});
+}
 
 /// PROFILE PHOTO
 class UpdatingProfilePhotoState extends UserProfileState {
@@ -61,7 +75,7 @@ class DeletingVerificationVideoFailedState extends UserProfileState {
 
 class DeletedVerificationVideoState extends UserProfileState {}
 
-//getting a code
+/// VERIFICATION CODE
 class LoadingVerificationVideoCodeState extends UserProfileState {}
 
 class LoadingVerificationVideoCodeFailedState extends UserProfileState {

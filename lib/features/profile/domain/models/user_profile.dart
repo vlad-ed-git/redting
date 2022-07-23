@@ -8,7 +8,6 @@ abstract class UserProfile {
   String phoneNumber;
   String profilePhotoUrl;
   String? genderOther;
-  UserGender gender;
   String bio;
   String registerCountry;
   String title;
@@ -26,13 +25,17 @@ abstract class UserProfile {
 
   bool isBanned;
 
+  static const int userBioMinLen = 20;
+  static const int userBioMaxLen = 120;
+  static const int userTitleMinLen = 4;
+  static const int userTitleMaxLen = 40;
+
   UserProfile({
     required this.name,
     required this.userId,
     required this.phoneNumber,
     required this.profilePhotoUrl,
     this.genderOther,
-    required this.gender,
     required this.bio,
     required this.registerCountry,
     required this.title,
@@ -46,4 +49,17 @@ abstract class UserProfile {
   bool isSameAs(UserProfile user);
   UserProfile fromJson(Map<String, dynamic> json);
   Map<String, dynamic> toJson();
+
+  static bool isOfLegalAge({DateTime? birthDay}) {
+    if (birthDay == null) return false;
+    return (DateTime.now().year - birthDay.year) >= 18;
+  }
+
+  static bool isValidGender({required UserGender gender, String? genderOther}) {
+    if (gender != UserGender.stated) return true;
+    return (genderOther != null) && (genderOther.isEmpty == false);
+  }
+
+  UserGender getGender();
+  setGender(UserGender gender);
 }

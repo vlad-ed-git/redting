@@ -5,6 +5,7 @@ abstract class LocalProfileDataSource {
   Future<UserProfile?> getCachedUserProfile();
   Future<OperationResult> updateUserProfileCache(
       {required UserProfile profile});
-  Future<OperationResult> clearUserProfileCache({required UserProfile profile});
-  Future<OperationResult> cacheUserProfile({required UserProfile profile});
+  Future<OperationResult> clearUserProfileCache();
+  Future<OperationResult> cacheAndReturnUserProfile(
+      {required UserProfile profile});
 }
