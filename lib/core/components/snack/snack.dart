@@ -34,8 +34,7 @@ class Snack {
                 textColor: appTheme.colorScheme.primary,
               )
             : null,
-        backgroundColor: isError
-            ? appTheme.colorScheme.inversePrimary.withOpacity(0.3)
-            : Colors.white);
+        backgroundColor:
+            isError ? appTheme.colorScheme.inversePrimary : Colors.white);
   }
 }

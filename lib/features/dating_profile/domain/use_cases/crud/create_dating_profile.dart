@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/dating_profile/domain/repository/dating_profile_repo.dart';
@@ -11,8 +13,8 @@ class CreateDatingProfileUseCase {
 
   Future<OperationResult> execute(
       String userId,
-      List<String> photos,
-      SexualOrientation myOrientation,
+      List<File> photoFiles,
+      List<String> photoFileNames,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
@@ -21,8 +23,8 @@ class CreateDatingProfileUseCase {
       bool onlyShowMeOthersOfSameOrientation) async {
     return await _repository.createDatingProfile(
         userId,
-        photos,
-        myOrientation,
+        photoFiles,
+        photoFileNames,
         minAgePreference,
         maxAgePreference,
         genderPreference,

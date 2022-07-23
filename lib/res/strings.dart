@@ -89,7 +89,6 @@ const bDayNotSet = "Your birthday is required. You must be at least 18 to join";
 const nameMissingErr = "Please provide your name";
 
 //dating profile
-
 const uploadingDatingProfilePhotoErr =
     "Failed to upload your photo! Please try again.";
 const deletingDatingProfilePhotoErr =
@@ -100,7 +99,7 @@ const deleteDatingProfileErr =
     "Failed to delete your RedTing profile! Please retry";
 const getDatingProfileErr = "Failed to get your RedTing profile! Please retry";
 const updateDatingProfileErr =
-    "Failed to update your RedTing profile changes! Please retry";
+    "Failed to update your RedTing profile! Please retry";
 const ageRangeLbl = "AGE RANGE";
 const mySexualityLbl = "I AM";
 const showMeGendersAndPreferencesLbl = "SHOW ME";
@@ -120,3 +119,5 @@ const biSexualSexualOrientationLbl = "bisexual";
 const asexualSexualOrientationLbl = "asexual";
 const gaySexualOrientationLbl = "gay";
 const createDatingProfileBtn = "ALL SET";
+const datingProfilePicsMissingErr = 'Please add at least 3 photos';
+const creatingDatingProfilePleaseWait = "just a bit ...";

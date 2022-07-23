@@ -9,23 +9,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0343c0f-6e2a-4b70-94b8-be5d411a5c67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/core/utils/consts.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/age_preference_slider.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/dating_pics.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/gender_preferences.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/sexual_preferences.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/res/string_maps.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/core/components/text/app_name_std_style.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/components/text/app_name_std_style.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/entities/dating_profile_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/entities/dating_profile_entity.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/entities/dating_profile_entity.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/data_sources/entities/dating_profile_entity.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/components/buttons/main_elevated_btn.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/components/buttons/main_elevated_btn.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/components/snack/snack.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/components/snack/snack.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/utils/consts.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/utils/consts.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/data/repository/dating_profile_repo_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/data/repository/dating_profile_repo_impl.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/domain/models/dating_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/models/dating_profile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/domain/repository/dating_profile_repo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/repository/dating_profile_repo.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/crud/create_dating_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/crud/create_dating_profile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/crud/update_dating_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/domain/use_cases/crud/update_dating_profile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/age_preference_slider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/age_preference_slider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/dating_pics.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/dating_pics.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/gender_preferences.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/gender_preferences.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/sexual_preferences.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/components/sexual_preferences.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/presentation/pages/create_dating_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/pages/create_dating_profile_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/dating_profile/presentation/state/dating_profile_state.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/pages/create_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/pages/create_profile_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/res/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/strings.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

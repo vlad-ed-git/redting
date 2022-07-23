@@ -40,7 +40,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   UserGender _gender = UserGender.stated;
   String? _otherGender;
 
-  UserProfileBloc? _event;
+  UserProfileBloc? _eventDispatcher;
   bool _isDialogOpen = false;
 
   //birthday stuff
@@ -252,8 +252,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   /// STATE CHANGE
   void _onInitState(BuildContext blocContext) {
     //get the verification code asap
-    _event ??= BlocProvider.of<UserProfileBloc>(blocContext);
-    _event?.add(GetVerificationVideoCodeEvent());
+    _eventDispatcher ??= BlocProvider.of<UserProfileBloc>(blocContext);
+    _eventDispatcher?.add(GetVerificationVideoCodeEvent());
   }
 
   void _listenToProfilePhotoState(UserProfileState state) {
@@ -392,8 +392,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     setState(() {
       _selectedLocalPhotoFile = file;
     });
-    _event ??= BlocProvider.of<UserProfileBloc>(blocContext);
-    _event?.add(ChangeProfilePhotoEvent(file, filename));
+    _eventDispatcher ??= BlocProvider.of<UserProfileBloc>(blocContext);
+    _eventDispatcher?.add(ChangeProfilePhotoEvent(file, filename));
   }
 
   /// PROFILE VIDEO EVENTS
@@ -405,14 +405,15 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     setState(() {
       _createdLocalVideoFile = file;
     });
-    _event ??= BlocProvider.of<UserProfileBloc>(blocContext);
-    _event?.add(ChangeVerificationVideoEvent(file, _verificationCode!));
+    _eventDispatcher ??= BlocProvider.of<UserProfileBloc>(blocContext);
+    _eventDispatcher
+        ?.add(ChangeVerificationVideoEvent(file, _verificationCode!));
   }
 
   void _onDeleteVerificationVideo(BuildContext blocContext) {
     if (_onGoingProcessBlockVideoUpload()) return;
-    _event ??= BlocProvider.of<UserProfileBloc>(blocContext);
-    _event?.add(DeleteVerificationVideoEvent());
+    _eventDispatcher ??= BlocProvider.of<UserProfileBloc>(blocContext);
+    _eventDispatcher?.add(DeleteVerificationVideoEvent());
   }
 
   ///PROFILE CREATION
@@ -420,9 +421,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       (_isCreatingUserProfile || _isUploadingPhoto || _onGoingOpOnVideo);
   void _createProfile(BuildContext blocContext) {
     if (_onGoingProcessBlockProfileCreation()) return;
-    _event ??= BlocProvider.of<UserProfileBloc>(blocContext);
+    _eventDispatcher ??= BlocProvider.of<UserProfileBloc>(blocContext);
 
-    _event?.add(CreateUserProfileEvent(
+    _eventDispatcher?.add(CreateUserProfileEvent(
         name: _nameController.text,
         userId: loggedInUser.userId,
         phoneNumber: loggedInUser.phoneNumber,

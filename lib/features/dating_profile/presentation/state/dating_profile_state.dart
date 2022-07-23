@@ -18,3 +18,16 @@ class LoadingDatingProfileFailedState extends DatingProfileState {
   final String errMsg;
   LoadingDatingProfileFailedState(this.errMsg);
 }
+
+/// CREATING
+class CreatingProfileState extends DatingProfileState {}
+
+class CreatingProfileFailedState extends DatingProfileState {
+  final String errMsg;
+  CreatingProfileFailedState(this.errMsg);
+}
+
+class CreatedProfileState extends DatingProfileState {
+  final DatingProfile profile;
+  CreatedProfileState(this.profile);
+}

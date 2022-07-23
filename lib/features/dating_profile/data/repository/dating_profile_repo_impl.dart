@@ -39,18 +39,29 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
   @override
   Future<OperationResult> createDatingProfile(
       String userId,
-      List<String> photos,
-      SexualOrientation myOrientation,
+      List<File> photoFiles,
+      List<String> photoFileNames,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
       List<SexualOrientation> userOrientation,
       bool makeMyOrientationPublic,
       bool onlyShowMeOthersOfSameOrientation) async {
+    List<String> photos = [];
+
+    //upload the files
+    int i = 0;
+    for (File file in photoFiles) {
+      OperationResult result = await addPhoto(file, photoFileNames[i], userId);
+      if (result.data is String) {
+        photos.add(result.data);
+      }
+      i++;
+    }
+
     DatingProfile profile = createDatingProfileInstance(
         userId,
         photos,
-        myOrientation,
         minAgePreference,
         maxAgePreference,
         genderPreference,
@@ -61,7 +72,7 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
         await _remoteSource.createDatingProfile(profile);
     if (createdProfile == null) {
       return OperationResult(
-          errorOccurred: true, errorMessage: updateDatingProfileErr);
+          errorOccurred: true, errorMessage: createDatingProfileErr);
     }
     return await _localSource.cacheDatingProfileAndGetIt(createdProfile);
   }
@@ -85,7 +96,6 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
   Future<OperationResult> updateDatingProfile(
       String userId,
       List<String> photos,
-      SexualOrientation myOrientation,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
@@ -95,7 +105,6 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
     DatingProfile profile = createDatingProfileInstance(
         userId,
         photos,
-        myOrientation,
         minAgePreference,
         maxAgePreference,
         genderPreference,
@@ -116,7 +125,6 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
   DatingProfile createDatingProfileInstance(
       String userId,
       List<String> photos,
-      SexualOrientation myOrientation,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,

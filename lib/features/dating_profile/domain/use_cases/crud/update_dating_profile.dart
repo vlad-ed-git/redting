@@ -13,7 +13,6 @@ class UpdateDatingProfileUseCase {
   Future<OperationResult> execute(
       String userId,
       List<String> photos,
-      SexualOrientation myOrientation,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
@@ -23,7 +22,6 @@ class UpdateDatingProfileUseCase {
     return await _repository.updateDatingProfile(
         userId,
         photos,
-        myOrientation,
         minAgePreference,
         maxAgePreference,
         genderPreference,

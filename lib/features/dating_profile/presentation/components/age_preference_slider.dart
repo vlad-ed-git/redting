@@ -5,14 +5,28 @@ import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
 class AgePreferenceSlider extends StatefulWidget {
-  const AgePreferenceSlider({Key? key}) : super(key: key);
+  final Function(int from, int to) onAgeRangeSet;
+  final double fromAge, toAge;
+  const AgePreferenceSlider(
+      {Key? key,
+      required this.onAgeRangeSet,
+      required this.fromAge,
+      required this.toAge})
+      : super(key: key);
 
   @override
   State<AgePreferenceSlider> createState() => _AgeSliderState();
 }
 
 class _AgeSliderState extends State<AgePreferenceSlider> {
-  RangeValues _currentRangeAge = const RangeValues(20, 50);
+  late RangeValues _currentRangeAge;
+
+  @override
+  void initState() {
+    _currentRangeAge = RangeValues(widget.fromAge, widget.toAge);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,7 +45,7 @@ class _AgeSliderState extends State<AgePreferenceSlider> {
               valueIndicatorTextStyle: appTextTheme.headline6,
               valueIndicatorColor:
                   appTheme.colorScheme.primary.withOpacity(0.6),
-              showValueIndicator: ShowValueIndicator.always),
+              showValueIndicator: ShowValueIndicator.never),
           child: RangeSlider(
             values: _currentRangeAge,
             max: 100,
@@ -45,6 +59,7 @@ class _AgeSliderState extends State<AgePreferenceSlider> {
               setState(() {
                 _currentRangeAge = values;
               });
+              widget.onAgeRangeSet(values.start.round(), values.end.round());
             },
           ),
         )

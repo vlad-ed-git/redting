@@ -6,7 +6,11 @@ import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
 class GenderPreferences extends StatefulWidget {
-  const GenderPreferences({Key? key}) : super(key: key);
+  final UserGender? initialGender;
+  final Function(UserGender? value) onChangeGender;
+  const GenderPreferences(
+      {Key? key, this.initialGender, required this.onChangeGender})
+      : super(key: key);
 
   @override
   State<GenderPreferences> createState() => _GenderPreferencesState();
@@ -14,6 +18,11 @@ class GenderPreferences extends StatefulWidget {
 
 class _GenderPreferencesState extends State<GenderPreferences> {
   UserGender? _gender;
+  @override
+  void initState() {
+    _gender = widget.initialGender;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +58,7 @@ class _GenderPreferencesState extends State<GenderPreferences> {
         setState(() {
           _gender = value;
         });
+        widget.onChangeGender(value);
       },
       child: Container(
         decoration: BoxDecoration(

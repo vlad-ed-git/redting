@@ -8,8 +8,8 @@ abstract class DatingProfileRepo {
   Future<OperationResult> addPhoto(File photo, String filename, String userId);
   Future<OperationResult> createDatingProfile(
       String userId,
-      List<String> photos,
-      SexualOrientation myOrientation,
+      List<File> photoFiles,
+      List<String> photoFileNames,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
@@ -20,7 +20,6 @@ abstract class DatingProfileRepo {
   Future<OperationResult> updateDatingProfile(
       String userId,
       List<String> photos,
-      SexualOrientation myOrientation,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,

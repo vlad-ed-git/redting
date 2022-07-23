@@ -7,7 +7,22 @@ import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
 class SexualPreferences extends StatefulWidget {
-  const SexualPreferences({Key? key}) : super(key: key);
+  final List<SexualOrientation> orientationPreferences;
+  final Function(List<SexualOrientation> orientationPreferences)
+      onUpdatedPreferences;
+  final bool makeMyOrientationPublic;
+  final bool showMeMyOrientationOnly;
+  final Function(bool value) onUpdateRestrictions;
+  final Function(bool value) onUpdateVisibility;
+  const SexualPreferences(
+      {Key? key,
+      required this.orientationPreferences,
+      required this.onUpdatedPreferences,
+      required this.onUpdateRestrictions,
+      required this.onUpdateVisibility,
+      required this.makeMyOrientationPublic,
+      required this.showMeMyOrientationOnly})
+      : super(key: key);
 
   @override
   State<SexualPreferences> createState() => _SexualPreferencesState();
@@ -17,6 +32,16 @@ class _SexualPreferencesState extends State<SexualPreferences> {
   Map<SexualOrientation, bool> _myPreferences = {};
   bool _makeMyOrientationPublic = true;
   bool _showMeMyOrientationOnly = true;
+
+  @override
+  void initState() {
+    _myPreferences.clear();
+    _myPreferences.addEntries(
+        widget.orientationPreferences.map((e) => MapEntry(e, true)));
+    _makeMyOrientationPublic = widget.makeMyOrientationPublic;
+    _showMeMyOrientationOnly = widget.showMeMyOrientationOnly;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +71,7 @@ class _SexualPreferencesState extends State<SexualPreferences> {
             setState(() {
               _makeMyOrientationPublic = value;
             });
+            widget.onUpdateVisibility(value);
           },
         ),
         const SizedBox(
@@ -64,6 +90,7 @@ class _SexualPreferencesState extends State<SexualPreferences> {
             setState(() {
               _showMeMyOrientationOnly = value;
             });
+            widget.onUpdateRestrictions(value);
           },
         ),
         const SizedBox(
@@ -93,6 +120,8 @@ class _SexualPreferencesState extends State<SexualPreferences> {
           setState(() {
             _myPreferences = _myPreferences;
           });
+          widget.onUpdatedPreferences(
+              _myPreferences.keys.toList(growable: false));
         }
       },
       child: Container(
