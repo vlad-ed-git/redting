@@ -16,7 +16,9 @@ class CreateDatingProfileUseCase {
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
-      List<SexualOrientation> orientationsPreference) async {
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation) async {
     return await _repository.createDatingProfile(
         userId,
         photos,
@@ -24,6 +26,8 @@ class CreateDatingProfileUseCase {
         minAgePreference,
         maxAgePreference,
         genderPreference,
-        orientationsPreference);
+        userOrientation,
+        makeMyOrientationPublic,
+        onlyShowMeOthersOfSameOrientation);
   }
 }

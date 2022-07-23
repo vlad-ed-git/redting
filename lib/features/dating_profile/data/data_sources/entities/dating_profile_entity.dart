@@ -32,20 +32,26 @@ class DatingProfileEntity implements DatingProfile {
   UserGenderEntity? genderPreference;
 
   @HiveField(5)
-  List<SexualOrientationEntity> sexualOrientationPreferences;
+  List<SexualOrientationEntity> userSexualOrientation;
 
   @HiveField(6)
-  SexualOrientationEntity userSexualOrientation;
+  @override
+  bool makeMyOrientationPublic;
 
-  DatingProfileEntity({
-    required this.maxAgePreference,
-    required this.minAgePreference,
-    required this.photos,
-    required this.userId,
-    this.userSexualOrientation = SexualOrientationEntity.straight,
-    required this.genderPreference,
-    List<SexualOrientationEntity>? sexualOrientationPreferences,
-  }) : sexualOrientationPreferences = sexualOrientationPreferences ?? [];
+  @HiveField(7)
+  @override
+  bool onlyShowMeOthersOfSameOrientation;
+
+  DatingProfileEntity(
+      {required this.maxAgePreference,
+      required this.minAgePreference,
+      required this.photos,
+      required this.userId,
+      required this.genderPreference,
+      List<SexualOrientationEntity>? userOrientation,
+      required this.makeMyOrientationPublic,
+      required this.onlyShowMeOthersOfSameOrientation})
+      : userSexualOrientation = userOrientation ?? [];
 
   @override
   factory DatingProfileEntity.fromJson(Map<String, dynamic> json) =>
@@ -73,15 +79,10 @@ class DatingProfileEntity implements DatingProfile {
   }
 
   @override
-  List<SexualOrientation> getSexualOrientationPreferences() {
-    return sexualOrientationPreferences
-        .map((e) => mapSexualOrientationEntityToModel(e))
+  List<SexualOrientation> getUserSexualOrientation() {
+    return userSexualOrientation
+        .map((entity) => mapSexualOrientationEntityToModel(entity))
         .toList();
-  }
-
-  @override
-  SexualOrientation getUserSexualOrientation() {
-    return mapSexualOrientationEntityToModel(userSexualOrientation);
   }
 
   @override
@@ -90,15 +91,9 @@ class DatingProfileEntity implements DatingProfile {
   }
 
   @override
-  setSexualOrientationPreferences(
-      List<SexualOrientation> orientationPreferences) {
-    sexualOrientationPreferences = orientationPreferences
+  setUserSexualOrientation(List<SexualOrientation> userOrientationModel) {
+    userSexualOrientation = userOrientationModel
         .map((e) => mapSexualOrientationToEntity(e))
         .toList();
-  }
-
-  @override
-  setUserSexualOrientation(SexualOrientation orientation) {
-    userSexualOrientation = mapSexualOrientationToEntity(orientation);
   }
 }

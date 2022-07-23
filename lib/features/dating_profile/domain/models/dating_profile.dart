@@ -6,23 +6,24 @@ abstract class DatingProfile {
   List<String> photos;
   int minAgePreference;
   int maxAgePreference;
+  bool makeMyOrientationPublic;
+  bool onlyShowMeOthersOfSameOrientation;
 
   DatingProfile(
       {required this.userId,
       required this.photos,
       required this.minAgePreference,
-      required this.maxAgePreference});
+      required this.maxAgePreference,
+      this.makeMyOrientationPublic = true,
+      this.onlyShowMeOthersOfSameOrientation = true});
 
   bool isSameAs(DatingProfile datingProfile);
   DatingProfile fromJson(Map<String, dynamic> json);
   Map<String, dynamic> toJson();
 
   UserGender? getGenderPreferences();
+  setGenderPreference(UserGender? genderPreferences);
 
-  List<SexualOrientation> getSexualOrientationPreferences();
-  setSexualOrientationPreferences(
-      List<SexualOrientation> orientationPreferences);
-
-  SexualOrientation getUserSexualOrientation();
-  setUserSexualOrientation(SexualOrientation orientation);
+  List<SexualOrientation> getUserSexualOrientation();
+  setUserSexualOrientation(List<SexualOrientation> orientation);
 }

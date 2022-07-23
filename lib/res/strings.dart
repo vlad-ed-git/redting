@@ -101,3 +101,22 @@ const deleteDatingProfileErr =
 const getDatingProfileErr = "Failed to get your RedTing profile! Please retry";
 const updateDatingProfileErr =
     "Failed to update your RedTing profile changes! Please retry";
+const ageRangeLbl = "AGE RANGE";
+const mySexualityLbl = "I AM";
+const showMeGendersAndPreferencesLbl = "SHOW ME";
+const menLbl = "MEN";
+const womenLbl = "WOMEN";
+const allGendersLbl = "EVERYONE";
+const mySexualOrientation = "MY SEXUAL ORIENTATION";
+const makeMyOrientationPublicLbl = "Show my orientation on my profile";
+const showMeMyOrientationOnly =
+    "Only show me others of same sexual orientation";
+const straightSexualOrientationLbl = "straight";
+const questioningSexualOrientationLbl = "questioning";
+const queerSexualOrientationLbl = "queer";
+const panSexualSexualOrientationLbl = "pansexual";
+const demiSexualSexualOrientationLbl = "demisexual";
+const biSexualSexualOrientationLbl = "bisexual";
+const asexualSexualOrientationLbl = "asexual";
+const gaySexualOrientationLbl = "gay";
+const createDatingProfileBtn = "ALL SET";

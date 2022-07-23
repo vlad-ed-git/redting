@@ -44,7 +44,9 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
-      List<SexualOrientation> orientationsPreference) async {
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation) async {
     DatingProfile profile = createDatingProfileInstance(
         userId,
         photos,
@@ -52,7 +54,9 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
         minAgePreference,
         maxAgePreference,
         genderPreference,
-        orientationsPreference);
+        userOrientation,
+        makeMyOrientationPublic,
+        onlyShowMeOthersOfSameOrientation);
     DatingProfile? createdProfile =
         await _remoteSource.createDatingProfile(profile);
     if (createdProfile == null) {
@@ -85,7 +89,9 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
-      List<SexualOrientation> orientationsPreference) async {
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation) async {
     DatingProfile profile = createDatingProfileInstance(
         userId,
         photos,
@@ -93,7 +99,9 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
         minAgePreference,
         maxAgePreference,
         genderPreference,
-        orientationsPreference);
+        userOrientation,
+        makeMyOrientationPublic,
+        onlyShowMeOthersOfSameOrientation);
 
     DatingProfile? updatedProfile =
         await _remoteSource.updateDatingProfile(profile);
@@ -112,12 +120,14 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
-      List<SexualOrientation> orientationsPreference) {
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation) {
     return DatingProfileEntity(
-      sexualOrientationPreferences: orientationsPreference
-          .map((e) => mapSexualOrientationToEntity(e))
-          .toList(),
-      userSexualOrientation: mapSexualOrientationToEntity(myOrientation),
+      makeMyOrientationPublic: makeMyOrientationPublic,
+      onlyShowMeOthersOfSameOrientation: onlyShowMeOthersOfSameOrientation,
+      userOrientation:
+          userOrientation.map((e) => mapSexualOrientationToEntity(e)).toList(),
       photos: photos,
       maxAgePreference: maxAgePreference,
       minAgePreference: minAgePreference,

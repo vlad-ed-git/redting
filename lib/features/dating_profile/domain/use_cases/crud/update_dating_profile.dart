@@ -17,7 +17,9 @@ class UpdateDatingProfileUseCase {
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
-      List<SexualOrientation> orientationsPreference) async {
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation) async {
     return await _repository.updateDatingProfile(
         userId,
         photos,
@@ -25,6 +27,8 @@ class UpdateDatingProfileUseCase {
         minAgePreference,
         maxAgePreference,
         genderPreference,
-        orientationsPreference);
+        userOrientation,
+        makeMyOrientationPublic,
+        onlyShowMeOthersOfSameOrientation);
   }
 }

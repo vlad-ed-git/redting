@@ -6,7 +6,13 @@ import 'package:redting/res/theme.dart';
 
 class StdAppName extends StatelessWidget {
   final bool large;
-  const StdAppName({Key? key, this.large = false}) : super(key: key);
+  final Color? firstPartTxtColor, secondPartTxtColor;
+  const StdAppName(
+      {Key? key,
+      this.large = false,
+      this.firstPartTxtColor,
+      this.secondPartTxtColor})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +24,13 @@ class StdAppName extends StatelessWidget {
         TextSpan(
             text: appNameFirstWord,
             style: txtTheme?.copyWith(
-              color: appTheme.colorScheme.primary.withOpacity(0.5),
+              color: firstPartTxtColor ??
+                  appTheme.colorScheme.primary.withOpacity(0.5),
             )),
         TextSpan(
             text: appNameLastWord,
-            style: txtTheme?.copyWith(color: appTheme.colorScheme.primary)),
+            style: txtTheme?.copyWith(
+                color: secondPartTxtColor ?? appTheme.colorScheme.primary)),
       ],
     ));
   }

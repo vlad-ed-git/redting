@@ -13,7 +13,9 @@ abstract class DatingProfileRepo {
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
-      List<SexualOrientation> orientationsPreference);
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation);
   Future<OperationResult> getDatingProfile(String userId);
   Future<OperationResult> updateDatingProfile(
       String userId,
@@ -22,5 +24,7 @@ abstract class DatingProfileRepo {
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
-      List<SexualOrientation> orientationsPreference);
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation);
 }

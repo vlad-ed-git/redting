@@ -21,17 +21,17 @@ class DatingProfileEntityAdapter extends TypeAdapter<DatingProfileEntity> {
       minAgePreference: fields[1] as int,
       photos: (fields[2] as List).cast<String>(),
       userId: fields[3] as String,
-      userSexualOrientation: fields[6] as SexualOrientationEntity,
-      genderPreference: fields[4] as UserGenderEntity,
-      sexualOrientationPreferences:
-          (fields[5] as List?)?.cast<SexualOrientationEntity>(),
-    );
+      genderPreference: fields[4] as UserGenderEntity?,
+      makeMyOrientationPublic: fields[6] as bool,
+      onlyShowMeOthersOfSameOrientation: fields[7] as bool,
+    )..userSexualOrientation =
+        (fields[5] as List).cast<SexualOrientationEntity>();
   }
 
   @override
   void write(BinaryWriter writer, DatingProfileEntity obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.maxAgePreference)
       ..writeByte(1)
@@ -43,9 +43,11 @@ class DatingProfileEntityAdapter extends TypeAdapter<DatingProfileEntity> {
       ..writeByte(4)
       ..write(obj.genderPreference)
       ..writeByte(5)
-      ..write(obj.sexualOrientationPreferences)
+      ..write(obj.userSexualOrientation)
       ..writeByte(6)
-      ..write(obj.userSexualOrientation);
+      ..write(obj.makeMyOrientationPublic)
+      ..writeByte(7)
+      ..write(obj.onlyShowMeOthersOfSameOrientation);
   }
 
   @override
@@ -70,17 +72,14 @@ DatingProfileEntity _$DatingProfileEntityFromJson(Map json) =>
       photos:
           (json['photos'] as List<dynamic>).map((e) => e as String).toList(),
       userId: json['userId'] as String,
-      userSexualOrientation: $enumDecodeNullable(
-              _$SexualOrientationEntityEnumMap,
-              json['userSexualOrientation']) ??
-          SexualOrientationEntity.straight,
-      genderPreference:
-          $enumDecode(_$UserGenderEntityEnumMap, json['genderPreferences']),
-      sexualOrientationPreferences:
-          (json['sexualOrientationPreferences'] as List<dynamic>?)
-              ?.map((e) => $enumDecode(_$SexualOrientationEntityEnumMap, e))
-              .toList(),
-    );
+      genderPreference: $enumDecodeNullable(
+          _$UserGenderEntityEnumMap, json['genderPreference']),
+      makeMyOrientationPublic: json['makeMyOrientationPublic'] as bool,
+      onlyShowMeOthersOfSameOrientation:
+          json['onlyShowMeOthersOfSameOrientation'] as bool,
+    )..userSexualOrientation = (json['userSexualOrientation'] as List<dynamic>)
+        .map((e) => $enumDecode(_$SexualOrientationEntityEnumMap, e))
+        .toList();
 
 Map<String, dynamic> _$DatingProfileEntityToJson(
         DatingProfileEntity instance) =>
@@ -89,14 +88,20 @@ Map<String, dynamic> _$DatingProfileEntityToJson(
       'minAgePreference': instance.minAgePreference,
       'photos': instance.photos,
       'userId': instance.userId,
-      'genderPreferences':
-          _$UserGenderEntityEnumMap[instance.genderPreference]!,
-      'sexualOrientationPreferences': instance.sexualOrientationPreferences
+      'genderPreference': _$UserGenderEntityEnumMap[instance.genderPreference],
+      'userSexualOrientation': instance.userSexualOrientation
           .map((e) => _$SexualOrientationEntityEnumMap[e]!)
           .toList(),
-      'userSexualOrientation':
-          _$SexualOrientationEntityEnumMap[instance.userSexualOrientation]!,
+      'makeMyOrientationPublic': instance.makeMyOrientationPublic,
+      'onlyShowMeOthersOfSameOrientation':
+          instance.onlyShowMeOthersOfSameOrientation,
     };
+
+const _$UserGenderEntityEnumMap = {
+  UserGenderEntity.male: 'male',
+  UserGenderEntity.female: 'female',
+  UserGenderEntity.stated: 'stated',
+};
 
 const _$SexualOrientationEntityEnumMap = {
   SexualOrientationEntity.straight: 'straight',
@@ -107,10 +112,4 @@ const _$SexualOrientationEntityEnumMap = {
   SexualOrientationEntity.panSexual: 'panSexual',
   SexualOrientationEntity.queer: 'queer',
   SexualOrientationEntity.questioning: 'questioning',
-};
-
-const _$UserGenderEntityEnumMap = {
-  UserGenderEntity.male: 'male',
-  UserGenderEntity.female: 'female',
-  UserGenderEntity.stated: 'stated',
 };
