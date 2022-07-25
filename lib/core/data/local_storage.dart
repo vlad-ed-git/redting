@@ -2,9 +2,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:redting/core/data/hive_names.dart';
 import 'package:redting/features/auth/data/entities/auth_user_entity.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
-import 'package:redting/features/dating_profile/data/data_sources/entities/dating_profile_entity.dart';
-import 'package:redting/features/dating_profile/data/data_sources/entities/sexual_orientation_entity.dart';
+import 'package:redting/features/dating_profile/data/entities/dating_profile_entity.dart';
+import 'package:redting/features/dating_profile/data/entities/sexual_orientation_entity.dart';
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
+import 'package:redting/features/home/data/entity/ice_breaker_messages_entity.dart';
+import 'package:redting/features/home/data/entity/like_notification_entity.dart';
+import 'package:redting/features/home/domain/models/ice_breaker_msg.dart';
+import 'package:redting/features/home/domain/models/like_notification.dart';
 import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
 import 'package:redting/features/profile/data/entities/user_verification_video_entity.dart';
@@ -21,6 +25,7 @@ class LocalStorage {
     _registerAuthUserAdapter();
     _registerUserProfileAdapters();
     _registerDatingProfileAdapters();
+    _registerMatchingDataAdapters();
     //todo other adapters
   }
 
@@ -28,6 +33,7 @@ class LocalStorage {
     await _openBoxAuthUser();
     await _openBoxUserProfile();
     await _openBoxDatingProfile();
+    await _openMatchingDataBox();
     //todo other boxes
   }
 
@@ -55,7 +61,7 @@ class LocalStorage {
     Hive.registerAdapter(UserProfileEntityAdapter(), override: true);
   }
 
-  //dating profile
+  /// dating profile
   static void _registerDatingProfileAdapters() {
     Hive.registerAdapter(SexualOrientationEntityAdapter(), override: true);
     Hive.registerAdapter(DatingProfileEntityAdapter(), override: true);
@@ -63,5 +69,17 @@ class LocalStorage {
 
   static Future _openBoxDatingProfile() {
     return Hive.openBox<DatingProfile?>(datingProfileBox);
+  }
+
+  /// Matching Feature Data
+  static void _registerMatchingDataAdapters() {
+    Hive.registerAdapter(IceBreakerMessagesEntityAdapter(), override: true);
+    Hive.registerAdapter(LikeNotificationEntityAdapter(), override: true);
+  }
+
+  static Future _openMatchingDataBox() async {
+    await Hive.openBox<List<String>?>(passedOnUsersBox);
+    await Hive.openBox<IceBreakerMessages?>(iceBreakersBox);
+    await Hive.openBox<LikeNotification>(likeNotificationBox);
   }
 }

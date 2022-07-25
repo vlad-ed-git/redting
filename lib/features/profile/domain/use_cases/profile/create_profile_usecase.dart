@@ -10,7 +10,6 @@ class CreateProfileUseCase {
   Future<OperationResult> execute({
     required String name,
     required String userId,
-    required String phoneNumber,
     required String profilePhotoUrl,
     String? genderOther,
     required UserGender gender,
@@ -23,9 +22,9 @@ class CreateProfileUseCase {
     return await profileRepository.createUserProfile(
         name: name,
         userId: userId,
-        phoneNumber: phoneNumber,
         profilePhotoUrl: profilePhotoUrl,
         gender: gender,
+        genderOther: genderOther,
         bio: bio,
         title: title,
         registerCountry: registerCountry,

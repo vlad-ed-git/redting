@@ -2,15 +2,16 @@ import 'dart:io';
 
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
+import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 
 abstract class ProfileRepository {
-  Future<OperationResult> getUserProfile();
+  Future<OperationResult> getUserProfileFromRemote();
+  Future<UserProfile?> getCachedUserProfile();
 
   Future<OperationResult> createUserProfile({
     required String name,
     required String userId,
-    required String phoneNumber,
     required String profilePhotoUrl,
     String? genderOther,
     required UserGender gender,

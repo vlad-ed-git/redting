@@ -6,6 +6,6 @@ class GetAuthenticatedUserCase {
   GetAuthenticatedUserCase({required this.repository});
 
   Future<OperationResult> execute() async {
-    return await repository.getAuthUser();
+    return await repository.getCachedAuthUser();
   }
 }

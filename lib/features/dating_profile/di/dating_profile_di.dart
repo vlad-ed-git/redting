@@ -30,8 +30,8 @@ GetIt init() {
             addPhotoUseCase: datingProfileInstance(),
           ));
 
-  datingProfileInstance.registerLazySingleton<GetDatingProfileUseCase>(
-      () => GetDatingProfileUseCase(datingProfileInstance()));
+  datingProfileInstance.registerLazySingleton<GetDatingProfilesUseCase>(
+      () => GetDatingProfilesUseCase(datingProfileInstance()));
 
   datingProfileInstance.registerLazySingleton<CreateDatingProfileUseCase>(
       () => CreateDatingProfileUseCase(datingProfileInstance()));

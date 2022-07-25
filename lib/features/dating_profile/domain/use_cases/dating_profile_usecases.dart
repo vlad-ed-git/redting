@@ -5,7 +5,7 @@ import 'package:redting/features/dating_profile/domain/use_cases/photos/add_phot
 
 class DatingProfileUseCases {
   final CreateDatingProfileUseCase createDatingProfileUseCase;
-  final GetDatingProfileUseCase getDatingProfileUseCase;
+  final GetDatingProfilesUseCase getDatingProfileUseCase;
   final AddPhotoUseCase addPhotoUseCase;
   final UpdateDatingProfileUseCase updateDatingProfileUseCase;
   DatingProfileUseCases({

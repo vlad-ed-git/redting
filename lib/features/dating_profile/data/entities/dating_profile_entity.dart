@@ -1,10 +1,12 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:redting/core/data/hive_type_ids.dart';
-import 'package:redting/features/dating_profile/data/data_sources/entities/sexual_orientation_entity.dart';
+import 'package:redting/features/dating_profile/data/entities/sexual_orientation_entity.dart';
+import 'package:redting/features/dating_profile/data/utils/enum_mappers.dart';
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
+import 'package:redting/features/profile/data/utils/enum_mappers.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 
 part 'dating_profile_entity.g.dart';

@@ -1,14 +1,14 @@
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/dating_profile/domain/repository/dating_profile_repo.dart';
 
-class GetDatingProfileUseCase {
+class GetDatingProfilesUseCase {
   final DatingProfileRepo _repository;
 
-  GetDatingProfileUseCase(
+  GetDatingProfilesUseCase(
     this._repository,
   );
 
   Future<OperationResult> execute(String userId) async {
-    return await _repository.getDatingProfile(userId);
+    return await _repository.getDatingProfileFromRemote(userId);
   }
 }

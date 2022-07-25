@@ -16,7 +16,7 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<OperationResult> getAuthUser() async {
+  Future<OperationResult> getCachedAuthUser() async {
     try {
       AuthUser? authUser = localAuth.getAuthUser();
       return OperationResult(data: authUser);

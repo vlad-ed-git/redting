@@ -29,7 +29,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<OperationResult> createUserProfile(
       {required String name,
       required String userId,
-      required String phoneNumber,
       required String profilePhotoUrl,
       String? genderOther,
       required UserGender gender,
@@ -43,10 +42,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
     if (name.isEmpty) {
       return OperationResult(errorOccurred: true, errorMessage: nameMissingErr);
     }
-    if (userId.isEmpty || phoneNumber.isEmpty) {
+    if (userId.isEmpty) {
       return OperationResult(
           errorOccurred: true,
-          errorMessage: userIdOrPhoneNumberMissingDuringProfileCreateErr);
+          errorMessage: userIdMissingDuringProfileCreateErr);
     }
     if (profilePhotoUrl.isEmpty) {
       return OperationResult(
@@ -56,6 +55,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return OperationResult(
           errorOccurred: true, errorMessage: noVerificationVideo);
     }
+
     if (!UserProfile.isValidGender(gender: gender, genderOther: genderOther)) {
       return OperationResult(
           errorOccurred: true, errorMessage: noGenderSpecified);
@@ -78,7 +78,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
     UserProfile profile = _createUserProfileInstance(
         name: name,
         userId: userId,
-        phoneNumber: phoneNumber,
         profilePhotoUrl: profilePhotoUrl,
         gender: gender,
         genderOther: genderOther,
@@ -109,7 +108,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   /// FETCH
   @override
-  Future<OperationResult> getUserProfile() async {
+  Future<OperationResult> getUserProfileFromRemote() async {
     //remote
     final OperationResult result =
         await _remoteProfileDataSource.getUserProfile();
@@ -156,7 +155,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
   UserProfile _createUserProfileInstance(
       {required String name,
       required String userId,
-      required String phoneNumber,
       required String profilePhotoUrl,
       String? genderOther,
       required UserGender gender,
@@ -166,12 +164,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
       required DateTime birthDay,
       bool isBanned = false,
       required UserVerificationVideo verificationVideo}) {
+    int age = DateTime.now().year - birthDay.year;
     return UserProfileEntity(
         name: name,
         userId: userId,
-        phoneNumber: phoneNumber,
         profilePhotoUrl: profilePhotoUrl,
-        genderEntity: mapUserGenderToDataEntity(gender),
+        gender: mapUserGenderToDataEntity(gender),
         genderOther: genderOther,
         bio: bio,
         registerCountry: registerCountry,
@@ -180,6 +178,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
         lastUpdatedOn: DateTime.now(),
         birthDay: birthDay,
         isBanned: isBanned,
+        age: age,
         verificationVideo: verificationVideo);
+  }
+
+  @override
+  Future<UserProfile?> getCachedUserProfile() {
+    return _localProfileDataSource.getCachedUserProfile();
   }
 }

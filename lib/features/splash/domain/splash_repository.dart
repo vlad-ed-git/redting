@@ -15,7 +15,7 @@ class SplashRepository {
       this.authRepository, this.profileRepository, this.datingProfileRepo);
 
   Future<CurrentUserStatus> fetchCurrentUserStatus() async {
-    OperationResult result = await authRepository.getAuthUser();
+    OperationResult result = await authRepository.getCachedAuthUser();
     if (result.errorOccurred) {
       return CurrentUserStatus(errorFetchingStatus: true);
     }
@@ -23,7 +23,8 @@ class SplashRepository {
     if (result.data is! AuthUser) return CurrentUserStatus();
 
     AuthUser authUser = result.data as AuthUser;
-    OperationResult profileResult = await profileRepository.getUserProfile();
+    OperationResult profileResult =
+        await profileRepository.getUserProfileFromRemote();
     if (profileResult.errorOccurred) {
       return CurrentUserStatus(errorFetchingStatus: true);
     } else if (profileResult.data is! UserProfile) {
@@ -32,7 +33,7 @@ class SplashRepository {
 
     /// GET DATING PROFILE
     OperationResult datingProfileResult =
-        await datingProfileRepo.getDatingProfile(authUser.userId);
+        await datingProfileRepo.getDatingProfileFromRemote(authUser.userId);
     if (datingProfileResult.errorOccurred) {
       return CurrentUserStatus(errorFetchingStatus: true);
     } else if (datingProfileResult.data is! DatingProfile) {

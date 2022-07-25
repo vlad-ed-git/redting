@@ -1,7 +1,7 @@
 const appName = 'REDTING';
 const appNameFirstWord = 'RED';
 const appNameLastWord = 'TING';
-
+const defaultIceBreaker = "Hi there. I’m vanilla! … Get it?";
 const initAppErr = "Something went wrong! Please restart app";
 
 //splash screen
@@ -77,7 +77,7 @@ const createProfileOnGoing = "Creating profile...";
 const createProfileSuccess = "Awesome! Your profile was created.";
 const createProfileFail =
     "Failed to create your profile. Please check your connection & retry";
-const userIdOrPhoneNumberMissingDuringProfileCreateErr =
+const userIdMissingDuringProfileCreateErr =
     "OOps! Looks like you are logged out! Please restart the app";
 const emptyProfilePhotoErr = "A profile photo is required";
 const noVerificationVideo = "A verification video is required";
@@ -121,3 +121,10 @@ const gaySexualOrientationLbl = "gay";
 const createDatingProfileBtn = "ALL SET";
 const datingProfilePicsMissingErr = 'Please add at least 3 photos';
 const creatingDatingProfilePleaseWait = "just a bit ...";
+
+//matching
+const likingUserFailed =
+    "OOps! Failed to like the user! Please check your internet connection";
+const dislikingUserFailedErr = "Please check your internet connection";
+const fetchingProfilesToMatchFailed =
+    "REDTING couldn't load profiles! Please check your internet connection";

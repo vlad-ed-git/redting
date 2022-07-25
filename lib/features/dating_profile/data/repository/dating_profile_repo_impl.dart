@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:redting/core/utils/service_result.dart';
-import 'package:redting/features/dating_profile/data/data_sources/entities/dating_profile_entity.dart';
-import 'package:redting/features/dating_profile/data/data_sources/entities/sexual_orientation_entity.dart';
 import 'package:redting/features/dating_profile/data/data_sources/local/local_dating_profile_source.dart';
 import 'package:redting/features/dating_profile/data/data_sources/remote/remote_dating_profile_source.dart';
+import 'package:redting/features/dating_profile/data/entities/dating_profile_entity.dart';
+import 'package:redting/features/dating_profile/data/entities/sexual_orientation_entity.dart';
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/dating_profile/domain/repository/dating_profile_repo.dart';
@@ -59,6 +59,10 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
       i++;
     }
 
+    if (userOrientation.isEmpty) {
+      //default orientation
+      userOrientation.add(SexualOrientation.straight);
+    }
     DatingProfile profile = createDatingProfileInstance(
         userId,
         photos,
@@ -78,7 +82,7 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
   }
 
   @override
-  Future<OperationResult> getDatingProfile(String userId) async {
+  Future<OperationResult> getDatingProfileFromRemote(String userId) async {
     OperationResult result = await _remoteSource.getDatingProfile(userId);
     if (result.errorOccurred) return result;
 
@@ -90,6 +94,11 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
 
     DatingProfile? cachedProfile = await _localSource.getCachedDatingProfile();
     return OperationResult(data: cachedProfile);
+  }
+
+  @override
+  Future<DatingProfile?> getCachedDatingProfile() {
+    return _localSource.getCachedDatingProfile();
   }
 
   @override

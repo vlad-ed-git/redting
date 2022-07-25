@@ -11,6 +11,7 @@ class GlassCard extends StatelessWidget {
   final EdgeInsets contentPadding;
   final double borderRadius;
   final Gradient? gradient;
+  final bool wrapInChildScrollable;
   const GlassCard(
       {Key? key,
       required this.child,
@@ -21,7 +22,8 @@ class GlassCard extends StatelessWidget {
       this.margins = const EdgeInsets.only(bottom: paddingMd),
       this.contentPadding = const EdgeInsets.all(paddingMd),
       this.borderRadius = 14.0,
-      this.gradient})
+      this.gradient,
+      this.wrapInChildScrollable = true})
       : super(key: key);
 
   @override
@@ -41,7 +43,9 @@ class GlassCard extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: contentPadding,
-                    child: SingleChildScrollView(child: child),
+                    child: wrapInChildScrollable
+                        ? SingleChildScrollView(child: child)
+                        : child,
                   )),
             )));
   }

@@ -24,9 +24,11 @@ class HiveDatingProfile implements LocalDatingProfileSource {
   @override
   Future<DatingProfile?> getCachedDatingProfile() async {
     try {
-      return await _datingProfileHiveBox.get(userProfileKey) as DatingProfile?;
+      DatingProfile? profile =
+          await _datingProfileHiveBox.get(datingProfileKey) as DatingProfile?;
+      return profile;
     } catch (e) {
-      print("============ $e ===========");
+      print("============ getCachedDatingProfile $e ===========");
       return null;
     }
   }

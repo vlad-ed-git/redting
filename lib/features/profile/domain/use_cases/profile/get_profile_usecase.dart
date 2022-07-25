@@ -6,6 +6,6 @@ class GetProfileUseCase {
   GetProfileUseCase({required this.profileRepository});
 
   Future<OperationResult> execute() async {
-    return await profileRepository.getUserProfile();
+    return await profileRepository.getUserProfileFromRemote();
   }
 }

@@ -27,7 +27,6 @@ class GetVerificationVideoCodeEvent extends UserProfileEvent {}
 class CreateUserProfileEvent extends UserProfileEvent {
   final String name;
   final String userId;
-  final String phoneNumber;
   final String profilePhotoUrl;
   final String? genderOther;
   final UserGender gender;
@@ -41,7 +40,6 @@ class CreateUserProfileEvent extends UserProfileEvent {
     required this.registerCountry,
     required this.name,
     required this.userId,
-    required this.phoneNumber,
     required this.profilePhotoUrl,
     required this.genderOther,
     required this.gender,

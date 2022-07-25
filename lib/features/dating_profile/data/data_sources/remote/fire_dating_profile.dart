@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:redting/core/utils/service_result.dart';
-import 'package:redting/features/dating_profile/data/data_sources/entities/dating_profile_entity.dart';
+import 'package:redting/features/dating_profile/data/entities/dating_profile_entity.dart';
 import 'package:redting/features/dating_profile/data/data_sources/remote/remote_dating_profile_source.dart';
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/profile/data/utils/compressors/image_compressor.dart';

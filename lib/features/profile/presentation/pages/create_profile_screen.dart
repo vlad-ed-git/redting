@@ -426,10 +426,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     _eventDispatcher?.add(CreateUserProfileEvent(
         name: _nameController.text,
         userId: loggedInUser.userId,
-        phoneNumber: loggedInUser.phoneNumber,
         profilePhotoUrl: _profilePhoto ?? '',
         gender: _gender,
-        genderOther: _otherGender,
+        genderOther:
+            _gender == UserGender.stated ? _otherGenderController.text : null,
         bio: _bioController.text,
         title: _titleController.text,
         birthDay: _selectedBDay,

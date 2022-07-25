@@ -93,12 +93,13 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   FutureOr<void> _onCreateUserProfileEvent(
       CreateUserProfileEvent event, Emitter<UserProfileState> emit) async {
     emit(CreatingUserProfileState());
+
     OperationResult result = await profileUseCases.createProfileUseCase.execute(
         name: event.name,
         userId: event.userId,
-        phoneNumber: event.phoneNumber,
         profilePhotoUrl: event.profilePhotoUrl,
         gender: event.gender,
+        genderOther: event.genderOther,
         bio: event.bio,
         title: event.title,
         birthDay: event.birthDay,
