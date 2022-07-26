@@ -62,30 +62,33 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [StdAppName()]),
                     ),
-                    body: Container(
-                      decoration:
-                          BoxDecoration(gradient: threeColorOpaqueGradientTB),
-                      constraints: BoxConstraints(
-                          minWidth: screenWidth, minHeight: screenHeight),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: paddingMd, horizontal: paddingStd),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (_isLoading) const LoadingCard(),
-                            if (_currentSwipeBatchProfiles.isNotEmpty)
-                              _getSwipeAbleCards(),
-                            if (_shouldRevisitPassedOnProfiles())
-                              _showRefreshOption(),
-                            if (_hasViewedAllProfiles())
-                              RateAppCard(
-                                isSendingFeedback:
-                                    state is SendingFeedbackState,
-                                onSubmitFeedback: _onSubmitDailyFeedback,
-                              ),
-                            if (_nothingElseToDo()) const IdleMatchingCard()
-                          ],
+                    body: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Container(
+                        decoration:
+                            BoxDecoration(gradient: threeColorOpaqueGradientTB),
+                        constraints: BoxConstraints(
+                            minWidth: screenWidth, minHeight: screenHeight),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: paddingMd, horizontal: paddingStd),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (_isLoading) const LoadingCard(),
+                              if (_currentSwipeBatchProfiles.isNotEmpty)
+                                _getSwipeAbleCards(),
+                              if (_shouldRevisitPassedOnProfiles())
+                                _showRefreshOption(),
+                              if (_hasViewedAllProfiles())
+                                RateAppCard(
+                                  isSendingFeedback:
+                                      state is SendingFeedbackState,
+                                  onSubmitFeedback: _onSubmitDailyFeedback,
+                                ),
+                              if (_nothingElseToDo()) const IdleMatchingCard()
+                            ],
+                          ),
                         ),
                       ),
                     ))),

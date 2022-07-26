@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:redting/core/components/gradients/primary_gradients.dart';
+import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/home/presentation/components/swipeable_profile_components/container_card.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
@@ -151,6 +153,24 @@ class _DetailedViewCardState extends State<DetailedViewCard> {
               width: widget.cardWidth,
               height: widget.cardHeight / 2,
               fit: BoxFit.cover,
+              errorWidget: (_, __, ___) {
+                return Container(
+                  decoration:
+                      BoxDecoration(gradient: threeColorOpaqueGradientTB),
+                  child: const Center(
+                    child: CircularProgress(),
+                  ),
+                );
+              },
+              progressIndicatorBuilder: (_, __, ___) {
+                return Container(
+                  decoration:
+                      BoxDecoration(gradient: threeColorOpaqueGradientTB),
+                  child: const Center(
+                    child: CircularProgress(),
+                  ),
+                );
+              },
             ))
         .toList(growable: false);
   }

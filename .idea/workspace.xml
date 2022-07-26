@@ -9,17 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0343c0f-6e2a-4b70-94b8-be5d411a5c67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/core/components/misc/darkish_transparent_layer.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/container_card.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/detailed_view.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/overview.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/overview_text.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/stamp.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/detailed_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/detailed_view.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/pages/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/home/presentation/pages/home_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/res/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/strings.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
