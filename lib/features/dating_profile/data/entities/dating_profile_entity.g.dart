@@ -73,12 +73,12 @@ DatingProfileEntity _$DatingProfileEntityFromJson(Map json) =>
           (json['photos'] as List<dynamic>).map((e) => e as String).toList(),
       userId: json['userId'] as String,
       genderPreference: $enumDecodeNullable(
-          userGenderEntityToStringVal, json['genderPreference']),
+          _$UserGenderEntityEnumMap, json['genderPreference']),
       makeMyOrientationPublic: json['makeMyOrientationPublic'] as bool,
       onlyShowMeOthersOfSameOrientation:
           json['onlyShowMeOthersOfSameOrientation'] as bool,
     )..userSexualOrientation = (json['userSexualOrientation'] as List<dynamic>)
-        .map((e) => $enumDecode(sexualOrientationEntityEnumMap, e))
+        .map((e) => $enumDecode(_$SexualOrientationEntityEnumMap, e))
         .toList();
 
 Map<String, dynamic> _$DatingProfileEntityToJson(
@@ -88,11 +88,28 @@ Map<String, dynamic> _$DatingProfileEntityToJson(
       'minAgePreference': instance.minAgePreference,
       'photos': instance.photos,
       'userId': instance.userId,
-      'genderPreference': userGenderToStringVal[instance.genderPreference],
+      'genderPreference': _$UserGenderEntityEnumMap[instance.genderPreference],
       'userSexualOrientation': instance.userSexualOrientation
-          .map((e) => sexualOrientationEntityEnumMap[e]!)
+          .map((e) => _$SexualOrientationEntityEnumMap[e]!)
           .toList(),
       'makeMyOrientationPublic': instance.makeMyOrientationPublic,
       'onlyShowMeOthersOfSameOrientation':
           instance.onlyShowMeOthersOfSameOrientation,
     };
+
+const _$UserGenderEntityEnumMap = {
+  UserGenderEntity.male: 'male',
+  UserGenderEntity.female: 'female',
+  UserGenderEntity.stated: 'stated',
+};
+
+const _$SexualOrientationEntityEnumMap = {
+  SexualOrientationEntity.straight: 'straight',
+  SexualOrientationEntity.gay: 'gay',
+  SexualOrientationEntity.asexual: 'asexual',
+  SexualOrientationEntity.bisexual: 'bisexual',
+  SexualOrientationEntity.demiSexual: 'demiSexual',
+  SexualOrientationEntity.panSexual: 'panSexual',
+  SexualOrientationEntity.queer: 'queer',
+  SexualOrientationEntity.questioning: 'questioning',
+};

@@ -26,3 +26,21 @@ class FetchingMatchesFailedState extends MatchingState {
   final String errMsg;
   FetchingMatchesFailedState(this.errMsg);
 }
+
+/// LIKING USER
+class LikingUserState extends MatchingState {}
+
+class LikingUserFailedState extends MatchingState {
+  //so you can undo like
+  final MatchingUserProfileWrapper likedUserProfile;
+  LikingUserFailedState(this.likedUserProfile);
+}
+
+class LikingUserSuccessState extends MatchingState {}
+
+/// SENDING FEEDBACK
+class SendingFeedbackState extends MatchingState {}
+
+class SendingFeedbackFailedState extends MatchingState {}
+
+class SendingFeedbackSuccessState extends MatchingState {}

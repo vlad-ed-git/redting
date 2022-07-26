@@ -78,7 +78,7 @@ class LocalStorage {
   }
 
   static Future _openMatchingDataBox() async {
-    await Hive.openBox<List<String>?>(passedOnUsersBox);
+    await Hive.openBox<Map<dynamic, dynamic>?>(likedUsersBox);
     await Hive.openBox<IceBreakerMessages?>(iceBreakersBox);
     await Hive.openBox<LikeNotification>(likeNotificationBox);
   }

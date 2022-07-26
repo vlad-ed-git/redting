@@ -6,6 +6,7 @@ import 'package:redting/features/home/domain/models/ice_breaker_msg.dart';
 
 class HiveMatchingDataSource implements LocalMatchingDataSource {
   final Box _iceBreakersHiveBox = Hive.box<IceBreakerMessages?>(iceBreakersBox);
+  final Box _likedUsersBox = Hive.box<Map<dynamic, dynamic>?>(likedUsersBox);
 
   @override
   Future<IceBreakerMessages?> cacheIceBreakersAndGet(
@@ -24,5 +25,17 @@ class HiveMatchingDataSource implements LocalMatchingDataSource {
   @override
   IceBreakerMessages? getIceBreakerMessages() {
     return _iceBreakersHiveBox.get(iceBreakersKey);
+  }
+
+  @override
+  Future cacheLikedUser(String likedUserId) async {
+    Map<dynamic, dynamic> likedUsersCache = getLikedUsersCache();
+    likedUsersCache[likedUserId] = true;
+    await _likedUsersBox.put(likedUsersBoxKey, likedUsersCache);
+  }
+
+  @override
+  Map<dynamic, dynamic> getLikedUsersCache() {
+    return _likedUsersBox.get(likedUsersBoxKey, defaultValue: {});
   }
 }

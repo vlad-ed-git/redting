@@ -8,6 +8,7 @@ import 'package:redting/features/dating_profile/data/entities/dating_profile_ent
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/home/data/data_sources/remote/remote_matching_data_source.dart';
 import 'package:redting/features/home/data/entity/ice_breaker_messages_entity.dart';
+import 'package:redting/features/home/domain/models/daily_user_feedback.dart';
 import 'package:redting/features/home/domain/models/ice_breaker_msg.dart';
 import 'package:redting/features/home/domain/models/like_notification.dart';
 import 'package:redting/features/home/domain/repositories/matching_user_profile_wrapper.dart';
@@ -22,6 +23,7 @@ const String iceBreakersCollection = "ice_breakers";
 const String iceBreakersDoc = "ice_breakers_doc";
 const String likedUsersCollection = "liked_users";
 const String usersILikeCollection = "users_i_like";
+const String dailyUserFeedbackCollection = "daily_user_feedback";
 
 class FireMatchingDataSource implements RemoteMatchingDataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -68,7 +70,6 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
   }
 
   /// GETTING PROFILES
-  /// TODO REMOVE MYSELF AS A MATCH
   Query<Map<String, dynamic>> _getQueryForFirstUserProfileMatchesBatch(
     int lessThanAge,
     int moreThanAge,
@@ -161,9 +162,9 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
     return null;
   }
 
-  /// TODO CHECK IF THE USERS ARE NOT ALREADY IN MY LIKE LIST
   @override
-  Future<OperationResult> getDatingProfiles(UserProfile thisUsersProfile,
+  Future<List<MatchingUserProfileWrapper>?> getDatingProfiles(
+      UserProfile thisUsersProfile,
       DatingProfile thisUsersDatingProfile) async {
     try {
       UserGender? myGenderPreference =
@@ -195,6 +196,11 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
         try {
           UserProfile matchingUserProfile =
               UserProfileEntity.fromJson(snapshot.data());
+
+          if (matchingUserProfile.userId == thisUsersProfile.userId) {
+            continue; //skip this user if matched with self
+          }
+
           DocumentSnapshot<Map<String, dynamic>> foundDatingProfile =
               await _fireStore
                   .collection(datingProfilesCollection)
@@ -216,10 +222,28 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
           continue;
         }
       }
-      return OperationResult(data: matchingDatingProfilesList);
+      return matchingDatingProfilesList;
     } catch (e) {
       if (kDebugMode) {
         print("================= getDatingProfiles $e =============== ");
+      }
+      return null;
+    }
+  }
+
+  /// user feedback
+  @override
+  Future<OperationResult> sendDailyFeedback(
+      DailyUserFeedback dailyUserFeedback) async {
+    try {
+      await _fireStore
+          .collection(dailyUserFeedbackCollection)
+          .doc()
+          .set(dailyUserFeedback.toJson());
+      return OperationResult();
+    } catch (e) {
+      if (kDebugMode) {
+        print("================= sendDailyFeedback $e =============== ");
       }
       return OperationResult(errorOccurred: true);
     }

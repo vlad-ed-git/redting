@@ -6,10 +6,13 @@ import 'package:redting/core/components/screens/screen_container.dart';
 import 'package:redting/core/components/snack/snack.dart';
 import 'package:redting/core/components/text/app_name_std_style.dart';
 import 'package:redting/features/home/domain/repositories/matching_user_profile_wrapper.dart';
+import 'package:redting/features/home/presentation/components/idle_matching_card.dart';
 import 'package:redting/features/home/presentation/components/loading_card.dart';
+import 'package:redting/features/home/presentation/components/rate_app_card.dart';
 import 'package:redting/features/home/presentation/components/swipeable_profile.dart';
 import 'package:redting/features/home/presentation/state/matching_bloc.dart';
 import 'package:redting/res/dimens.dart';
+import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// WHEN WE REACH THE END [_loadedAllProfiles], THE USER CAN VIEW THE DISLIKED PROFILES AGAIN
   List<MatchingUserProfileWrapper> _currentSwipeBatchProfiles = [];
   final List<MatchingUserProfileWrapper> _passedProfiles = [];
+  bool _todaysFeedbackReceived = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +76,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (_isLoading) const LoadingCard(),
                             if (_currentSwipeBatchProfiles.isNotEmpty)
                               _getSwipeAbleCards(),
-                            if (_passedProfiles.isNotEmpty &&
-                                _currentSwipeBatchProfiles.isEmpty &&
-                                _loadedAllProfiles)
-                              _showRefreshOption()
+                            if (_shouldRevisitPassedOnProfiles())
+                              _showRefreshOption(),
+                            if (_hasViewedAllProfiles())
+                              RateAppCard(
+                                isSendingFeedback:
+                                    state is SendingFeedbackState,
+                                onSubmitFeedback: _onSubmitDailyFeedback,
+                              ),
+                            if (_nothingElseToDo()) const IdleMatchingCard()
                           ],
                         ),
                       ),
@@ -127,6 +136,27 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         });
       }
+    }
+
+    /// liking user
+    if (state is LikingUserFailedState) {
+      if (mounted) {
+        setState(() {
+          _passedProfiles.add(state.likedUserProfile);
+        });
+      }
+    }
+
+    /// sending feedback
+    if (state is SendingFeedbackSuccessState) {
+      setState(() {
+        _todaysFeedbackReceived = true;
+      });
+      _showSnack(feedbackReceived, isError: false);
+    }
+
+    if (state is SendingFeedbackFailedState) {
+      _showSnack(feedbackNotSentErr, isError: false);
     }
   }
 
@@ -185,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
   _onSwipe(CardSwipeType gesture) {
     if (mounted) {
       if (_currentSwipeBatchProfiles.isEmpty) return; //safe check
-      final last = _currentSwipeBatchProfiles.removeLast();
+      final swipedProfile = _currentSwipeBatchProfiles.removeLast();
       if (_currentSwipeBatchProfiles.isEmpty) {
         _loadNextProfilesBatch();
       }
@@ -194,9 +224,12 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
           });
+          _eventDispatcher?.add(LikeUserEvent(
+              likedByUser: _thisUserInfo!.userProfile.userId,
+              likedUserProfile: swipedProfile));
           break;
         case CardSwipeType.pass:
-          _passedProfiles.add(last);
+          _passedProfiles.add(swipedProfile);
           setState(() {
             _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
           });
@@ -206,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
           });
           break;
-        case CardSwipeType.unknown:
+        case CardSwipeType.noAction:
           break; //do nothing
       }
     }
@@ -235,5 +268,32 @@ class _HomeScreenState extends State<HomeScreen> {
         _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
       });
     }
+  }
+
+  void _onSubmitDailyFeedback(int rating, String feedback) {
+    _eventDispatcher?.add(SendUserFeedBackEvent(
+        rating: rating,
+        feedback: feedback,
+        userId: _thisUserInfo!.userProfile.userId));
+  }
+
+  _hasViewedAllProfiles() {
+    return _passedProfiles.isEmpty &&
+        _currentSwipeBatchProfiles.isEmpty &&
+        _loadedAllProfiles &&
+        !_todaysFeedbackReceived;
+  }
+
+  _shouldRevisitPassedOnProfiles() {
+    return _passedProfiles.isNotEmpty &&
+        _currentSwipeBatchProfiles.isEmpty &&
+        _loadedAllProfiles;
+  }
+
+  _nothingElseToDo() {
+    return _passedProfiles.isEmpty &&
+        _currentSwipeBatchProfiles.isEmpty &&
+        _loadedAllProfiles &&
+        _todaysFeedbackReceived;
   }
 }

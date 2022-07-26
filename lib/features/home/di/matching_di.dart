@@ -10,6 +10,7 @@ import 'package:redting/features/home/domain/use_cases/initialize_usecase.dart';
 import 'package:redting/features/home/domain/use_cases/like_user_usecase.dart';
 import 'package:redting/features/home/domain/use_cases/matching_usecases.dart';
 import 'package:redting/features/home/domain/use_cases/pass_on_user_usecase.dart';
+import 'package:redting/features/home/domain/use_cases/send_daily_feedback.dart';
 import 'package:redting/features/home/presentation/state/matching_bloc.dart';
 
 GetIt init(
@@ -26,7 +27,8 @@ GetIt init(
           initializeUserProfilesUseCase: matchingDiInstance(),
           fetchProfilesToMatch: matchingDiInstance(),
           likeUserUseCase: matchingDiInstance(),
-          passOnUserUseCase: matchingDiInstance()));
+          passOnUserUseCase: matchingDiInstance(),
+          sendUserDailyFeedback: matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<InitializeUseCase>(
       () => InitializeUseCase(matchingDiInstance()));
@@ -39,6 +41,9 @@ GetIt init(
 
   matchingDiInstance.registerLazySingleton<PassOnUserUseCase>(
       () => PassOnUserUseCase(matchingDiInstance()));
+
+  matchingDiInstance.registerLazySingleton<SendUserDailyFeedback>(
+      () => SendUserDailyFeedback(matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<MatchingRepository>(() =>
       MatchingRepositoryImpl(profileDiInstance(), datingProfileDiInstance(),

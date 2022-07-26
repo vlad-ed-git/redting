@@ -4,3 +4,4 @@ const int datingProfilePhotoSizeHeight = 848;
 const int maxDatingProfilePhotos = 4;
 const int minDatingProfilePhotosAllowed = 3;
 const int queryPageResultsSize = 50;
+const int maxStarsForRating = 5;

@@ -5,7 +5,8 @@ abstract class MatchingRepository {
   Future<OperationResult> getMatchingUserProfileWrapper();
   Future<OperationResult> getDatingProfiles(
       MatchingUserProfileWrapper thisUserProfiles);
-  Future<OperationResult> likeUser(
-      MatchingUserProfileWrapper thisUserProfiles, String userId);
+  Future<OperationResult> likeUser(String thisUser, String likedUser);
   Future loadIceBreakerMessages();
+  Future<OperationResult> sendDailyFeedback(
+      String userId, String feedback, int rating);
 }

@@ -6,6 +6,7 @@ import 'package:redting/features/dating_profile/domain/models/dating_profile.dar
 import 'package:redting/features/dating_profile/domain/repository/dating_profile_repo.dart';
 import 'package:redting/features/home/data/data_sources/local/local_matching_data_source.dart';
 import 'package:redting/features/home/data/data_sources/remote/remote_matching_data_source.dart';
+import 'package:redting/features/home/data/entity/daily_user_feedback_entity.dart';
 import 'package:redting/features/home/data/entity/like_notification_entity.dart';
 import 'package:redting/features/home/domain/models/ice_breaker_msg.dart';
 import 'package:redting/features/home/domain/models/like_notification.dart';
@@ -27,8 +28,17 @@ class MatchingRepositoryImpl implements MatchingRepository {
   @override
   Future<OperationResult> getDatingProfiles(
       MatchingUserProfileWrapper thisUserProfiles) async {
-    return _remoteDataSource.getDatingProfiles(
-        thisUserProfiles.userProfile, thisUserProfiles.datingProfile);
+    List<MatchingUserProfileWrapper>? resultsIfNoErrElseNull =
+        await _remoteDataSource.getDatingProfiles(
+            thisUserProfiles.userProfile, thisUserProfiles.datingProfile);
+    if (resultsIfNoErrElseNull == null) {
+      return OperationResult(errorOccurred: true);
+    }
+    //removed liked users
+    Map<dynamic, dynamic> likedUsers = _localDataSource.getLikedUsersCache();
+    resultsIfNoErrElseNull
+        .removeWhere((e) => likedUsers.containsKey(e.userProfile.userId));
+    return OperationResult(data: resultsIfNoErrElseNull);
   }
 
   @override
@@ -50,17 +60,19 @@ class MatchingRepositoryImpl implements MatchingRepository {
   }
 
   @override
-  Future<OperationResult> likeUser(
-      MatchingUserProfileWrapper thisUserProfiles, String userId) async {
+  Future<OperationResult> likeUser(String thisUser, String likedUser) async {
     try {
-      String userId = thisUserProfiles.userProfile.userId;
       String iceBreaker = await _getRandomIceBreakerMessage();
       LikeNotification notification = LikeNotificationEntity(
-          likedByUserId: userId,
+          likedByUserId: thisUser,
           likedOn: DateTime.now(),
-          likedUserId: userId,
+          likedUserId: likedUser,
           iceBreaker: iceBreaker.isNotEmpty ? iceBreaker : defaultIceBreaker);
       OperationResult result = await _remoteDataSource.likeUser(notification);
+      if (!result.errorOccurred) {
+        //cache liked user
+        await _localDataSource.cacheLikedUser(likedUser);
+      }
       return result;
     } catch (e) {
       if (kDebugMode) {
@@ -111,5 +123,12 @@ class MatchingRepositoryImpl implements MatchingRepository {
             "=============== repo getRandomIceBreakerMessage() $e ==========");
       }
     }
+  }
+
+  @override
+  Future<OperationResult> sendDailyFeedback(
+      String userId, String feedback, int rating) async {
+    return await _remoteDataSource.sendDailyFeedback(
+        DailyUserFeedbackEntity(feedback, rating, DateTime.now(), userId));
   }
 }

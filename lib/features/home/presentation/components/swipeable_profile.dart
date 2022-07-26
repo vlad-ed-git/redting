@@ -6,6 +6,7 @@ import 'package:redting/core/components/cards/glass_card.dart';
 import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
+import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
 class SwipeProfile extends StatefulWidget {
@@ -34,6 +35,7 @@ class _SwipeProfileState extends State<SwipeProfile> {
   Offset _dragPosition = Offset.zero;
   double _rotationAngle = 0;
   late Size _screenSize;
+  CardSwipeType _stampToShow = CardSwipeType.noAction;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class _SwipeProfileState extends State<SwipeProfile> {
         _dragPosition += details.delta;
         final x = _dragPosition.dx;
         _rotationAngle = 45 * x / _screenSize.width; //45 is angle of rotation
+        _stampToShow = _getCardSwipeType();
       });
     }
   }
@@ -75,7 +78,7 @@ class _SwipeProfileState extends State<SwipeProfile> {
         case CardSwipeType.superLike:
           _superLikeAnimation();
           break;
-        case CardSwipeType.unknown:
+        case CardSwipeType.noAction:
           //reset
           setState(() {
             _dragPosition = Offset.zero;
@@ -83,6 +86,9 @@ class _SwipeProfileState extends State<SwipeProfile> {
           });
           break;
       }
+      setState(() {
+        _stampToShow = CardSwipeType.noAction;
+      });
     }
   }
 
@@ -103,7 +109,7 @@ class _SwipeProfileState extends State<SwipeProfile> {
       return CardSwipeType.superLike;
     }
 
-    return CardSwipeType.unknown;
+    return CardSwipeType.noAction;
   }
 
   /// UI
@@ -138,6 +144,27 @@ class _SwipeProfileState extends State<SwipeProfile> {
                   }),
             ),
             const TransparentLayer(),
+            Visibility(
+              visible: _stampToShow == CardSwipeType.superLike,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: _getStamp(forType: CardSwipeType.superLike),
+              ),
+            ),
+            Visibility(
+              visible: _stampToShow == CardSwipeType.pass,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: _getStamp(forType: CardSwipeType.pass),
+              ),
+            ),
+            Visibility(
+              visible: _stampToShow == CardSwipeType.like,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: _getStamp(forType: CardSwipeType.like),
+              ),
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: _buildBottomText(cardWidth),
@@ -248,6 +275,44 @@ class _SwipeProfileState extends State<SwipeProfile> {
     await Future.delayed(const Duration(milliseconds: 200));
     widget.onSwiped(CardSwipeType.superLike);
   }
+
+  /// STAMP UI ***/
+  Widget _getStamp({required CardSwipeType forType}) {
+    String stampTxt = "";
+    EdgeInsets pushByMargin = EdgeInsets.zero;
+    switch (forType) {
+      case CardSwipeType.like:
+        stampTxt = likeStamp;
+        pushByMargin = const EdgeInsets.only(right: 40);
+        break;
+      case CardSwipeType.pass:
+        stampTxt = passStamp;
+        pushByMargin = const EdgeInsets.only(left: 40);
+        break;
+      case CardSwipeType.superLike:
+        stampTxt = superLikeStamp;
+        pushByMargin = const EdgeInsets.only(top: 40);
+        break;
+      case CardSwipeType.noAction:
+        break;
+    }
+    return Container(
+      margin: pushByMargin,
+      decoration: BoxDecoration(
+          color: Colors.black38,
+          borderRadius: BorderRadius.circular(12),
+          border:
+              Border.all(color: appTheme.colorScheme.inversePrimary, width: 2)),
+      child: Padding(
+        padding: const EdgeInsets.all(paddingStd),
+        child: Text(
+          stampTxt,
+          style: appTextTheme.headline3
+              ?.copyWith(color: appTheme.colorScheme.inversePrimary),
+        ),
+      ),
+    );
+  }
 }
 
 class TransparentLayer extends StatefulWidget {
@@ -272,4 +337,4 @@ class _TransparentLayerState extends State<TransparentLayer> {
   }
 }
 
-enum CardSwipeType { like, pass, superLike, unknown }
+enum CardSwipeType { like, pass, superLike, noAction }

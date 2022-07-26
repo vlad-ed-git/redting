@@ -15,6 +15,8 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   MatchingBloc(this.matchingUseCases) : super(MatchingInitialState()) {
     on<InitializeEvent>(_onInitializeEvent);
     on<LoadProfilesEvent>(_onLoadProfilesEvent);
+    on<LikeUserEvent>(_onLikeUserEvent);
+    on<SendUserFeedBackEvent>(_onSendUserFeedBackEvent);
   }
 
   FutureOr<void> _onInitializeEvent(
@@ -45,6 +47,33 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
     } else {
       emit(FetchedProfilesToMatchState(
           result.data as List<MatchingUserProfileWrapper>));
+    }
+  }
+
+  FutureOr<void> _onLikeUserEvent(
+      LikeUserEvent event, Emitter<MatchingState> emit) async {
+    emit(LikingUserState());
+    OperationResult result = await matchingUseCases.likeUserUseCase
+        .execute(event.likedByUser, event.likedUserProfile.userProfile.userId);
+    if (result.errorOccurred) {
+      emit(LikingUserFailedState(event.likedUserProfile));
+    } else {
+      emit(LikingUserSuccessState());
+    }
+  }
+
+  FutureOr<void> _onSendUserFeedBackEvent(
+      SendUserFeedBackEvent event, Emitter<MatchingState> emit) async {
+    emit(SendingFeedbackState());
+    OperationResult result = await matchingUseCases.sendUserDailyFeedback
+        .execute(event.userId, event.feedback, event.rating);
+
+    if (result.errorOccurred) {
+      emit(SendingFeedbackFailedState());
+    }
+
+    if (!result.errorOccurred) {
+      emit(SendingFeedbackSuccessState());
     }
   }
 }
