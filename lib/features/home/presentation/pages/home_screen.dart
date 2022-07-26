@@ -194,6 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// CARDS
   _getSwipeAbleCards() {
     if (_currentSwipeBatchProfiles.isEmpty) return const SizedBox.shrink();
     return Stack(
@@ -201,10 +202,15 @@ class _HomeScreenState extends State<HomeScreen> {
         bool isFrontCard = _currentSwipeBatchProfiles.last.userProfile.userId ==
             e.userProfile.userId;
         return SwipeProfile(
-          photoUrl: e.datingProfile.photos.first,
+          photoUrls: e.datingProfile.photos,
           name: e.userProfile.name,
           age: e.userProfile.age.toString(),
           title: e.userProfile.title,
+          bio: e.userProfile.bio,
+          verificationVideo: e.userProfile.verificationVideo,
+          sexualOrientation: e.datingProfile.makeMyOrientationPublic
+              ? e.datingProfile.getUserSexualOrientation()
+              : [],
           isFrontCard: isFrontCard,
           onSwiped: _onSwipe,
         );
@@ -219,28 +225,23 @@ class _HomeScreenState extends State<HomeScreen> {
       if (_currentSwipeBatchProfiles.isEmpty) {
         _loadNextProfilesBatch();
       }
-      switch (gesture) {
-        case CardSwipeType.like:
-          setState(() {
-            _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
-          });
-          _eventDispatcher?.add(LikeUserEvent(
-              likedByUser: _thisUserInfo!.userProfile.userId,
-              likedUserProfile: swipedProfile));
-          break;
-        case CardSwipeType.pass:
-          _passedProfiles.add(swipedProfile);
-          setState(() {
-            _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
-          });
-          break;
-        case CardSwipeType.superLike:
-          setState(() {
-            _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
-          });
-          break;
-        case CardSwipeType.noAction:
-          break; //do nothing
+      //on like
+      if (gesture == CardSwipeType.like) {
+        setState(() {
+          _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
+        });
+        _eventDispatcher?.add(LikeUserEvent(
+            likedByUser: _thisUserInfo!.userProfile.userId,
+            likedUserProfile: swipedProfile));
+        return;
+      }
+      //on pass
+      if (gesture == CardSwipeType.pass) {
+        _passedProfiles.add(swipedProfile);
+        setState(() {
+          _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
+        });
+        return;
       }
     }
   }

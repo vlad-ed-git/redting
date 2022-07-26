@@ -128,7 +128,6 @@ const likingUserFailed =
 const dislikingUserFailedErr = "Please check your internet connection";
 const fetchingProfilesToMatchFailed =
     "REDTING couldn't load profiles! Please check your internet connection";
-const superLikeStamp = "SUPER LIKE";
 const likeStamp = "LIKE";
 const passStamp = "PASS";
 const noMoreProfiles =
@@ -137,3 +136,4 @@ const feedbackHint = "I like ... but I wish ...";
 const submitFeedbackBtn = "submit";
 const feedbackReceived = "Thank You! Your feedback helps RedTing get better.";
 const feedbackNotSentErr = "Oops! Sorry, we could not get that! Please retry";
+const verificationVideoWord = "VERIFICATION CODE: ";

@@ -1,30 +1,35 @@
+import 'dart:async';
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:redting/core/components/cards/glass_card.dart';
-import 'package:redting/core/components/progress/circular_progress.dart';
+import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
+import 'package:redting/features/home/presentation/components/swipeable_profile_components/detailed_view.dart';
+import 'package:redting/features/home/presentation/components/swipeable_profile_components/overview.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/res/dimens.dart';
-import 'package:redting/res/fonts.dart';
-import 'package:redting/res/strings.dart';
-import 'package:redting/res/theme.dart';
 
 class SwipeProfile extends StatefulWidget {
-  final String photoUrl;
+  final List<String> photoUrls;
   final String name;
   final String age;
   final String title;
   final bool isFrontCard;
   final Function(CardSwipeType gesture) onSwiped;
-  const SwipeProfile(
-      {Key? key,
-      required this.photoUrl,
-      required this.name,
-      required this.age,
-      required this.title,
-      required this.isFrontCard,
-      required this.onSwiped})
-      : super(key: key);
+  final String bio;
+  final UserVerificationVideo verificationVideo;
+  final List<SexualOrientation> sexualOrientation;
+  const SwipeProfile({
+    Key? key,
+    required this.photoUrls,
+    required this.name,
+    required this.age,
+    required this.title,
+    required this.isFrontCard,
+    required this.onSwiped,
+    required this.bio,
+    required this.verificationVideo,
+    required this.sexualOrientation,
+  }) : super(key: key);
 
   @override
   State<SwipeProfile> createState() => _SwipeProfileState();
@@ -36,12 +41,70 @@ class _SwipeProfileState extends State<SwipeProfile> {
   double _rotationAngle = 0;
   late Size _screenSize;
   CardSwipeType _stampToShow = CardSwipeType.noAction;
+  bool _switchToDetailedView = false;
 
   @override
   Widget build(BuildContext context) {
     _screenSize = MediaQuery.of(context).size;
-    return widget.isFrontCard ? _draggableProfileCard() : _profileCard();
+    return widget.isFrontCard
+        ? _draggableProfileCard()
+        : _showProfileOverview();
   }
+
+  double cardWidth() => _screenSize.width - (paddingMd * 2);
+  double cardHeight() => _screenSize.height * 0.7;
+
+  /// UI
+  _showProfileOverview() {
+    return ProfileOverView(
+        stampToShow: _stampToShow,
+        name: widget.name,
+        age: widget.age,
+        title: widget.title,
+        cardWidth: cardWidth(),
+        cardHeight: cardHeight(),
+        mainPhoto: widget.photoUrls.first);
+  }
+
+  Widget _draggableProfileCard() {
+    return GestureDetector(
+      onPanStart: (details) {
+        _onStartDrag(details);
+      },
+      onPanEnd: (details) {
+        _onEndDrag(details);
+      },
+      onPanUpdate: (details) {
+        _onDragUpdate(details);
+      },
+      child: LayoutBuilder(builder: (context, constraints) {
+        final center = constraints.smallest.center(Offset.zero);
+        final rotateAngle = _rotationAngle * pi / 180;
+        final rotatedMatrix = Matrix4.identity()
+          ..translate(center.dx, center.dy)
+          ..rotateZ(rotateAngle)
+          ..translate(-center.dx, -center.dy);
+        final animatedDuration = _isDragging ? 0 : 400;
+        return AnimatedContainer(
+          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: animatedDuration),
+          transform: rotatedMatrix
+            ..translate(_dragPosition.dx, _dragPosition.dy),
+          child: _switchToDetailedView
+              ? DetailedViewCard(
+                  bio: widget.bio,
+                  verificationVideo: widget.verificationVideo,
+                  sexualOrientation: widget.sexualOrientation,
+                  cardWidth: cardWidth(),
+                  cardHeight: cardHeight(),
+                  photoUrls: widget.photoUrls)
+              : _showProfileOverview(),
+        );
+      }),
+    );
+  }
+
+  /// DRAG LISTENERS
 
   void _onStartDrag(DragStartDetails details) {
     if (mounted) {
@@ -75,14 +138,15 @@ class _SwipeProfileState extends State<SwipeProfile> {
         case CardSwipeType.pass:
           _passAnimation();
           break;
-        case CardSwipeType.superLike:
-          _superLikeAnimation();
+        case CardSwipeType.superlike:
+          //todo
           break;
         case CardSwipeType.noAction:
           //reset
           setState(() {
             _dragPosition = Offset.zero;
             _rotationAngle = 0;
+            _switchToDetailedView = !_switchToDetailedView;
           });
           break;
       }
@@ -105,144 +169,11 @@ class _SwipeProfileState extends State<SwipeProfile> {
       return CardSwipeType.pass;
     }
 
-    if (y <= -50 && isStraightUp) {
-      return CardSwipeType.superLike;
+    if (y <= -20 && isStraightUp) {
+      return CardSwipeType.superlike;
     }
 
     return CardSwipeType.noAction;
-  }
-
-  /// UI
-  Widget _profileCard() {
-    double cardWidth = _screenSize.width - (paddingMd * 2);
-    double cardHeight = _screenSize.height * 0.7;
-    return GlassCard(
-      wrapInChildScrollable: false,
-      constraints: BoxConstraints(
-        maxWidth: cardWidth,
-        minHeight: cardHeight,
-        maxHeight: cardHeight,
-      ),
-      contentPadding: EdgeInsets.zero,
-      child: Center(
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: CachedNetworkImage(
-                  height: cardHeight,
-                  imageUrl: widget.photoUrl,
-                  fit: BoxFit.cover,
-                  placeholder: (_, __) {
-                    return const Center(
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: CircularProgress(),
-                      ),
-                    );
-                  }),
-            ),
-            const TransparentLayer(),
-            Visibility(
-              visible: _stampToShow == CardSwipeType.superLike,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: _getStamp(forType: CardSwipeType.superLike),
-              ),
-            ),
-            Visibility(
-              visible: _stampToShow == CardSwipeType.pass,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: _getStamp(forType: CardSwipeType.pass),
-              ),
-            ),
-            Visibility(
-              visible: _stampToShow == CardSwipeType.like,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: _getStamp(forType: CardSwipeType.like),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: _buildBottomText(cardWidth),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBottomText(double cardWidth) {
-    return SizedBox(
-      width: cardWidth,
-      height: 100,
-      child: Padding(
-        padding: const EdgeInsets.all(paddingStd),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.name,
-                  style: appTextTheme.headline4
-                      ?.copyWith(color: appTheme.colorScheme.onPrimary),
-                ),
-                const SizedBox(
-                  width: paddingStd,
-                ),
-                Expanded(
-                    child: Text(widget.age,
-                        style: appTextTheme.headline4
-                            ?.copyWith(color: appTheme.colorScheme.onPrimary)))
-              ],
-            ),
-            Text(
-              widget.title.toUpperCase(),
-              overflow: TextOverflow.ellipsis,
-              style: appTextTheme.headline5
-                  ?.copyWith(color: appTheme.colorScheme.onPrimary),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _draggableProfileCard() {
-    return GestureDetector(
-      onPanStart: (details) {
-        _onStartDrag(details);
-      },
-      onPanEnd: (details) {
-        _onEndDrag(details);
-      },
-      onPanUpdate: (details) {
-        _onDragUpdate(details);
-      },
-      child: LayoutBuilder(builder: (context, constraints) {
-        final center = constraints.smallest.center(Offset.zero);
-        final rotateAngle = _rotationAngle * pi / 180;
-        final rotatedMatrix = Matrix4.identity()
-          ..translate(center.dx, center.dy)
-          ..rotateZ(rotateAngle)
-          ..translate(-center.dx, -center.dy);
-        final animatedDuration = _isDragging ? 0 : 400;
-        return AnimatedContainer(
-          curve: Curves.easeInOut,
-          duration: Duration(milliseconds: animatedDuration),
-          transform: rotatedMatrix
-            ..translate(_dragPosition.dx, _dragPosition.dy),
-          child: _profileCard(),
-        );
-      }),
-    );
   }
 
   /// SWIPE ANIMATION
@@ -263,78 +194,6 @@ class _SwipeProfileState extends State<SwipeProfile> {
     await Future.delayed(const Duration(milliseconds: 200));
     widget.onSwiped(CardSwipeType.pass);
   }
-
-  void _superLikeAnimation() async {
-    setState(() {
-      _rotationAngle = 0;
-      _dragPosition -= Offset(
-        0,
-        _screenSize.height,
-      );
-    });
-    await Future.delayed(const Duration(milliseconds: 200));
-    widget.onSwiped(CardSwipeType.superLike);
-  }
-
-  /// STAMP UI ***/
-  Widget _getStamp({required CardSwipeType forType}) {
-    String stampTxt = "";
-    EdgeInsets pushByMargin = EdgeInsets.zero;
-    switch (forType) {
-      case CardSwipeType.like:
-        stampTxt = likeStamp;
-        pushByMargin = const EdgeInsets.only(right: 40);
-        break;
-      case CardSwipeType.pass:
-        stampTxt = passStamp;
-        pushByMargin = const EdgeInsets.only(left: 40);
-        break;
-      case CardSwipeType.superLike:
-        stampTxt = superLikeStamp;
-        pushByMargin = const EdgeInsets.only(top: 40);
-        break;
-      case CardSwipeType.noAction:
-        break;
-    }
-    return Container(
-      margin: pushByMargin,
-      decoration: BoxDecoration(
-          color: Colors.black38,
-          borderRadius: BorderRadius.circular(12),
-          border:
-              Border.all(color: appTheme.colorScheme.inversePrimary, width: 2)),
-      child: Padding(
-        padding: const EdgeInsets.all(paddingStd),
-        child: Text(
-          stampTxt,
-          style: appTextTheme.headline3
-              ?.copyWith(color: appTheme.colorScheme.inversePrimary),
-        ),
-      ),
-    );
-  }
 }
 
-class TransparentLayer extends StatefulWidget {
-  const TransparentLayer({Key? key}) : super(key: key);
-
-  @override
-  State<TransparentLayer> createState() => _TransparentLayerState();
-}
-
-class _TransparentLayerState extends State<TransparentLayer> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: [
-      Colors.transparent,
-      Colors.black,
-    ], stops: [
-      0.7,
-      1
-    ], begin: Alignment.topCenter, end: Alignment.bottomCenter)));
-  }
-}
-
-enum CardSwipeType { like, pass, superLike, noAction }
+enum CardSwipeType { like, pass, superlike, noAction }
