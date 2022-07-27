@@ -9,10 +9,69 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0343c0f-6e2a-4b70-94b8-be5d411a5c67" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/features/matching/presentation/pages/matching_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/get_cached_profile_usecase.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/view_only/profile_photo_circular_container.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/view_only/profile_photo_loading_placeholder.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/view_only/profile_photo_uneditable.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/features/profile/presentation/pages/view_profile_destination.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/detailed_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/detailed_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/components/text_input/unstyled_input_txt.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/components/text_input/unstyled_input_txt.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/data/local_storage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/data/local_storage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/data_sources/local/hive_matching_data_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/data_sources/local/hive_matching_data_source.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/data_sources/local/local_matching_data_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/data_sources/local/local_matching_data_source.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/data_sources/remote/fire_matching_data_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/data_sources/remote/fire_matching_data_source.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/data_sources/remote/remote_matching_data_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/data_sources/remote/remote_matching_data_source.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/entity/daily_user_feedback_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/entity/daily_user_feedback_entity.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/entity/daily_user_feedback_entity.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/entity/daily_user_feedback_entity.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/entity/ice_breaker_messages_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/entity/ice_breaker_messages_entity.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/entity/ice_breaker_messages_entity.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/entity/ice_breaker_messages_entity.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/entity/like_notification_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/entity/like_notification_entity.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/entity/like_notification_entity.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/entity/like_notification_entity.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/data/repositories/matching_repository_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/data/repositories/matching_repository_impl.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/di/matching_di.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/di/matching_di.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/models/daily_user_feedback.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/models/daily_user_feedback.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/models/ice_breaker_msg.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/models/ice_breaker_msg.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/models/like_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/models/like_notification.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/repositories/matching_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/repositories/matching_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/repositories/matching_user_profile_wrapper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/repositories/matching_user_profile_wrapper.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/use_cases/fetch_profiles_to_match.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/use_cases/fetch_profiles_to_match.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/use_cases/initialize_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/use_cases/initialize_usecase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/use_cases/like_user_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/use_cases/like_user_usecase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/use_cases/matching_usecases.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/use_cases/matching_usecases.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/use_cases/pass_on_user_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/use_cases/pass_on_user_usecase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/domain/use_cases/send_daily_feedback.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/domain/use_cases/send_daily_feedback.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/idle_matching_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/idle_matching_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/loading_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/loading_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/rate_app_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/rate_app_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/swipeable_profile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/container_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/swipeable_profile_components/container_card.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/detailed_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/swipeable_profile_components/detailed_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/overview.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/swipeable_profile_components/overview.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/overview_text.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/swipeable_profile_components/overview_text.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components/stamp.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/components/swipeable_profile_components/stamp.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/pages/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/home/presentation/pages/home_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/state/matching_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/state/matching_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/state/matching_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/state/matching_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/home/presentation/state/matching_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/matching/presentation/state/matching_state.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/di/profile_di.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/di/profile_di.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/get_profile_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile/get_profile_from_remote_usecase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile_usecases.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/domain/use_cases/profile_usecases.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/components/profile_photo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/components/profile_photo_editor.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/pages/create_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/pages/create_profile_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/presentation/state/user_profile_state.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/splash/di/splash_di.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/splash/di/splash_di.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/splash/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/splash/presentation/pages/splash_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/splash/state/current_user_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/splash/presentation/state/current_user_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/splash/state/current_user_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/splash/presentation/state/current_user_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/splash/state/current_user_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/splash/presentation/state/current_user_state.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/splash/usecases/fetch_current_user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/splash/domain/usecases/fetch_current_user.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main_init.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main_init.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/res/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/res/strings.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,11 +127,11 @@
       <recent name="$PROJECT_DIR$/lib/features/auth/data/entities" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/features/splash/presentation/pages" />
+      <recent name="$PROJECT_DIR$/lib/features/splash/presentation" />
+      <recent name="$PROJECT_DIR$/lib/features/splash/domain" />
       <recent name="$PROJECT_DIR$/lib/features/home/presentation/components/swipeable_profile_components" />
       <recent name="$PROJECT_DIR$/lib/features/dating_profile/data/utils" />
-      <recent name="$PROJECT_DIR$/lib/features/dating_profile/data" />
-      <recent name="$PROJECT_DIR$/lib/features/home/domain/repositories" />
-      <recent name="$PROJECT_DIR$/lib/features/home/domain/models" />
     </key>
   </component>
   <component name="RunManager">

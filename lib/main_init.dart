@@ -5,7 +5,7 @@ import 'package:redting/core/di/core_dependencies.dart' as core_di;
 import 'package:redting/features/auth/di/auth_di.dart' as auth_di;
 import 'package:redting/features/dating_profile/di/dating_profile_di.dart'
     as dating_profile_di;
-import 'package:redting/features/home/di/matching_di.dart' as matching_di;
+import 'package:redting/features/matching/di/matching_di.dart' as matching_di;
 import 'package:redting/features/profile/di/profile_di.dart' as profile_di;
 import 'package:redting/features/splash/di/splash_di.dart' as splash_di;
 

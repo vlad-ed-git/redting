@@ -18,18 +18,41 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
 
   UserProfileBloc({required this.profileUseCases})
       : super(UserProfileInitialState()) {
-    on<LoadUserProfileEvent>(_onLoadUserProfileEvent);
+    on<LoadUserProfileFromRemoteEvent>(_onLoadUserProfileFromRemoteEvent);
     on<ChangeProfilePhotoEvent>(_onChangeProfilePhotoEvent);
     on<ChangeVerificationVideoEvent>(_onChangeVerificationVideoEvent);
     on<GetVerificationVideoCodeEvent>(_onGetVerificationVideoCodeEvent);
     on<DeleteVerificationVideoEvent>(_onDeleteVerificationVideoEvent);
     on<CreateUserProfileEvent>(_onCreateUserProfileEvent);
+    on<LoadCachedProfileEvent>(_onLoadCachedProfileFromRemoteEvent);
   }
 
-  FutureOr<void> _onLoadUserProfileEvent(
-      LoadUserProfileEvent event, Emitter<UserProfileState> emit) async {
-    ///TODO fetch user
+  FutureOr<void> _onLoadUserProfileFromRemoteEvent(
+      LoadUserProfileFromRemoteEvent event,
+      Emitter<UserProfileState> emit) async {
     emit(LoadingUserProfileState());
+    OperationResult result =
+        await profileUseCases.getProfileFromRemoteUseCase.execute();
+    if (result.errorOccurred) {
+      emit(ErrorLoadingUserProfileState(
+          errMsg: result.errorMessage ?? getProfileError));
+    }
+
+    if (result.data is UserProfile) {
+      emit(LoadedUserProfileState(profile: result.data as UserProfile));
+    }
+  }
+
+  FutureOr<void> _onLoadCachedProfileFromRemoteEvent(
+      LoadCachedProfileEvent event, Emitter<UserProfileState> emit) async {
+    emit(LoadingUserProfileState());
+    UserProfile? profile =
+        await profileUseCases.getCachedProfileUseCase.execute();
+    if (profile == null) {
+      emit(ErrorLoadingUserProfileState(errMsg: getProfileError));
+    } else {
+      emit(LoadedUserProfileState(profile: profile));
+    }
   }
 
   FutureOr<void> _onChangeProfilePhotoEvent(

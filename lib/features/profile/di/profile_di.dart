@@ -6,7 +6,8 @@ import 'package:redting/features/profile/data/data_sources/remote/remote_profile
 import 'package:redting/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/create_profile_usecase.dart';
-import 'package:redting/features/profile/domain/use_cases/profile/get_profile_usecase.dart';
+import 'package:redting/features/profile/domain/use_cases/profile/get_cached_profile_usecase.dart';
+import 'package:redting/features/profile/domain/use_cases/profile/get_profile_from_remote_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/upload_profile_photo_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_usecases.dart';
 import 'package:redting/features/profile/domain/use_cases/verification_video/delete_verification_video_usecase.dart';
@@ -27,14 +28,15 @@ GetIt init() {
   profileDiInstance.registerLazySingleton<ProfileUseCases>(() =>
       ProfileUseCases(
           createProfileUseCase: profileDiInstance(),
-          getProfileUseCase: profileDiInstance(),
+          getProfileFromRemoteUseCase: profileDiInstance(),
           uploadProfilePhotoUseCase: profileDiInstance(),
           generateVideoVerificationCodeUseCase: profileDiInstance(),
           uploadVerificationVideoUseCase: profileDiInstance(),
-          deleteVerificationVideoUseCase: profileDiInstance()));
+          deleteVerificationVideoUseCase: profileDiInstance(),
+          getCachedProfileUseCase: profileDiInstance()));
 
-  profileDiInstance.registerLazySingleton<GetProfileUseCase>(
-      () => GetProfileUseCase(profileRepository: profileDiInstance()));
+  profileDiInstance.registerLazySingleton<GetProfileFromRemoteUseCase>(() =>
+      GetProfileFromRemoteUseCase(profileRepository: profileDiInstance()));
 
   profileDiInstance.registerLazySingleton<CreateProfileUseCase>(
       () => CreateProfileUseCase(profileRepository: profileDiInstance()));
@@ -45,6 +47,9 @@ GetIt init() {
   profileDiInstance.registerLazySingleton<GenerateVideoVerificationCodeUseCase>(
       () => GenerateVideoVerificationCodeUseCase(
           profileRepository: profileDiInstance()));
+
+  profileDiInstance.registerLazySingleton<GetCachedProfileUseCase>(
+      () => GetCachedProfileUseCase(profileRepository: profileDiInstance()));
 
   profileDiInstance.registerLazySingleton<UploadVerificationVideoUseCase>(() =>
       UploadVerificationVideoUseCase(profileRepository: profileDiInstance()));

@@ -12,7 +12,7 @@ import 'package:redting/core/components/text_input/unstyled_input_txt.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
-import 'package:redting/features/profile/presentation/components/profile_photo.dart';
+import 'package:redting/features/profile/presentation/components/profile_photo_editor.dart';
 import 'package:redting/features/profile/presentation/components/verification_video_editor.dart';
 import 'package:redting/features/profile/presentation/state/user_profile_bloc.dart';
 import 'package:redting/res/dimens.dart';
@@ -138,7 +138,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ProfilePhoto(
+            ProfilePhotoEditor(
               isLoading: _isUploadingPhoto,
               profilePhoto: _profilePhoto,
               localPhoto: _selectedLocalPhotoFile,

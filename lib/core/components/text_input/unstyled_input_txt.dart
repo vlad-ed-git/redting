@@ -11,6 +11,7 @@ class UnStyledTxtInput extends StatelessWidget {
   final int? maxCharacters;
   final Function(String)? onTxtChanged;
   final Function()? onTap;
+  final Color? txtColor;
   const UnStyledTxtInput(
       {Key? key,
       required this.controller,
@@ -21,7 +22,8 @@ class UnStyledTxtInput extends StatelessWidget {
       this.label,
       this.maxCharacters,
       this.onTxtChanged,
-      this.onTap})
+      this.onTap,
+      this.txtColor})
       : super(key: key);
 
   @override
@@ -34,6 +36,8 @@ class UnStyledTxtInput extends StatelessWidget {
       maxLines: isLongTxt ? 5 : 1,
       maxLength: maxCharacters,
       onTap: onTap,
+      showCursor: keyboardType != TextInputType.none,
+      enabled: keyboardType != TextInputType.none,
       decoration: InputDecoration(
           helperStyle: appTextTheme.headline6
               ?.copyWith(fontSize: 12, fontWeight: FontWeight.w200),
@@ -47,7 +51,7 @@ class UnStyledTxtInput extends StatelessWidget {
           border: isLongTxt ? const UnderlineInputBorder() : InputBorder.none),
       textAlign: textAlign ?? TextAlign.start,
       onChanged: onTxtChanged,
-      style: appTextTheme.headline5?.copyWith(color: Colors.black),
+      style: appTextTheme.headline5?.copyWith(color: txtColor ?? Colors.black),
     );
   }
 }

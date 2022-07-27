@@ -3,7 +3,11 @@ part of 'user_profile_bloc.dart';
 @immutable
 abstract class UserProfileEvent {}
 
-class LoadUserProfileEvent extends UserProfileEvent {}
+/// when a user might have a profile for instance new phone install but already registered
+class LoadUserProfileFromRemoteEvent extends UserProfileEvent {}
+
+// when a user profile should exist in cache e.g. view profile screen
+class LoadCachedProfileEvent extends UserProfileEvent {}
 
 /// verification profile
 class ChangeProfilePhotoEvent extends UserProfileEvent {

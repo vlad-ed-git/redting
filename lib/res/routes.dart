@@ -2,7 +2,7 @@ import 'package:redting/features/auth/presentation/pages/login_screen.dart';
 import 'package:redting/features/dating_profile/presentation/pages/create_dating_profile_screen.dart';
 import 'package:redting/features/home/presentation/pages/home_screen.dart';
 import 'package:redting/features/profile/presentation/pages/create_profile_screen.dart';
-import 'package:redting/features/splash/splash_screen.dart';
+import 'package:redting/features/splash/presentation/pages/splash_screen.dart';
 
 const splashRoute = '/';
 const loginRoute = '/login';

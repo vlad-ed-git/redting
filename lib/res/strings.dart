@@ -137,3 +137,8 @@ const submitFeedbackBtn = "submit";
 const feedbackReceived = "Thank You! Your feedback helps RedTing get better.";
 const feedbackNotSentErr = "Oops! Sorry, we could not get that! Please retry";
 const verificationVideoWord = "VERIFICATION CODE: ";
+
+//home
+const homeDestinationLbl = "RedTing";
+const myProfileDestinationLbl = "My Profile";
+const myMatchesDestinationLbl = "Matched";

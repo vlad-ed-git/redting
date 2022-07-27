@@ -14,7 +14,7 @@ class LoadedUserProfileState extends UserProfileState {
 }
 
 class ErrorLoadingUserProfileState extends UserProfileState {
-  final String? errMsg;
+  final String errMsg;
   ErrorLoadingUserProfileState({required this.errMsg});
 }
 
