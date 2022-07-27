@@ -8,9 +8,11 @@ import 'package:redting/features/matching/domain/repositories/matching_repositor
 import 'package:redting/features/matching/domain/use_cases/fetch_profiles_to_match.dart';
 import 'package:redting/features/matching/domain/use_cases/initialize_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/like_user_usecase.dart';
+import 'package:redting/features/matching/domain/use_cases/listen_to_matches_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/matching_usecases.dart';
 import 'package:redting/features/matching/domain/use_cases/pass_on_user_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/send_daily_feedback.dart';
+import 'package:redting/features/matching/presentation/state/matches_listener/matches_listener_bloc.dart';
 import 'package:redting/features/matching/presentation/state/matching_bloc.dart';
 
 GetIt init(
@@ -22,13 +24,17 @@ GetIt init(
   matchingDiInstance
       .registerFactory<MatchingBloc>(() => MatchingBloc(matchingDiInstance()));
 
+  matchingDiInstance.registerFactory<MatchesListenerBloc>(
+      () => MatchesListenerBloc(matchingDiInstance()));
+
   matchingDiInstance.registerLazySingleton<MatchingUseCases>(() =>
       MatchingUseCases(
           initializeUserProfilesUseCase: matchingDiInstance(),
           fetchProfilesToMatch: matchingDiInstance(),
           likeUserUseCase: matchingDiInstance(),
           passOnUserUseCase: matchingDiInstance(),
-          sendUserDailyFeedback: matchingDiInstance()));
+          sendUserDailyFeedback: matchingDiInstance(),
+          listenToMatchUseCase: matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<InitializeUseCase>(
       () => InitializeUseCase(matchingDiInstance()));
@@ -44,6 +50,9 @@ GetIt init(
 
   matchingDiInstance.registerLazySingleton<SendUserDailyFeedback>(
       () => SendUserDailyFeedback(matchingDiInstance()));
+
+  matchingDiInstance.registerLazySingleton<ListenToMatchUseCase>(
+      () => ListenToMatchUseCase(matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<MatchingRepository>(() =>
       MatchingRepositoryImpl(profileDiInstance(), datingProfileDiInstance(),

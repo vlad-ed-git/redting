@@ -298,4 +298,10 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
       ).create(context));
     }
   }
+
+  @override
+  void dispose() {
+    _eventDispatcher?.close();
+    super.dispose();
+  }
 }

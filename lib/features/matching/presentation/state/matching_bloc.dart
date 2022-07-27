@@ -53,8 +53,11 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   FutureOr<void> _onLikeUserEvent(
       LikeUserEvent event, Emitter<MatchingState> emit) async {
     emit(LikingUserState());
-    OperationResult result = await matchingUseCases.likeUserUseCase
-        .execute(event.likedByUser, event.likedUserProfile.userProfile.userId);
+    OperationResult result = await matchingUseCases.likeUserUseCase.execute(
+        event.likedByUser,
+        event.likedUserProfile.userProfile.userId,
+        event.likedUserProfile.userProfile.name,
+        event.likedUserProfile.userProfile.profilePhotoUrl);
     if (result.errorOccurred) {
       emit(LikingUserFailedState(event.likedUserProfile));
     } else {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
 import 'package:redting/core/components/text/app_name_std_style.dart';
+import 'package:redting/features/matching/presentation/pages/matched_screen.dart';
 import 'package:redting/features/matching/presentation/pages/matching_screen.dart';
 import 'package:redting/features/profile/presentation/pages/view_profile_destination.dart';
 import 'package:redting/res/dimens.dart';
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     _destinationScreens = [
       const MatchingScreen(),
-      Container(),
+      const MatchedScreen(),
       const ViewProfileScreen(),
     ];
 

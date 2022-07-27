@@ -7,10 +7,12 @@ import 'package:redting/features/dating_profile/data/data_sources/remote/fire_da
 import 'package:redting/features/dating_profile/data/entities/dating_profile_entity.dart';
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/matching/data/data_sources/remote/remote_matching_data_source.dart';
-import 'package:redting/features/matching/data/entity/ice_breaker_messages_entity.dart';
+import 'package:redting/features/matching/data/entities/ice_breaker_messages_entity.dart';
+import 'package:redting/features/matching/data/entities/matching_profiles_entity.dart';
 import 'package:redting/features/matching/domain/models/daily_user_feedback.dart';
 import 'package:redting/features/matching/domain/models/ice_breaker_msg.dart';
 import 'package:redting/features/matching/domain/models/like_notification.dart';
+import 'package:redting/features/matching/domain/models/matching_profiles.dart';
 import 'package:redting/features/matching/domain/repositories/matching_user_profile_wrapper.dart';
 import 'package:redting/features/profile/data/data_sources/remote/fire_profile.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
@@ -23,12 +25,14 @@ const String iceBreakersCollection = "ice_breakers";
 const String iceBreakersDoc = "ice_breakers_doc";
 const String likedUsersCollection = "liked_users";
 const String usersILikeCollection = "users_i_like";
+const String matchesCollection = "matches";
 const String dailyUserFeedbackCollection = "daily_user_feedback";
 
 class FireMatchingDataSource implements RemoteMatchingDataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   DocumentSnapshot<Object?>? _startUserProfileMatchAfterDoc;
+  DocumentSnapshot<Object?>? _startMatchesAfterDoc;
 
   @override
   Future<IceBreakerMessages?> getIceBreakerMessages() async {
@@ -50,16 +54,86 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
     }
   }
 
+  /// like user
+  //TODO  if true, then this is an instant match
+  Future<bool?> _isAMatch(MatchingProfiles matchingProfiles) async {
+    try {
+      var doc = await _fireStore
+          .collection(matchesCollection)
+          .doc(matchingProfiles.userAUserBIdsConcatNSorted)
+          .get();
+      return doc.exists;
+    } catch (e) {
+      if (kDebugMode) {
+        print("=============== isAMatch() exc $e ==========");
+      }
+      return null;
+    }
+  }
+
+  Future<bool> _updateToMatchProfiles(MatchingProfiles matchingProfiles) async {
+    try {
+      await _fireStore
+          .collection(matchesCollection)
+          .doc(matchingProfiles.userAUserBIdsConcatNSorted)
+          .update({
+        MatchingProfilesEntity.haveMatchedFieldName: true,
+        MatchingProfilesEntity.likersFieldName:
+            FieldValue.arrayUnion(matchingProfiles.likers),
+        MatchingProfilesEntity.membersFieldName: FieldValue.arrayUnion(
+            matchingProfiles
+                .getMembers()
+                .map((e) => e.toJson())
+                .toList(growable: false))
+      });
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print("=============== updateToMatchProfiles exc $e ==========");
+      }
+      return false;
+    }
+  }
+
+  Future<bool> _addToMatchProfiles(MatchingProfiles matchingProfiles) async {
+    try {
+      await _fireStore
+          .collection(matchesCollection)
+          .doc(matchingProfiles.userAUserBIdsConcatNSorted)
+          .set(matchingProfiles.toJson());
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print("=============== addToMatchProfiles exc $e ==========");
+      }
+      return false;
+    }
+  }
+
   @override
-  Future<OperationResult> likeUser(LikeNotification likeNotification) async {
+  Future<OperationResult> likeUser(LikeNotification likeNotification,
+      MatchingProfiles matchingProfiles) async {
     try {
       await _fireStore
           .collection(likedUsersCollection)
           .doc(_auth.currentUser!.uid)
           .collection(usersILikeCollection)
-          .doc()
-          .set(likeNotification.toJson());
-      return OperationResult();
+          .doc(likeNotification.likedUserId)
+          .set(likeNotification.toJson(), SetOptions(merge: true));
+
+      bool? isAMatch = await _isAMatch(matchingProfiles);
+      bool errorOccurred = isAMatch == null;
+      if (isAMatch == true) {
+        bool updated = await _updateToMatchProfiles(matchingProfiles);
+        errorOccurred = !updated;
+      }
+
+      if (isAMatch == false) {
+        bool added = await _addToMatchProfiles(matchingProfiles);
+        errorOccurred = !added;
+      }
+
+      return OperationResult(errorOccurred: errorOccurred);
     } catch (e) {
       if (kDebugMode) {
         print("=============== likeUser() exc $e ==========");
@@ -246,6 +320,78 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
         print("================= sendDailyFeedback $e =============== ");
       }
       return OperationResult(errorOccurred: true);
+    }
+  }
+
+  /// listen to matches
+  @override
+  Stream<List<OperationRealTimeResult>> listenToMatches() {
+    if (_auth.currentUser == null) return const Stream.empty();
+
+    try {
+      Query<Map<String, dynamic>> query;
+
+      /// paginate
+      if (_startMatchesAfterDoc == null) {
+        query = _fireStore
+            .collection(matchesCollection)
+            .where(MatchingProfilesEntity.likersFieldName,
+                arrayContainsAny: [_auth.currentUser!.uid])
+            .where(MatchingProfilesEntity.haveMatchedFieldName, isEqualTo: true)
+            .orderBy(MatchingProfilesEntity.orderByFieldName)
+            .limit(queryPageResultsSize);
+      } else {
+        query = _fireStore
+            .collection(matchesCollection)
+            .where(MatchingProfilesEntity.likersFieldName,
+                arrayContainsAny: [_auth.currentUser!.uid])
+            .where(MatchingProfilesEntity.haveMatchedFieldName, isEqualTo: true)
+            .startAfterDocument(_startMatchesAfterDoc!)
+            .orderBy(MatchingProfilesEntity.orderByFieldName)
+            .limit(queryPageResultsSize);
+      }
+
+      //get stream
+      return query.snapshots().map((event) {
+        List<OperationRealTimeResult> results = [];
+        for (var change in event.docChanges) {
+          OperationRealTimeResult result;
+          switch (change.type) {
+            case DocumentChangeType.added:
+              //cache the last added for pagination
+              _startMatchesAfterDoc = change.doc;
+              result = OperationRealTimeResult(
+                data: MatchingProfilesEntity.fromJson(change.doc.data()!),
+                realTimeEventType: RealTimeEventType.added,
+              );
+              break;
+            case DocumentChangeType.modified:
+              result = OperationRealTimeResult(
+                data: MatchingProfilesEntity.fromJson(change.doc.data()!),
+                realTimeEventType: RealTimeEventType.modified,
+              );
+              break;
+            case DocumentChangeType.removed:
+              //reset pagination cache
+              if (_startMatchesAfterDoc == change.doc) {
+                _startMatchesAfterDoc = null;
+              }
+
+              result = OperationRealTimeResult(
+                data: MatchingProfilesEntity.fromJson(change.doc.data()!),
+                realTimeEventType: RealTimeEventType.deleted,
+              );
+              break;
+          }
+          results.add(result);
+        }
+        return results;
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print("===============  listenToMatches exc $e ==========");
+      }
+      return Stream.error(e);
     }
   }
 }

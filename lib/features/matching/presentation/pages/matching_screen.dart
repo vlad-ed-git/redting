@@ -42,8 +42,7 @@ class _MatchingScreenState extends State<MatchingScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
+
     return BlocProvider(
       lazy: false,
       create: (BuildContext blocProviderContext) =>
@@ -185,18 +184,21 @@ class _MatchingScreenState extends State<MatchingScreen>
       children: _currentSwipeBatchProfiles.map((e) {
         bool isFrontCard = _currentSwipeBatchProfiles.last.userProfile.userId ==
             e.userProfile.userId;
-        return SwipeProfile(
-          photoUrls: e.datingProfile.photos,
-          name: e.userProfile.name,
-          age: e.userProfile.age.toString(),
-          title: e.userProfile.title,
-          bio: e.userProfile.bio,
-          verificationVideo: e.userProfile.verificationVideo,
-          sexualOrientation: e.datingProfile.makeMyOrientationPublic
-              ? e.datingProfile.getUserSexualOrientation()
-              : [],
-          isFrontCard: isFrontCard,
-          onSwiped: _onSwipe,
+        return Align(
+          alignment: Alignment.topCenter,
+          child: SwipeProfile(
+            photoUrls: e.datingProfile.photos,
+            name: e.userProfile.name,
+            age: e.userProfile.age.toString(),
+            title: e.userProfile.title,
+            bio: e.userProfile.bio,
+            verificationVideo: e.userProfile.verificationVideo,
+            sexualOrientation: e.datingProfile.makeMyOrientationPublic
+                ? e.datingProfile.getUserSexualOrientation()
+                : [],
+            isFrontCard: isFrontCard,
+            onSwiped: _onSwipe,
+          ),
         );
       }).toList(),
     );
@@ -280,5 +282,11 @@ class _MatchingScreenState extends State<MatchingScreen>
         _currentSwipeBatchProfiles.isEmpty &&
         _loadedAllProfiles &&
         _todaysFeedbackReceived;
+  }
+
+  @override
+  void dispose() {
+    _eventDispatcher?.close();
+    super.dispose();
   }
 }

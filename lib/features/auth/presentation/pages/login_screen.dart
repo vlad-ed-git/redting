@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _verificationErr;
   String? _signInErr;
   bool _isLoading = false;
+  AuthUserBloc? _eventDispatcher;
 
   @override
   void initState() {
@@ -252,10 +253,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 200, maxWidth: 200),
           child: MainElevatedBtn(
-          onPressed: () {
-          _onClickedContinue(blocContext);
-          },
-       lbl: loginBtn,
+            onPressed: () {
+              _onClickedContinue(blocContext);
+            },
+            lbl: loginBtn,
             showLoading: _isLoading,
           ),
         ),
@@ -333,8 +334,8 @@ class _LoginScreenState extends State<LoginScreen> {
       _onSendOrResendCodeClicked(blocContext);
     } else {
       //we have an sms code
-      AuthUserBloc event = BlocProvider.of<AuthUserBloc>(blocContext);
-      event.add(SignInAuthUserEvent(
+      _eventDispatcher ??= BlocProvider.of<AuthUserBloc>(blocContext);
+      _eventDispatcher?.add(SignInAuthUserEvent(
           verificationId: _verificationId, smsCode: _smsCode));
     }
   }
@@ -342,8 +343,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _onBackPressed(BuildContext blocContext) {
     if (_step == LoginSteps.verifyPhone) {
       //go back to get phone
-      AuthUserBloc event = BlocProvider.of<AuthUserBloc>(blocContext);
-      event.add(SwitchLoginModeEvent(isInGetPhoneNotGetCodeMode: false));
+      _eventDispatcher ??= BlocProvider.of<AuthUserBloc>(blocContext);
+      _eventDispatcher
+          ?.add(SwitchLoginModeEvent(isInGetPhoneNotGetCodeMode: false));
       return false; //don't go back
     } else {
       return true;
@@ -351,15 +353,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _goToGetPhone(BuildContext blocContext) {
-    AuthUserBloc event = BlocProvider.of<AuthUserBloc>(blocContext);
-    event.add(SwitchLoginModeEvent(isInGetPhoneNotGetCodeMode: false));
+    _eventDispatcher ??= BlocProvider.of<AuthUserBloc>(blocContext);
+    _eventDispatcher
+        ?.add(SwitchLoginModeEvent(isInGetPhoneNotGetCodeMode: false));
   }
 
   void _onSendOrResendCodeClicked(BuildContext blocContext) {
-    AuthUserBloc event = BlocProvider.of<AuthUserBloc>(blocContext);
+    _eventDispatcher ??= BlocProvider.of<AuthUserBloc>(blocContext);
     String phoneNumber = _phoneController.text;
     String countryCode = countryToPhoneCodeMap[_selectedCountry] ?? '';
-    event.add(VerifyAuthUserEvent(
+    _eventDispatcher?.add(VerifyAuthUserEvent(
         phoneNumber: phoneNumber,
         countryCode: countryCode,
         resendToken: _resendToken));
@@ -369,6 +372,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     _phoneController.dispose();
+    _eventDispatcher?.close();
     super.dispose();
   }
 }

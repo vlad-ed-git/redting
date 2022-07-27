@@ -568,4 +568,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       ).create(context));
     }
   }
+
+  @override
+  void dispose() {
+    _eventDispatcher?.close();
+    super.dispose();
+  }
 }

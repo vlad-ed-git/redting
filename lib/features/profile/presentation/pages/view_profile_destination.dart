@@ -166,4 +166,10 @@ class _ViewProfileScreenState extends State<ViewProfileScreen>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _eventDispatcher?.close();
+    super.dispose();
+  }
 }

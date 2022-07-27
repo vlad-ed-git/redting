@@ -6,10 +6,12 @@ import 'package:redting/features/dating_profile/domain/models/dating_profile.dar
 import 'package:redting/features/dating_profile/domain/repository/dating_profile_repo.dart';
 import 'package:redting/features/matching/data/data_sources/local/local_matching_data_source.dart';
 import 'package:redting/features/matching/data/data_sources/remote/remote_matching_data_source.dart';
-import 'package:redting/features/matching/data/entity/daily_user_feedback_entity.dart';
-import 'package:redting/features/matching/data/entity/like_notification_entity.dart';
+import 'package:redting/features/matching/data/entities/daily_user_feedback_entity.dart';
+import 'package:redting/features/matching/data/entities/like_notification_entity.dart';
+import 'package:redting/features/matching/data/entities/matching_profiles_entity.dart';
 import 'package:redting/features/matching/domain/models/ice_breaker_msg.dart';
 import 'package:redting/features/matching/domain/models/like_notification.dart';
+import 'package:redting/features/matching/domain/models/matching_profiles.dart';
 import 'package:redting/features/matching/domain/repositories/matching_repository.dart';
 import 'package:redting/features/matching/domain/repositories/matching_user_profile_wrapper.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
@@ -60,15 +62,33 @@ class MatchingRepositoryImpl implements MatchingRepository {
   }
 
   @override
-  Future<OperationResult> likeUser(String thisUser, String likedUser) async {
+  Future<OperationResult> likeUser(String thisUser, String likedUser,
+      String likedUserName, String likedUserProfilePhotoUrl) async {
     try {
       String iceBreaker = await _getRandomIceBreakerMessage();
+
       LikeNotification notification = LikeNotificationEntity(
           likedByUserId: thisUser,
           likedOn: DateTime.now(),
           likedUserId: likedUser,
           iceBreaker: iceBreaker.isNotEmpty ? iceBreaker : defaultIceBreaker);
-      OperationResult result = await _remoteDataSource.likeUser(notification);
+
+      MatchingProfiles matchingProfiles = MatchingProfilesEntity(
+          userAUserBIdsConcatNSorted:
+              MatchingProfiles.concatUser1User2IdsSortAndSetAsId(
+                  thisUser, likedUser),
+          iceBreakers: [iceBreaker],
+          likers: [thisUser],
+          otherUser: [
+            MatchingMembersEntity(
+                likedUser, likedUserName, likedUserProfilePhotoUrl)
+          ],
+          updatedOn: DateTime.now()
+          //add self
+          );
+
+      OperationResult result =
+          await _remoteDataSource.likeUser(notification, matchingProfiles);
       if (!result.errorOccurred) {
         //cache liked user
         await _localDataSource.cacheLikedUser(likedUser);
@@ -130,5 +150,10 @@ class MatchingRepositoryImpl implements MatchingRepository {
       String userId, String feedback, int rating) async {
     return await _remoteDataSource.sendDailyFeedback(
         DailyUserFeedbackEntity(feedback, rating, DateTime.now(), userId));
+  }
+
+  @override
+  Stream<List<OperationRealTimeResult>> listenToMatches() {
+    return _remoteDataSource.listenToMatches();
   }
 }
