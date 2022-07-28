@@ -1,6 +1,6 @@
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/matching/domain/repositories/matching_repository.dart';
-import 'package:redting/features/matching/domain/repositories/matching_user_profile_wrapper.dart';
+import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
 
 class FetchProfilesToMatch {
   final MatchingRepository repository;

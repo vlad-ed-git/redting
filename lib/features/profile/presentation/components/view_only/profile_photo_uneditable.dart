@@ -6,16 +6,23 @@ import 'package:redting/features/profile/presentation/components/view_only/profi
 class UneditableProfilePhoto extends StatelessWidget {
   final String profilePhoto;
   final ImageProvider? placeholderImageProvider;
+  final bool isSmall, isSmallest;
   const UneditableProfilePhoto(
-      {Key? key, required this.profilePhoto, this.placeholderImageProvider})
+      {Key? key,
+      required this.profilePhoto,
+      this.placeholderImageProvider,
+      this.isSmall = false,
+      this.isSmallest = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: profilePhoto,
-      imageBuilder: (context, imageProvider) =>
-          ProfilePhotoCircularContainer(imageProvider: imageProvider),
+      imageBuilder: (context, imageProvider) => ProfilePhotoCircularContainer(
+          imageProvider: imageProvider,
+          isSmall: isSmall,
+          isSmallest: isSmallest),
       placeholder: (context, url) => ProfilePhotoLoadingPlaceholder(
         imgProvider: placeholderImageProvider,
       ),

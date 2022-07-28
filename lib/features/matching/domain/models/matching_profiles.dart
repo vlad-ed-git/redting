@@ -22,9 +22,9 @@ abstract class MatchingProfiles {
 abstract class MatchingMembers {
   String userId;
   String userName;
-  String userProfilePhotos;
+  String userProfilePhoto;
 
-  MatchingMembers(this.userId, this.userName, this.userProfilePhotos);
+  MatchingMembers(this.userId, this.userName, this.userProfilePhoto);
 
   Map<String, dynamic> toJson();
   MatchingMembers fromJson(Map<String, dynamic> json);

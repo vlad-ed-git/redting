@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:redting/core/utils/service_result.dart';
+import 'package:redting/core/utils/txt_helpers.dart';
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/dating_profile/domain/repository/dating_profile_repo.dart';
 import 'package:redting/features/matching/data/data_sources/local/local_matching_data_source.dart';
@@ -13,7 +12,7 @@ import 'package:redting/features/matching/domain/models/ice_breaker_msg.dart';
 import 'package:redting/features/matching/domain/models/like_notification.dart';
 import 'package:redting/features/matching/domain/models/matching_profiles.dart';
 import 'package:redting/features/matching/domain/repositories/matching_repository.dart';
-import 'package:redting/features/matching/domain/repositories/matching_user_profile_wrapper.dart';
+import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
 import 'package:redting/res/strings.dart';
@@ -44,7 +43,7 @@ class MatchingRepositoryImpl implements MatchingRepository {
   }
 
   @override
-  Future<OperationResult> getMatchingUserProfileWrapper() async {
+  Future<OperationResult> getThisUserInfo() async {
     UserProfile? userProfile = await _profileRepository.getCachedUserProfile();
     DatingProfile? datingProfile =
         await _datingProfileRepo.getCachedDatingProfile();
@@ -112,12 +111,8 @@ class MatchingRepositoryImpl implements MatchingRepository {
           icebreakersCacheMessages.addAll(icebreakers.messages);
         }
       }
-      final random = Random();
-      String iceBreaker = icebreakersCacheMessages.isNotEmpty
-          ? icebreakersCacheMessages[
-              random.nextInt(icebreakersCacheMessages.length)]
-          : '';
-      return iceBreaker;
+
+      return randomWordInList(icebreakersCacheMessages);
     } catch (e) {
       if (kDebugMode) {
         print(

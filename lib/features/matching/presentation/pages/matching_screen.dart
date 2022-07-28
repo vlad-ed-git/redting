@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/snack/snack.dart';
-import 'package:redting/features/matching/domain/repositories/matching_user_profile_wrapper.dart';
+import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
 import 'package:redting/features/matching/presentation/components/idle_matching_card.dart';
 import 'package:redting/features/matching/presentation/components/loading_card.dart';
 import 'package:redting/features/matching/presentation/components/rate_app_card.dart';
@@ -154,7 +154,7 @@ class _MatchingScreenState extends State<MatchingScreen>
   ) {
     if (mounted) {
       setState(() {
-        _thisUserInfo = state.wrapper;
+        _thisUserInfo = state.thisUserInfo;
         _isLoading = false;
       });
     }
@@ -164,17 +164,7 @@ class _MatchingScreenState extends State<MatchingScreen>
 
   void _loadNextProfilesBatch() {
     if (_thisUserInfo == null) return;
-    _eventDispatcher?.add(LoadProfilesEvent(_thisUserInfo!));
-  }
-
-  ///snack
-  void _showSnack(String err, {bool isError = true}) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(Snack(
-        content: err,
-        isError: isError,
-      ).create(context));
-    }
+    _eventDispatcher?.add(LoadProfilesToMatchEvent(_thisUserInfo!));
   }
 
   /// CARDS
@@ -288,5 +278,15 @@ class _MatchingScreenState extends State<MatchingScreen>
   void dispose() {
     _eventDispatcher?.close();
     super.dispose();
+  }
+
+  ///snack
+  void _showSnack(String err, {bool isError = true}) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(Snack(
+        content: err,
+        isError: isError,
+      ).create(context));
+    }
   }
 }

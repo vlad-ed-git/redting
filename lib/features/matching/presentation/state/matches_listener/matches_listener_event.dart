@@ -4,3 +4,5 @@ part of 'matches_listener_bloc.dart';
 abstract class MatchesListenerEvent {}
 
 class ListenToMatchesEvent extends MatchesListenerEvent {}
+
+class LoadThisUserProfileEvent extends MatchesListenerEvent {}

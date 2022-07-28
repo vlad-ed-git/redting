@@ -13,7 +13,7 @@ import 'package:redting/features/matching/domain/models/daily_user_feedback.dart
 import 'package:redting/features/matching/domain/models/ice_breaker_msg.dart';
 import 'package:redting/features/matching/domain/models/like_notification.dart';
 import 'package:redting/features/matching/domain/models/matching_profiles.dart';
-import 'package:redting/features/matching/domain/repositories/matching_user_profile_wrapper.dart';
+import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
 import 'package:redting/features/profile/data/data_sources/remote/fire_profile.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
 import 'package:redting/features/profile/data/utils/enum_mappers.dart';
@@ -338,7 +338,7 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
             .where(MatchingProfilesEntity.likersFieldName,
                 arrayContainsAny: [_auth.currentUser!.uid])
             .where(MatchingProfilesEntity.haveMatchedFieldName, isEqualTo: true)
-            .orderBy(MatchingProfilesEntity.orderByFieldName)
+            .orderBy(MatchingProfilesEntity.orderByFieldName, descending: true)
             .limit(queryPageResultsSize);
       } else {
         query = _fireStore
@@ -347,7 +347,7 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
                 arrayContainsAny: [_auth.currentUser!.uid])
             .where(MatchingProfilesEntity.haveMatchedFieldName, isEqualTo: true)
             .startAfterDocument(_startMatchesAfterDoc!)
-            .orderBy(MatchingProfilesEntity.orderByFieldName)
+            .orderBy(MatchingProfilesEntity.orderByFieldName, descending: true)
             .limit(queryPageResultsSize);
       }
 

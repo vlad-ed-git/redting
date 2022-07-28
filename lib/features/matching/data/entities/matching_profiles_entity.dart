@@ -11,6 +11,7 @@ class MatchingProfilesEntity implements MatchingProfiles {
   static String haveMatchedFieldName = "haveMatched";
   static String membersFieldName = "otherUser";
   static Object orderByFieldName = "updatedOn";
+  static var iceBreakersFieldName = "iceBreakers";
 
   @override
   String userAUserBIdsConcatNSorted;
@@ -68,9 +69,9 @@ class MatchingMembersEntity implements MatchingMembers {
   String userName;
 
   @override
-  String userProfilePhotos;
+  String userProfilePhoto;
 
-  MatchingMembersEntity(this.userId, this.userName, this.userProfilePhotos);
+  MatchingMembersEntity(this.userId, this.userName, this.userProfilePhoto);
 
   @override
   factory MatchingMembersEntity.fromJson(Map<String, dynamic> json) =>

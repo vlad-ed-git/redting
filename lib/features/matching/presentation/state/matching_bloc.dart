@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:redting/core/utils/service_result.dart';
-import 'package:redting/features/matching/domain/repositories/matching_user_profile_wrapper.dart';
 import 'package:redting/features/matching/domain/use_cases/matching_usecases.dart';
+import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
 import 'package:redting/res/strings.dart';
 
 part 'matching_event.dart';
@@ -14,7 +14,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   final MatchingUseCases matchingUseCases;
   MatchingBloc(this.matchingUseCases) : super(MatchingInitialState()) {
     on<InitializeEvent>(_onInitializeEvent);
-    on<LoadProfilesEvent>(_onLoadProfilesEvent);
+    on<LoadProfilesToMatchEvent>(_onLoadProfilesEvent);
     on<LikeUserEvent>(_onLikeUserEvent);
     on<SendUserFeedBackEvent>(_onSendUserFeedBackEvent);
   }
@@ -23,23 +23,24 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
       InitializeEvent event, Emitter<MatchingState> emit) async {
     emit(LoadingState());
 
+    await matchingUseCases.initializeUserProfilesUseCase.execute();
     OperationResult result =
-        await matchingUseCases.initializeUserProfilesUseCase.execute();
+        await matchingUseCases.getThisUsersInfoUseCase.execute();
     if (result.errorOccurred || result.data is! MatchingUserProfileWrapper) {
       emit(InitializingMatchingFailedState(
           result.errorMessage ?? loadingAuthUserErr));
     }
 
     if (result.data is MatchingUserProfileWrapper) {
-      emit(InitializedMatchingState(result.data));
+      emit(InitializedMatchingState(result.data as MatchingUserProfileWrapper));
     }
   }
 
   FutureOr<void> _onLoadProfilesEvent(
-      LoadProfilesEvent event, Emitter<MatchingState> emit) async {
+      LoadProfilesToMatchEvent event, Emitter<MatchingState> emit) async {
     emit(LoadingState());
-    OperationResult result = await matchingUseCases.fetchProfilesToMatch
-        .execute(event._userProfileWrapper);
+    OperationResult result =
+        await matchingUseCases.fetchProfilesToMatch.execute(event.profiles);
     if (result.errorOccurred ||
         result.data is! List<MatchingUserProfileWrapper>) {
       emit(FetchingMatchesFailedState(

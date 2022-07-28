@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:redting/core/components/snack/snack.dart';
 import 'package:redting/core/utils/service_result.dart';
+import 'package:redting/core/utils/txt_helpers.dart';
+import 'package:redting/features/chat/presentation/pages/chat_screen.dart';
+import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/matching/domain/models/matching_profiles.dart';
 import 'package:redting/features/matching/presentation/state/matches_listener/matches_listener_bloc.dart';
+import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/presentation/components/view_only/profile_photo_uneditable.dart';
+import 'package:redting/res/dimens.dart';
+import 'package:redting/res/fonts.dart';
+import 'package:redting/res/theme.dart';
 
+//TODO pull to refresh stream manually if it has auto closed?
+//TODO load more on scroll
 class MatchedScreen extends StatefulWidget {
   const MatchedScreen({Key? key}) : super(key: key);
 
@@ -16,13 +27,15 @@ class _MatchedScreenState extends State<MatchedScreen>
     with AutomaticKeepAliveClientMixin<MatchedScreen> {
   Stream<List<OperationRealTimeResult>>? _stream;
   MatchesListenerBloc? _eventDispatcher;
+  late UserProfile _thisUsersProfile;
+  late DatingProfile _thisUsersDatingProfile;
 
   @override
   bool get wantKeepAlive => true;
   bool _isInitialized = false;
 
   final messagesScrollController = ScrollController();
-  Map<String, MatchingProfiles> _matchingProfiles = {};
+  final Map<String, MatchingProfiles> _matchedProfiles = {};
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +58,22 @@ class _MatchedScreenState extends State<MatchedScreen>
                       _respondToDataChanges(snapshot.data!);
                     }
 
-                    if (snapshot.hasError) {
-                      print("==== listening err ${snapshot.error} ===");
-                    }
-
-                    return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: _matchingProfiles.values
-                            .map((value) =>
-                                Text(value.getMembers().first.userName))
-                            .toList());
+                    return ListBody(
+                      children: [
+                        Text(
+                          "Each time you like a user. A random icebreaker is sent to them. This is the first message you see.",
+                          style: appTextTheme.caption?.copyWith(
+                              color: appTheme.colorScheme.primary
+                                  .withOpacity(0.8)),
+                        ),
+                        const SizedBox(
+                          height: paddingMd,
+                        ),
+                        ..._matchedProfiles.values
+                            .map((profile) => _matchToMessageWidget(profile))
+                            .toList()
+                      ],
+                    );
                   }));
         }));
   }
@@ -66,11 +85,21 @@ class _MatchedScreenState extends State<MatchedScreen>
         _stream = state.stream;
       });
     }
+
+    if (state is LoadedThisUserProfileState) {
+      _thisUsersProfile = state.thisUserProfiles.userProfile;
+      _thisUsersDatingProfile = state.thisUserProfiles.datingProfile;
+      _eventDispatcher?.add(ListenToMatchesEvent());
+    }
+
+    if (state is LoadingThisUserProfileFailedState) {
+      _showSnack(state.errMsg);
+    }
   }
 
   void _onInitState(BuildContext blocContext) {
     _eventDispatcher ??= BlocProvider.of<MatchesListenerBloc>(blocContext);
-    _eventDispatcher?.add(ListenToMatchesEvent());
+    _eventDispatcher?.add(LoadThisUserProfileEvent());
   }
 
   @override
@@ -80,32 +109,108 @@ class _MatchedScreenState extends State<MatchedScreen>
   }
 
   void _respondToDataChanges(List<OperationRealTimeResult> data) {
-    print(data);
     for (var realTimeResult in data) {
       MatchingProfiles matchingProfile =
           realTimeResult.data as MatchingProfiles;
       switch (realTimeResult.realTimeEventType) {
         case RealTimeEventType.added:
-          _matchingProfiles[matchingProfile.userAUserBIdsConcatNSorted] =
+          _matchedProfiles[matchingProfile.userAUserBIdsConcatNSorted] =
               matchingProfile;
           break;
 
         case RealTimeEventType.modified:
-          if (_matchingProfiles
+          if (_matchedProfiles
               .containsKey(matchingProfile.userAUserBIdsConcatNSorted)) {
-            _matchingProfiles[matchingProfile.userAUserBIdsConcatNSorted] =
+            _matchedProfiles[matchingProfile.userAUserBIdsConcatNSorted] =
                 matchingProfile;
           }
           break;
 
         case RealTimeEventType.deleted:
-          if (_matchingProfiles
+          if (_matchedProfiles
               .containsKey(matchingProfile.userAUserBIdsConcatNSorted)) {
-            _matchingProfiles
-                .remove(matchingProfile.userAUserBIdsConcatNSorted);
+            _matchedProfiles.remove(matchingProfile.userAUserBIdsConcatNSorted);
           }
           break;
       }
+    }
+  }
+
+  Widget _matchToMessageWidget(MatchingProfiles profiles) {
+    List<MatchingMembers> thisAndTheOtherUser = profiles.getMembers();
+    final otherUser = thisAndTheOtherUser
+        .firstWhere((profile) => profile.userId != _thisUsersProfile.userId);
+    final thisUser = thisAndTheOtherUser
+        .firstWhere((profile) => profile.userId == _thisUsersProfile.userId);
+    final iceBreaker = profiles.iceBreakers[0];
+    return Container(
+      margin: const EdgeInsets.only(bottom: paddingMd),
+      child: InkWell(
+        splashColor: appTheme.colorScheme.primary,
+        radius: 8,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChatScreen(
+                    thisUser: thisUser,
+                    thatUser: otherUser,
+                    iceBreaker: iceBreaker)),
+          );
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+                constraints: const BoxConstraints(
+                    maxHeight: avatarRadiusSmall * 2.5,
+                    maxWidth: avatarRadiusSmall * 2.5),
+                child: Center(
+                    child: UneditableProfilePhoto(
+                        isSmall: true,
+                        profilePhoto: otherUser.userProfilePhoto))),
+            const SizedBox(
+              width: paddingStd,
+            ),
+            Expanded(
+              child: ConstrainedBox(
+                constraints:
+                    const BoxConstraints(minHeight: avatarRadiusSmall * 2.5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      clipText(txt: otherUser.userName, maxChars: 24),
+                      style: appTextTheme.headline4
+                          ?.copyWith(color: Colors.black87),
+                    ),
+                    const SizedBox(
+                      width: paddingStd,
+                    ),
+                    Text(
+                        clipWords(
+                          txt: iceBreaker,
+                        ),
+                        style: appTextTheme.bodyText1
+                            ?.copyWith(color: Colors.black87))
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///snack
+  void _showSnack(String err, {bool isError = true}) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(Snack(
+        content: err,
+        isError: isError,
+      ).create(context));
     }
   }
 }

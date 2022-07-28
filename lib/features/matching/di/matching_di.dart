@@ -6,7 +6,8 @@ import 'package:redting/features/matching/data/data_sources/remote/remote_matchi
 import 'package:redting/features/matching/data/repositories/matching_repository_impl.dart';
 import 'package:redting/features/matching/domain/repositories/matching_repository.dart';
 import 'package:redting/features/matching/domain/use_cases/fetch_profiles_to_match.dart';
-import 'package:redting/features/matching/domain/use_cases/initialize_usecase.dart';
+import 'package:redting/features/matching/domain/use_cases/get_this_usersinfo_usecase.dart';
+import 'package:redting/features/matching/domain/use_cases/initialize_icebreakers_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/like_user_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/listen_to_matches_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/matching_usecases.dart';
@@ -34,10 +35,11 @@ GetIt init(
           likeUserUseCase: matchingDiInstance(),
           passOnUserUseCase: matchingDiInstance(),
           sendUserDailyFeedback: matchingDiInstance(),
-          listenToMatchUseCase: matchingDiInstance()));
+          listenToMatchUseCase: matchingDiInstance(),
+          getThisUsersInfoUseCase: matchingDiInstance()));
 
-  matchingDiInstance.registerLazySingleton<InitializeUseCase>(
-      () => InitializeUseCase(matchingDiInstance()));
+  matchingDiInstance.registerLazySingleton<InitializeIceBreakersUseCase>(
+      () => InitializeIceBreakersUseCase(matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<FetchProfilesToMatch>(
       () => FetchProfilesToMatch(matchingDiInstance()));
@@ -53,6 +55,9 @@ GetIt init(
 
   matchingDiInstance.registerLazySingleton<ListenToMatchUseCase>(
       () => ListenToMatchUseCase(matchingDiInstance()));
+
+  matchingDiInstance.registerLazySingleton<GetThisUsersInfoUseCase>(
+      () => GetThisUsersInfoUseCase(matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<MatchingRepository>(() =>
       MatchingRepositoryImpl(profileDiInstance(), datingProfileDiInstance(),

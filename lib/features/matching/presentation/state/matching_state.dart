@@ -8,8 +8,8 @@ class MatchingInitialState extends MatchingState {}
 class LoadingState extends MatchingState {}
 
 class InitializedMatchingState extends MatchingState {
-  final MatchingUserProfileWrapper wrapper;
-  InitializedMatchingState(this.wrapper);
+  final MatchingUserProfileWrapper thisUserInfo;
+  InitializedMatchingState(this.thisUserInfo);
 }
 
 class InitializingMatchingFailedState extends MatchingState {

@@ -5,9 +5,9 @@ abstract class MatchingEvent {}
 
 class InitializeEvent extends MatchingEvent {}
 
-class LoadProfilesEvent extends MatchingEvent {
-  final MatchingUserProfileWrapper _userProfileWrapper;
-  LoadProfilesEvent(this._userProfileWrapper);
+class LoadProfilesToMatchEvent extends MatchingEvent {
+  final MatchingUserProfileWrapper profiles;
+  LoadProfilesToMatchEvent(this.profiles);
 }
 
 class LikeUserEvent extends MatchingEvent {

@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   //destinations
-  HomeDestinations _homeDestinations = HomeDestinations.MATCHING;
+  HomeDestinations _homeDestinations = HomeDestinations.matching;
   late List<Widget> _destinationScreens;
   late PageController _destinationPagesController;
 
@@ -103,11 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _getSelectedIndex() {
     switch (_homeDestinations) {
-      case HomeDestinations.MATCHING:
+      case HomeDestinations.matching:
         return 0;
-      case HomeDestinations.CHAT:
+      case HomeDestinations.matched:
         return 1;
-      case HomeDestinations.PROFILE:
+      case HomeDestinations.profile:
         return 2;
     }
   }
@@ -115,21 +115,21 @@ class _HomeScreenState extends State<HomeScreen> {
   void _switchDestination(int index) {
     if (index == 0) {
       setState(() {
-        _homeDestinations = HomeDestinations.MATCHING;
+        _homeDestinations = HomeDestinations.matching;
         _destinationPagesController.jumpToPage(_getSelectedIndex());
       });
     }
 
     if (index == 1) {
       setState(() {
-        _homeDestinations = HomeDestinations.CHAT;
+        _homeDestinations = HomeDestinations.matched;
         _destinationPagesController.jumpToPage(_getSelectedIndex());
       });
     }
 
     if (index == 2) {
       setState(() {
-        _homeDestinations = HomeDestinations.PROFILE;
+        _homeDestinations = HomeDestinations.profile;
         _destinationPagesController.jumpToPage(_getSelectedIndex());
       });
     }
@@ -157,4 +157,4 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-enum HomeDestinations { MATCHING, CHAT, PROFILE }
+enum HomeDestinations { matching, matched, profile }

@@ -38,7 +38,7 @@ MatchingMembersEntity _$MatchingMembersEntityFromJson(Map json) =>
     MatchingMembersEntity(
       json['userId'] as String,
       json['userName'] as String,
-      json['userProfilePhotos'] as String,
+      json['userProfilePhoto'] as String,
     );
 
 Map<String, dynamic> _$MatchingMembersEntityToJson(
@@ -46,5 +46,5 @@ Map<String, dynamic> _$MatchingMembersEntityToJson(
     <String, dynamic>{
       'userId': instance.userId,
       'userName': instance.userName,
-      'userProfilePhotos': instance.userProfilePhotos,
+      'userProfilePhoto': instance.userProfilePhoto,
     };
