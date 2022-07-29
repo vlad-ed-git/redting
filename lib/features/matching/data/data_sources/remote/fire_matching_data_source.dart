@@ -325,19 +325,21 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
 
   /// listen to matches
   @override
-  Stream<List<OperationRealTimeResult>> listenToMatches() {
+  Stream<List<OperationRealTimeResult>> listenToMatches(
+      {bool loadMore = false}) {
     if (_auth.currentUser == null) return const Stream.empty();
 
     try {
       Query<Map<String, dynamic>> query;
 
       /// paginate
-      if (_startMatchesAfterDoc == null) {
+      if (_startMatchesAfterDoc != null && loadMore) {
         query = _fireStore
             .collection(matchesCollection)
             .where(MatchingProfilesEntity.likersFieldName,
                 arrayContainsAny: [_auth.currentUser!.uid])
             .where(MatchingProfilesEntity.haveMatchedFieldName, isEqualTo: true)
+            .startAfterDocument(_startMatchesAfterDoc!)
             .orderBy(MatchingProfilesEntity.orderByFieldName, descending: true)
             .limit(queryPageResultsSize);
       } else {
@@ -346,7 +348,6 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
             .where(MatchingProfilesEntity.likersFieldName,
                 arrayContainsAny: [_auth.currentUser!.uid])
             .where(MatchingProfilesEntity.haveMatchedFieldName, isEqualTo: true)
-            .startAfterDocument(_startMatchesAfterDoc!)
             .orderBy(MatchingProfilesEntity.orderByFieldName, descending: true)
             .limit(queryPageResultsSize);
       }

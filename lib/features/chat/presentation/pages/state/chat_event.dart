@@ -12,10 +12,10 @@ class ListenToChatEvent extends ChatEvent {
   });
 }
 
-class LoadMoreEvent extends ChatEvent {
+class LoadMoreMessagesEvent extends ChatEvent {
   final MatchingMembers thisUser;
   final MatchingMembers thatUser;
-  LoadMoreEvent({
+  LoadMoreMessagesEvent({
     required this.thisUser,
     required this.thatUser,
   });

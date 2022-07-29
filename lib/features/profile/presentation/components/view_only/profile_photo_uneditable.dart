@@ -7,12 +7,14 @@ class UneditableProfilePhoto extends StatelessWidget {
   final String profilePhoto;
   final ImageProvider? placeholderImageProvider;
   final bool isSmall, isSmallest;
+  final double? useRadius;
   const UneditableProfilePhoto(
       {Key? key,
       required this.profilePhoto,
       this.placeholderImageProvider,
       this.isSmall = false,
-      this.isSmallest = false})
+      this.isSmallest = false,
+      this.useRadius})
       : super(key: key);
 
   @override
@@ -22,9 +24,16 @@ class UneditableProfilePhoto extends StatelessWidget {
       imageBuilder: (context, imageProvider) => ProfilePhotoCircularContainer(
           imageProvider: imageProvider,
           isSmall: isSmall,
+          useRadius: useRadius,
           isSmallest: isSmallest),
-      placeholder: (context, url) => ProfilePhotoLoadingPlaceholder(
-        imgProvider: placeholderImageProvider,
+      placeholder: (context, url) => SizedBox(
+        width: 40,
+        height: 40,
+        child: Center(
+          child: ProfilePhotoLoadingPlaceholder(
+            imgProvider: placeholderImageProvider,
+          ),
+        ),
       ),
     );
   }

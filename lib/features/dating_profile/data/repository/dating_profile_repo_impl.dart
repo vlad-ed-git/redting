@@ -14,21 +14,21 @@ import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/res/strings.dart';
 
 class DatingProfileRepoImpl implements DatingProfileRepo {
-  final RemoteDatingProfileSource _remoteSource;
-  final LocalDatingProfileSource _localSource;
-  final ImageCompressor _imageCompressor;
+  final RemoteDatingProfileSource remoteSource;
+  final LocalDatingProfileSource localSource;
+  final ImageCompressor imageCompressor;
 
-  DatingProfileRepoImpl(
-    this._remoteSource,
-    this._localSource,
-    this._imageCompressor,
-  );
+  DatingProfileRepoImpl({
+    required this.remoteSource,
+    required this.localSource,
+    required this.imageCompressor,
+  });
 
   @override
   Future<OperationResult> addPhoto(
       File photo, String filename, String userId) async {
-    String? downloadUrl = await _remoteSource.uploadPhoto(
-        photo, filename, userId, _imageCompressor);
+    String? downloadUrl = await remoteSource.uploadPhoto(
+        photo, filename, userId, imageCompressor);
     return downloadUrl != null
         ? OperationResult(data: downloadUrl)
         : OperationResult(
@@ -73,32 +73,32 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
         makeMyOrientationPublic,
         onlyShowMeOthersOfSameOrientation);
     DatingProfile? createdProfile =
-        await _remoteSource.createDatingProfile(profile);
+        await remoteSource.createDatingProfile(profile);
     if (createdProfile == null) {
       return OperationResult(
           errorOccurred: true, errorMessage: createDatingProfileErr);
     }
-    return await _localSource.cacheDatingProfileAndGetIt(createdProfile);
+    return await localSource.cacheDatingProfileAndGetIt(createdProfile);
   }
 
   @override
   Future<OperationResult> getDatingProfileFromRemote(String userId) async {
-    OperationResult result = await _remoteSource.getDatingProfile(userId);
+    OperationResult result = await remoteSource.getDatingProfile(userId);
     if (result.errorOccurred) return result;
 
     //cache
     if (result.data is DatingProfile) {
-      return await _localSource
+      return await localSource
           .cacheDatingProfileAndGetIt(result.data as DatingProfile);
     }
 
-    DatingProfile? cachedProfile = await _localSource.getCachedDatingProfile();
+    DatingProfile? cachedProfile = await localSource.getCachedDatingProfile();
     return OperationResult(data: cachedProfile);
   }
 
   @override
   Future<DatingProfile?> getCachedDatingProfile() {
-    return _localSource.getCachedDatingProfile();
+    return localSource.getCachedDatingProfile();
   }
 
   @override
@@ -122,12 +122,12 @@ class DatingProfileRepoImpl implements DatingProfileRepo {
         onlyShowMeOthersOfSameOrientation);
 
     DatingProfile? updatedProfile =
-        await _remoteSource.updateDatingProfile(profile);
+        await remoteSource.updateDatingProfile(profile);
     if (updatedProfile == null) {
       return OperationResult(
           errorOccurred: true, errorMessage: updateDatingProfileErr);
     }
-    return await _localSource.updateDatingProfileCacheAndGetIt(updatedProfile);
+    return await localSource.updateDatingProfileCacheAndGetIt(updatedProfile);
   }
 
   /// create instance

@@ -15,7 +15,7 @@ import 'package:redting/features/dating_profile/presentation/state/dating_profil
 /// FACTORY - instantiated every time we request
 ///  SINGLETON - only a single instance is created
 
-GetIt init() {
+GetIt init(GetIt coreDiInstance) {
   final GetIt datingProfileInstance = GetIt.instance;
   //auth bloc
   datingProfileInstance.registerFactory<DatingProfileBloc>(
@@ -45,9 +45,9 @@ GetIt init() {
   //repository
   datingProfileInstance
       .registerLazySingleton<DatingProfileRepo>(() => DatingProfileRepoImpl(
-            datingProfileInstance(),
-            datingProfileInstance(),
-            datingProfileInstance(),
+            remoteSource: datingProfileInstance(),
+            imageCompressor: coreDiInstance(),
+            localSource: datingProfileInstance(),
           ));
 
   //remote data source

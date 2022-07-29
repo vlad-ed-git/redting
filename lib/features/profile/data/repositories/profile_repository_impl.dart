@@ -14,16 +14,16 @@ import 'package:redting/features/profile/domain/repositories/ProfileRepository.d
 import 'package:redting/res/strings.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
-  final RemoteProfileDataSource _remoteProfileDataSource;
-  final LocalProfileDataSource _localProfileDataSource;
-  final VideoCompressor _videoCompressor;
-  final ImageCompressor _imageCompressor;
+  final RemoteProfileDataSource remoteProfileDataSource;
+  final LocalProfileDataSource localProfileDataSource;
+  final VideoCompressor videoCompressor;
+  final ImageCompressor imageCompressor;
 
   ProfileRepositoryImpl(
-      this._remoteProfileDataSource,
-      this._localProfileDataSource,
-      this._videoCompressor,
-      this._imageCompressor);
+      {required this.remoteProfileDataSource,
+      required this.localProfileDataSource,
+      required this.videoCompressor,
+      required this.imageCompressor});
 
   @override
   Future<OperationResult> createUserProfile(
@@ -90,14 +90,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
     //remote
     UserProfile? savedProfile =
-        await _remoteProfileDataSource.createUserProfile(profile: profile);
+        await remoteProfileDataSource.createUserProfile(profile: profile);
     if (savedProfile == null) {
       return OperationResult(
           errorOccurred: true, errorMessage: createProfileError);
     }
 
     //local
-    OperationResult result = await _localProfileDataSource
+    OperationResult result = await localProfileDataSource
         .cacheAndReturnUserProfile(profile: savedProfile);
     if (result.errorOccurred) {
       return OperationResult(
@@ -111,13 +111,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<OperationResult> getUserProfileFromRemote() async {
     //remote
     final OperationResult result =
-        await _remoteProfileDataSource.getUserProfile();
+        await remoteProfileDataSource.getUserProfile();
 
     if (result.errorOccurred) return result;
 
     //update cache
     if (result.data is UserProfile) {
-      return await _localProfileDataSource.cacheAndReturnUserProfile(
+      return await localProfileDataSource.cacheAndReturnUserProfile(
           profile: result.data as UserProfile);
     }
 
@@ -128,27 +128,27 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<OperationResult> uploadProfilePhoto(
       {required File file, required String filename}) async {
-    return await _remoteProfileDataSource.uploadProfilePhoto(
-        file: file, filename: filename, imageCompressor: _imageCompressor);
+    return await remoteProfileDataSource.uploadProfilePhoto(
+        file: file, filename: filename, imageCompressor: imageCompressor);
   }
 
   @override
   Future<OperationResult> generateVerificationWord() async {
-    return await _remoteProfileDataSource.generateVerificationWord();
+    return await remoteProfileDataSource.generateVerificationWord();
   }
 
   @override
   Future<OperationResult> uploadVerificationVideo(
       {required File file, required String verificationCode}) async {
-    return await _remoteProfileDataSource.uploadVerificationVideo(
+    return await remoteProfileDataSource.uploadVerificationVideo(
         file: file,
         verificationCode: verificationCode,
-        compressor: _videoCompressor);
+        compressor: videoCompressor);
   }
 
   @override
   Future<OperationResult> deleteVerificationVideo() async {
-    return await _remoteProfileDataSource.deleteVerificationVideo();
+    return await remoteProfileDataSource.deleteVerificationVideo();
   }
 
   /// INSTANCE CREATION
@@ -184,6 +184,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<UserProfile?> getCachedUserProfile() {
-    return _localProfileDataSource.getCachedUserProfile();
+    return localProfileDataSource.getCachedUserProfile();
   }
 }

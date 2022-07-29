@@ -18,7 +18,7 @@ import 'package:redting/features/profile/presentation/state/user_profile_bloc.da
 /// FACTORY - instantiated every time we request
 ///  SINGLETON - only a single instance is created
 
-GetIt init() {
+GetIt init(GetIt coreDiInstance) {
   final GetIt profileDiInstance = GetIt.instance;
   //auth bloc
   profileDiInstance.registerFactory<UserProfileBloc>(
@@ -58,9 +58,13 @@ GetIt init() {
       () => DeleteVerificationVideoUseCase(profileDiInstance()));
 
   //repository
-  profileDiInstance.registerLazySingleton<ProfileRepository>(() =>
-      ProfileRepositoryImpl(profileDiInstance(), profileDiInstance(),
-          profileDiInstance(), profileDiInstance()));
+  profileDiInstance
+      .registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(
+            remoteProfileDataSource: profileDiInstance(),
+            imageCompressor: coreDiInstance(),
+            localProfileDataSource: profileDiInstance(),
+            videoCompressor: coreDiInstance(),
+          ));
 
   //remote data source
   profileDiInstance

@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:redting/core/data/local_storage.dart';
 import 'package:redting/core/di/core_dependencies.dart' as core_di;
 import 'package:redting/features/auth/di/auth_di.dart' as auth_di;
+import 'package:redting/features/chat/di/chat_di.dart' as chat_di;
 import 'package:redting/features/dating_profile/di/dating_profile_di.dart'
     as dating_profile_di;
 import 'package:redting/features/matching/di/matching_di.dart' as matching_di;
@@ -42,11 +43,12 @@ class MainAppInit {
 
   static void _initDependencies() {
     try {
-      core_di.init();
+      GetIt coreDiInstance = core_di.init();
       GetIt authDiInstance = auth_di.init();
-      GetIt profileDiInstance = profile_di.init();
-      GetIt datingProfileDiInstance = dating_profile_di.init();
+      GetIt profileDiInstance = profile_di.init(coreDiInstance);
+      GetIt datingProfileDiInstance = dating_profile_di.init(coreDiInstance);
       matching_di.init(profileDiInstance, datingProfileDiInstance);
+      chat_di.init(coreDiInstance);
       splash_di.init(
           authDiInstance, profileDiInstance, datingProfileDiInstance);
     } catch (e) {

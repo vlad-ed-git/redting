@@ -12,8 +12,16 @@ class ListeningToChatState extends ChatState {
   ListeningToChatState(this.stream);
 }
 
+class LoadedOlderMessagesState extends ChatState {
+  final List<Message> messages;
+  LoadedOlderMessagesState(this.messages);
+}
+
 class SendingMessageState extends ChatState {}
 
-class SendingMessageFailedState extends ChatState {}
+class SendingMessageFailedState extends ChatState {
+  final String errMsg;
+  SendingMessageFailedState(this.errMsg);
+}
 
 class SendingMessageSuccessState extends ChatState {}

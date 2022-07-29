@@ -12,7 +12,7 @@ class IceBreakerMsg extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       margin: const EdgeInsets.symmetric(
-          horizontal: paddingStd, vertical: paddingStd),
+          horizontal: paddingStd, vertical: paddingMd),
       child: Stack(
         children: [
           Center(

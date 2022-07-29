@@ -34,7 +34,7 @@ class _MatchedScreenState extends State<MatchedScreen>
   bool get wantKeepAlive => true;
   bool _isInitialized = false;
 
-  final messagesScrollController = ScrollController();
+  final matchesScrollController = ScrollController();
   final Map<String, MatchingProfiles> _matchedProfiles = {};
 
   @override
@@ -59,21 +59,9 @@ class _MatchedScreenState extends State<MatchedScreen>
                     }
 
                     return ListBody(
-                      children: [
-                        Text(
-                          "Each time you like a user. A random icebreaker is sent to them. This is the first message you see.",
-                          style: appTextTheme.caption?.copyWith(
-                              color: appTheme.colorScheme.primary
-                                  .withOpacity(0.8)),
-                        ),
-                        const SizedBox(
-                          height: paddingMd,
-                        ),
-                        ..._matchedProfiles.values
+                        children: _matchedProfiles.values
                             .map((profile) => _matchToMessageWidget(profile))
-                            .toList()
-                      ],
-                    );
+                            .toList());
                   }));
         }));
   }
@@ -144,6 +132,7 @@ class _MatchedScreenState extends State<MatchedScreen>
         .firstWhere((profile) => profile.userId == _thisUsersProfile.userId);
     final iceBreaker = profiles.iceBreakers[0];
     return Container(
+      key: ValueKey(otherUser.userId),
       margin: const EdgeInsets.only(bottom: paddingMd),
       child: InkWell(
         splashColor: appTheme.colorScheme.primary,

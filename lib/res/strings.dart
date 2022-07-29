@@ -142,3 +142,7 @@ const verificationVideoWord = "VERIFICATION CODE: ";
 const homeDestinationLbl = "RedTing";
 const myProfileDestinationLbl = "My Profile";
 const myMatchesDestinationLbl = "Matched";
+
+//chat
+const errorSendingImageMessage = "Failed to send image";
+const errorSendingTxtMessage = "Failed to send your message";
