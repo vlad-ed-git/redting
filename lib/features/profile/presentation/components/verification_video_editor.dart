@@ -161,8 +161,7 @@ class _VerificationVideoEditorState extends State<VerificationVideoEditor> {
                         children: [
                           Text(
                             verificationVideoTitle,
-                            style: appTextTheme.headline4
-                                ?.copyWith(color: appTheme.colorScheme.primary),
+                            style: appTextTheme.headline6,
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(
@@ -170,7 +169,7 @@ class _VerificationVideoEditorState extends State<VerificationVideoEditor> {
                           ),
                           Text(
                             verificationVideoInstructions,
-                            style: appTextTheme.subtitle1,
+                            style: appTextTheme.subtitle2,
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(
@@ -178,8 +177,9 @@ class _VerificationVideoEditorState extends State<VerificationVideoEditor> {
                           ),
                           Text(
                             widget.verificationCode!,
-                            style: appTextTheme.headline2
-                                ?.copyWith(letterSpacing: 2),
+                            style: appTextTheme.headline5?.copyWith(
+                                color: appTheme.colorScheme.primary,
+                                letterSpacing: 1),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(

@@ -7,12 +7,12 @@ import 'package:redting/features/matching/data/repositories/matching_repository_
 import 'package:redting/features/matching/domain/repositories/matching_repository.dart';
 import 'package:redting/features/matching/domain/use_cases/fetch_profiles_to_match.dart';
 import 'package:redting/features/matching/domain/use_cases/get_this_usersinfo_usecase.dart';
-import 'package:redting/features/matching/domain/use_cases/initialize_icebreakers_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/like_user_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/listen_to_matches_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/matching_usecases.dart';
 import 'package:redting/features/matching/domain/use_cases/pass_on_user_usecase.dart';
 import 'package:redting/features/matching/domain/use_cases/send_daily_feedback.dart';
+import 'package:redting/features/matching/domain/use_cases/sync_with_remote.dart';
 import 'package:redting/features/matching/presentation/state/matches_listener/matches_listener_bloc.dart';
 import 'package:redting/features/matching/presentation/state/matching_bloc.dart';
 
@@ -30,7 +30,7 @@ GetIt init(
 
   matchingDiInstance.registerLazySingleton<MatchingUseCases>(() =>
       MatchingUseCases(
-          initializeUserProfilesUseCase: matchingDiInstance(),
+          syncWithRemote: matchingDiInstance(),
           fetchProfilesToMatch: matchingDiInstance(),
           likeUserUseCase: matchingDiInstance(),
           passOnUserUseCase: matchingDiInstance(),
@@ -38,8 +38,8 @@ GetIt init(
           listenToMatchUseCase: matchingDiInstance(),
           getThisUsersInfoUseCase: matchingDiInstance()));
 
-  matchingDiInstance.registerLazySingleton<InitializeIceBreakersUseCase>(
-      () => InitializeIceBreakersUseCase(matchingDiInstance()));
+  matchingDiInstance.registerLazySingleton<SyncWithRemote>(
+      () => SyncWithRemote(matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<FetchProfilesToMatch>(
       () => FetchProfilesToMatch(matchingDiInstance()));

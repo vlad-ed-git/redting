@@ -35,7 +35,7 @@ class _AgeSliderState extends State<AgePreferenceSlider> {
       children: [
         Text(
           "$ageRangeLbl ${_currentRangeAge.start.round().toString()} - ${_currentRangeAge.end.round().toString()}",
-          style: appTextTheme.headline4?.copyWith(color: Colors.black),
+          style: appTextTheme.subtitle1?.copyWith(color: Colors.black),
         ),
         const SizedBox(
           height: paddingStd,

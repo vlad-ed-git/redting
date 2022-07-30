@@ -8,10 +8,11 @@ import 'package:redting/features/dating_profile/data/entities/dating_profile_ent
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/matching/data/data_sources/remote/remote_matching_data_source.dart';
 import 'package:redting/features/matching/data/entities/ice_breaker_messages_entity.dart';
+import 'package:redting/features/matching/data/entities/liked_user_entity.dart';
 import 'package:redting/features/matching/data/entities/matching_profiles_entity.dart';
 import 'package:redting/features/matching/domain/models/daily_user_feedback.dart';
 import 'package:redting/features/matching/domain/models/ice_breaker_msg.dart';
-import 'package:redting/features/matching/domain/models/like_notification.dart';
+import 'package:redting/features/matching/domain/models/liked_user.dart';
 import 'package:redting/features/matching/domain/models/matching_profiles.dart';
 import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
 import 'package:redting/features/profile/data/data_sources/remote/fire_profile.dart';
@@ -111,15 +112,37 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
   }
 
   @override
-  Future<OperationResult> likeUser(LikeNotification likeNotification,
-      MatchingProfiles matchingProfiles) async {
+  Future<OperationResult> getUsersILike() async {
+    try {
+      var doc = await _fireStore
+          .collection(likedUsersCollection)
+          .doc(_auth.currentUser!.uid)
+          .collection(usersILikeCollection)
+          .get();
+      List<LikedUser> found = doc.docs
+          .map((e) => LikedUserEntity.fromJson(e.data()))
+          .toList(growable: false);
+      return OperationResult(data: found);
+    } catch (e) {
+      if (kDebugMode) {
+        print("=============== getUsersILike exc $e ==========");
+      }
+      return OperationResult(errorOccurred: true);
+    }
+  }
+
+  @override
+  Future<OperationResult> likeUser(
+      LikedUser likedUser, MatchingProfiles matchingProfiles) async {
     try {
       await _fireStore
           .collection(likedUsersCollection)
           .doc(_auth.currentUser!.uid)
           .collection(usersILikeCollection)
-          .doc(likeNotification.likedUserId)
-          .set(likeNotification.toJson(), SetOptions(merge: true));
+          .doc(likedUser.likedUserId)
+          .set(
+            likedUser.toJson(),
+          );
 
       bool? isAMatch = await _isAMatch(matchingProfiles);
       bool errorOccurred = isAMatch == null;
@@ -210,11 +233,12 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
       UserGender? thisUsersGender = thisUsersProfile.getGender();
       if (otherUserGenderPref == null ||
           otherUserGenderPref == thisUsersGender) {
-        //if both parties do not care about orientation
         bool filterByThisUsersOrientation =
             thisUsersDatingProfile.onlyShowMeOthersOfSameOrientation;
         bool otherUserCaresAboutOrientation =
             matchingDatingProfile.onlyShowMeOthersOfSameOrientation;
+
+        //if both parties do not care about orientation
         if (!filterByThisUsersOrientation && !otherUserCaresAboutOrientation) {
           return matchingDatingProfile;
         }
@@ -245,6 +269,7 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
           thisUsersDatingProfile.getGenderPreferences();
       int lessThanAge = thisUsersDatingProfile.maxAgePreference + 1;
       int moreThanAge = thisUsersDatingProfile.minAgePreference - 1;
+
       Query<Map<String, dynamic>> query;
       if (_startUserProfileMatchAfterDoc != null) {
         //get the next batch
@@ -265,44 +290,50 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
       }
 
       /// fetch and filter out dating profiles
-      List<MatchingUserProfileWrapper> matchingDatingProfilesList = [];
-      for (var snapshot in matchingUserProfiles.docs) {
-        try {
-          UserProfile matchingUserProfile =
-              UserProfileEntity.fromJson(snapshot.data());
-
-          if (matchingUserProfile.userId == thisUsersProfile.userId) {
-            continue; //skip this user if matched with self
-          }
-
-          DocumentSnapshot<Map<String, dynamic>> foundDatingProfile =
-              await _fireStore
-                  .collection(datingProfilesCollection)
-                  .doc(matchingUserProfile.userId)
-                  .get();
-          if (foundDatingProfile.data() != null) {
-            DatingProfile matchingDatingProfile =
-                DatingProfileEntity.fromJson(foundDatingProfile.data()!);
-            DatingProfile? foundMatch = _checkIfMatchingPref(
-                matchingDatingProfile,
-                thisUsersProfile,
-                thisUsersDatingProfile);
-            if (foundMatch != null) {
-              matchingDatingProfilesList.add(MatchingUserProfileWrapper(
-                  matchingUserProfile, matchingDatingProfile));
-            }
-          }
-        } catch (_) {
-          continue;
-        }
-      }
-      return matchingDatingProfilesList;
+      return await _filterByDatingProfilePreferences(
+          matchingUserProfiles, thisUsersProfile, thisUsersDatingProfile);
     } catch (e) {
       if (kDebugMode) {
         print("================= getDatingProfiles $e =============== ");
       }
       return null;
     }
+  }
+
+  _filterByDatingProfilePreferences(
+      QuerySnapshot<Map<String, dynamic>> matchingUserProfiles,
+      UserProfile thisUsersProfile,
+      DatingProfile thisUsersDatingProfile) async {
+    List<MatchingUserProfileWrapper> matchingDatingProfilesList = [];
+    for (var snapshot in matchingUserProfiles.docs) {
+      try {
+        UserProfile matchingUserProfile =
+            UserProfileEntity.fromJson(snapshot.data());
+
+        if (matchingUserProfile.userId == thisUsersProfile.userId) {
+          continue; //skip this user if matched with self
+        }
+
+        DocumentSnapshot<Map<String, dynamic>> foundDatingProfile =
+            await _fireStore
+                .collection(datingProfilesCollection)
+                .doc(matchingUserProfile.userId)
+                .get();
+        if (foundDatingProfile.data() != null) {
+          DatingProfile matchingDatingProfile =
+              DatingProfileEntity.fromJson(foundDatingProfile.data()!);
+          DatingProfile? foundMatch = _checkIfMatchingPref(
+              matchingDatingProfile, thisUsersProfile, thisUsersDatingProfile);
+          if (foundMatch != null) {
+            matchingDatingProfilesList.add(MatchingUserProfileWrapper(
+                matchingUserProfile, matchingDatingProfile));
+          }
+        }
+      } catch (_) {
+        continue;
+      }
+    }
+    return matchingDatingProfilesList;
   }
 
   /// user feedback

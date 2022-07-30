@@ -63,6 +63,10 @@ class _DetailedViewCardState extends State<DetailedViewCard> {
     return ProfileContainerCard(
         cardHeight: widget.cardHeight,
         cardWidth: widget.cardWidth,
+        bgGradient: LinearGradient(colors: [
+          appTheme.colorScheme.primary,
+          appTheme.colorScheme.primary
+        ]),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

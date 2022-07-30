@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:redting/core/components/cards/glass_card.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
 import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
-import 'package:redting/core/components/text/app_name_std_style.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
 import 'package:redting/features/splash/presentation/state/current_user_bloc.dart';
+import 'package:redting/res/assets_paths.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
 import 'package:redting/res/routes.dart';
@@ -66,34 +65,29 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Scaffold(
           extendBodyBehindAppBar: true,
           body: Container(
+            decoration: BoxDecoration(gradient: twoColorOpaquePrimaryGradient),
             constraints:
-                BoxConstraints(minHeight: screenHeight, minWidth: screenWidth),
-            decoration: BoxDecoration(gradient: fiveColorOpaqueGradient),
-            child: Padding(
-                padding: const EdgeInsets.all(paddingMd),
-                child: GlassCard(
-                  constraints: const BoxConstraints(
-                      minWidth: 300, maxWidth: 300, minHeight: 200),
-                  child: BlocBuilder<CurrentUserBloc, CurrentUserState>(
-                      builder: (blocContext, state) {
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: paddingMd),
-                            child: const StdAppName(
-                              large: true,
-                            ),
-                          ),
-                          if (state is InitialState) _initialize(blocContext),
-                          if (state is LoadingCurrentUserState)
-                            _getLoadingIndicator(),
-                          if (state is ErrorLoadingCurrentUserState)
-                            _errorWidget(),
-                        ]);
-                  }),
-                )),
+                BoxConstraints(minWidth: screenWidth, minHeight: screenHeight),
+            child: BlocBuilder<CurrentUserBloc, CurrentUserState>(
+                builder: (blocContext, state) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: paddingMd),
+                      child: Image.asset(
+                        redShadowedLogoPath,
+                        height: 48,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                    if (state is InitialState) _initialize(blocContext),
+                    if (state is LoadingCurrentUserState)
+                      _getLoadingIndicator(),
+                    if (state is ErrorLoadingCurrentUserState) _errorWidget(),
+                  ]);
+            }),
           ),
         )),
       ),

@@ -1,10 +1,11 @@
 import 'package:redting/features/matching/domain/repositories/matching_repository.dart';
 
-class InitializeIceBreakersUseCase {
+class SyncWithRemote {
   final MatchingRepository repository;
-  InitializeIceBreakersUseCase(this.repository);
+  SyncWithRemote(this.repository);
 
   Future execute() async {
-    await repository.loadIceBreakerMessages();
+    await repository.loadIceBreakerMessagesToCache();
+    await repository.loadLikedUsersToCache();
   }
 }

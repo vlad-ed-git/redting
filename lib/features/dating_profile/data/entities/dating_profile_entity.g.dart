@@ -88,9 +88,10 @@ Map<String, dynamic> _$DatingProfileEntityToJson(
       'minAgePreference': instance.minAgePreference,
       'photos': instance.photos,
       'userId': instance.userId,
-      'genderPreference': _$UserGenderEntityEnumMap[instance.genderPreference],
-      'userSexualOrientation': instance.userSexualOrientation
-          .map((e) => _$SexualOrientationEntityEnumMap[e]!)
+      'genderPreference': _$UserGenderEnumMap[instance.getGenderPreferences()],
+      'userSexualOrientation': instance
+          .getUserSexualOrientation()
+          .map((e) => _$SexualOrientationEnumMap[e]!)
           .toList(),
       'makeMyOrientationPublic': instance.makeMyOrientationPublic,
       'onlyShowMeOthersOfSameOrientation':
@@ -103,6 +104,12 @@ const _$UserGenderEntityEnumMap = {
   UserGenderEntity.stated: 'stated',
 };
 
+const _$UserGenderEnumMap = {
+  UserGender.male: 'male',
+  UserGender.female: 'female',
+  UserGender.stated: 'stated',
+};
+
 const _$SexualOrientationEntityEnumMap = {
   SexualOrientationEntity.straight: 'straight',
   SexualOrientationEntity.gay: 'gay',
@@ -112,4 +119,15 @@ const _$SexualOrientationEntityEnumMap = {
   SexualOrientationEntity.panSexual: 'panSexual',
   SexualOrientationEntity.queer: 'queer',
   SexualOrientationEntity.questioning: 'questioning',
+};
+
+const _$SexualOrientationEnumMap = {
+  SexualOrientation.straight: 'straight',
+  SexualOrientation.gay: 'gay',
+  SexualOrientation.asexual: 'asexual',
+  SexualOrientation.bisexual: 'bisexual',
+  SexualOrientation.demiSexual: 'demiSexual',
+  SexualOrientation.panSexual: 'panSexual',
+  SexualOrientation.queer: 'queer',
+  SexualOrientation.questioning: 'questioning',
 };

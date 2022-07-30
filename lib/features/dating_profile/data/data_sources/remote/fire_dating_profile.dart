@@ -3,14 +3,15 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:redting/core/utils/service_result.dart';
-import 'package:redting/features/dating_profile/data/entities/dating_profile_entity.dart';
 import 'package:redting/features/dating_profile/data/data_sources/remote/remote_dating_profile_source.dart';
+import 'package:redting/features/dating_profile/data/entities/dating_profile_entity.dart';
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/profile/data/utils/compressors/image_compressor.dart';
 import 'package:redting/res/strings.dart';
 
-const String datingProfilesCollection = "datingProfiles";
+const String datingProfilesCollection = "dating_profiles";
 const String datingProfilesPhotosBucket = "datingProfilePhotos";
 const String thisUserDatingProfilePhotosBucket = "myDatingProfilePhotos";
 
@@ -28,6 +29,9 @@ class FireDatingProfile extends RemoteDatingProfileSource {
           .set(profile.toJson());
       return profile;
     } catch (e) {
+      if (kDebugMode) {
+        print("===== exception raised $e ====");
+      }
       return null;
     }
   }
@@ -48,6 +52,9 @@ class FireDatingProfile extends RemoteDatingProfileSource {
       }
       return OperationResult(data: profile);
     } catch (e) {
+      if (kDebugMode) {
+        print("===== exception raised $e ====");
+      }
       return OperationResult(
           errorOccurred: true, errorMessage: getDatingProfileErr);
     }
@@ -62,6 +69,9 @@ class FireDatingProfile extends RemoteDatingProfileSource {
           .update(profile.toJson());
       return profile;
     } catch (e) {
+      if (kDebugMode) {
+        print("===== exception raised $e ====");
+      }
       return null;
     }
   }
@@ -79,6 +89,9 @@ class FireDatingProfile extends RemoteDatingProfileSource {
       String downloadUrl = await photoRef.getDownloadURL();
       return downloadUrl;
     } catch (e) {
+      if (kDebugMode) {
+        print("===== exception raised $e ====");
+      }
       return null;
     }
   }

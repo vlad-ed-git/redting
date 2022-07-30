@@ -33,7 +33,7 @@ class OverviewText extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: appTextTheme.headline4
+                  style: appTextTheme.subtitle1
                       ?.copyWith(color: appTheme.colorScheme.onPrimary),
                 ),
                 const SizedBox(
@@ -41,14 +41,14 @@ class OverviewText extends StatelessWidget {
                 ),
                 Expanded(
                     child: Text(age,
-                        style: appTextTheme.headline4
+                        style: appTextTheme.headline6
                             ?.copyWith(color: appTheme.colorScheme.onPrimary)))
               ],
             ),
             Text(
               title.toUpperCase(),
               overflow: TextOverflow.ellipsis,
-              style: appTextTheme.headline5
+              style: appTextTheme.bodyText1
                   ?.copyWith(color: appTheme.colorScheme.onPrimary),
             )
           ],

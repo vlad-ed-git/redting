@@ -58,10 +58,13 @@ class _MatchedScreenState extends State<MatchedScreen>
                       _respondToDataChanges(snapshot.data!);
                     }
 
-                    return ListBody(
-                        children: _matchedProfiles.values
-                            .map((profile) => _matchToMessageWidget(profile))
-                            .toList());
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: ListBody(
+                          children: _matchedProfiles.values
+                              .map((profile) => _matchToMessageWidget(profile))
+                              .toList()),
+                    );
                   }));
         }));
   }
@@ -165,25 +168,28 @@ class _MatchedScreenState extends State<MatchedScreen>
               child: ConstrainedBox(
                 constraints:
                     const BoxConstraints(minHeight: avatarRadiusSmall * 2.5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      clipText(txt: otherUser.userName, maxChars: 24),
-                      style: appTextTheme.headline4
-                          ?.copyWith(color: Colors.black87),
-                    ),
-                    const SizedBox(
-                      width: paddingStd,
-                    ),
-                    Text(
-                        clipWords(
-                          txt: iceBreaker,
-                        ),
-                        style: appTextTheme.bodyText1
-                            ?.copyWith(color: Colors.black87))
-                  ],
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        clipText(txt: otherUser.userName, maxChars: 24),
+                        style: appTextTheme.subtitle1
+                            ?.copyWith(color: Colors.black87),
+                      ),
+                      const SizedBox(
+                        width: paddingStd,
+                      ),
+                      Text(
+                          clipWords(
+                            txt: iceBreaker,
+                          ),
+                          style: appTextTheme.bodyText1
+                              ?.copyWith(color: Colors.black87))
+                    ],
+                  ),
                 ),
               ),
             )

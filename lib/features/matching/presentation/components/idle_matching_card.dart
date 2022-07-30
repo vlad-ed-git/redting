@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:redting/core/components/cards/glass_card.dart';
 import 'package:redting/res/fonts.dart';
+import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
 class IdleMatchingCard extends StatelessWidget {
@@ -29,7 +30,7 @@ class IdleMatchingCard extends StatelessWidget {
               size: 64,
             ),
             Text(
-              "Always Be your Authenticate self.",
+              beAuthenticAlways,
               style: appTextTheme.subtitle1,
               textAlign: TextAlign.center,
             ),

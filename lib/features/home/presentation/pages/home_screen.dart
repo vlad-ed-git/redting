@@ -144,16 +144,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _getDestinationScreenContainer(Widget screen) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    return SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Container(
-            decoration: BoxDecoration(gradient: threeColorOpaqueGradientTB),
-            constraints:
-                BoxConstraints(minWidth: screenWidth, minHeight: screenHeight),
-            child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: paddingMd, horizontal: paddingStd),
-                child: screen)));
+    return Container(
+        decoration: BoxDecoration(gradient: threeColorOpaqueGradientTB),
+        constraints:
+            BoxConstraints(minWidth: screenWidth, minHeight: screenHeight),
+        child: Padding(
+            padding: const EdgeInsets.symmetric(
+                vertical: paddingMd, horizontal: paddingStd),
+            child: screen));
   }
 }
 

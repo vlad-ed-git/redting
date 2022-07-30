@@ -29,7 +29,7 @@ chatAppBar({required MatchingMembers chattingWithUser}) {
         ),
         Text(
           chattingWithUser.userName,
-          style: appTextTheme.headline5?.copyWith(color: Colors.black87),
+          style: appTextTheme.bodyText2?.copyWith(color: Colors.black87),
         ),
         const SizedBox(
           height: paddingStd,

@@ -6,10 +6,10 @@ import 'package:redting/features/dating_profile/domain/repository/dating_profile
 import 'package:redting/features/matching/data/data_sources/local/local_matching_data_source.dart';
 import 'package:redting/features/matching/data/data_sources/remote/remote_matching_data_source.dart';
 import 'package:redting/features/matching/data/entities/daily_user_feedback_entity.dart';
-import 'package:redting/features/matching/data/entities/like_notification_entity.dart';
+import 'package:redting/features/matching/data/entities/liked_user_entity.dart';
 import 'package:redting/features/matching/data/entities/matching_profiles_entity.dart';
 import 'package:redting/features/matching/domain/models/ice_breaker_msg.dart';
-import 'package:redting/features/matching/domain/models/like_notification.dart';
+import 'package:redting/features/matching/domain/models/liked_user.dart';
 import 'package:redting/features/matching/domain/models/matching_profiles.dart';
 import 'package:redting/features/matching/domain/repositories/matching_repository.dart';
 import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
@@ -37,6 +37,7 @@ class MatchingRepositoryImpl implements MatchingRepository {
     }
     //removed liked users
     Map<dynamic, dynamic> likedUsers = _localDataSource.getLikedUsersCache();
+
     resultsIfNoErrElseNull
         .removeWhere((e) => likedUsers.containsKey(e.userProfile.userId));
     return OperationResult(data: resultsIfNoErrElseNull);
@@ -61,36 +62,34 @@ class MatchingRepositoryImpl implements MatchingRepository {
   }
 
   @override
-  Future<OperationResult> likeUser(String thisUser, String likedUser,
+  Future<OperationResult> likeUser(String thisUserId, String likedUserId,
       String likedUserName, String likedUserProfilePhotoUrl) async {
     try {
       String iceBreaker = await _getRandomIceBreakerMessage();
 
-      LikeNotification notification = LikeNotificationEntity(
-          likedByUserId: thisUser,
+      LikedUser likedUser = LikedUserEntity(
+          likedByUserId: thisUserId,
           likedOn: DateTime.now(),
-          likedUserId: likedUser,
-          iceBreaker: iceBreaker.isNotEmpty ? iceBreaker : defaultIceBreaker);
-
+          likedUserId: likedUserId);
       MatchingProfiles matchingProfiles = MatchingProfilesEntity(
           userAUserBIdsConcatNSorted:
               MatchingProfiles.concatUser1User2IdsSortAndSetAsId(
-                  thisUser, likedUser),
+                  thisUserId, likedUserId),
           iceBreakers: [iceBreaker],
-          likers: [thisUser],
+          likers: [thisUserId],
           otherUser: [
             MatchingMembersEntity(
-                likedUser, likedUserName, likedUserProfilePhotoUrl)
+                likedUserId, likedUserName, likedUserProfilePhotoUrl)
           ],
           updatedOn: DateTime.now()
           //add self
           );
 
       OperationResult result =
-          await _remoteDataSource.likeUser(notification, matchingProfiles);
+          await _remoteDataSource.likeUser(likedUser, matchingProfiles);
       if (!result.errorOccurred) {
         //cache liked user
-        await _localDataSource.cacheLikedUser(likedUser);
+        await _localDataSource.cacheLikedUser(likedUserId);
       }
       return result;
     } catch (e) {
@@ -123,7 +122,7 @@ class MatchingRepositoryImpl implements MatchingRepository {
   }
 
   @override
-  Future loadIceBreakerMessages() async {
+  Future<bool> loadIceBreakerMessagesToCache() async {
     try {
       IceBreakerMessages? icebreakers =
           await _remoteDataSource.getIceBreakerMessages();
@@ -132,11 +131,32 @@ class MatchingRepositoryImpl implements MatchingRepository {
         icebreakersCacheMessages.clear();
         icebreakersCacheMessages.addAll(icebreakers.messages);
       }
+      return true;
     } catch (e) {
       if (kDebugMode) {
         print(
             "=============== repo getRandomIceBreakerMessage() $e ==========");
       }
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> loadLikedUsersToCache() async {
+    try {
+      OperationResult result = await _remoteDataSource.getUsersILike();
+      if (result.data is List) {
+        List<LikedUser> users = result.data as List<LikedUser>;
+        for (LikedUser user in users) {
+          await _localDataSource.cacheLikedUser(user.likedUserId);
+        }
+      }
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print("=========== loadLikedUsersToCache exc $e ===========");
+      }
+      return false;
     }
   }
 

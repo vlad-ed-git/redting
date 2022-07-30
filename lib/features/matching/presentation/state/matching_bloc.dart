@@ -23,7 +23,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
       InitializeEvent event, Emitter<MatchingState> emit) async {
     emit(LoadingState());
 
-    await matchingUseCases.initializeUserProfilesUseCase.execute();
+    await matchingUseCases.syncWithRemote.execute();
     OperationResult result =
         await matchingUseCases.getThisUsersInfoUseCase.execute();
     if (result.errorOccurred || result.data is! MatchingUserProfileWrapper) {

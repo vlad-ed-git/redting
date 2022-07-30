@@ -26,7 +26,14 @@ class UneditableProfilePhoto extends StatelessWidget {
           isSmall: isSmall,
           useRadius: useRadius,
           isSmallest: isSmallest),
-      placeholder: (context, url) => SizedBox(
+      errorWidget: (___, __, _) => const SizedBox(
+        width: 40,
+        height: 40,
+        child: Center(
+          child: Icon(Icons.error_outline),
+        ),
+      ),
+      placeholder: (context, _) => SizedBox(
         width: 40,
         height: 40,
         child: Center(

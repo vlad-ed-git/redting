@@ -213,7 +213,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           ),
           Text(
             gender,
-            style: appTextTheme.subtitle2?.copyWith(color: Colors.black45),
+            style: appTextTheme.subtitle1?.copyWith(color: Colors.black),
           ),
           const SizedBox(
             height: paddingStd,
@@ -242,6 +242,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         },
         lbl: createProfileBtn,
         showLoading: _isCreatingUserProfile,
+        flipColors: true,
       ),
     );
   }
@@ -428,8 +429,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         userId: loggedInUser.userId,
         profilePhotoUrl: _profilePhoto ?? '',
         gender: _gender,
-        genderOther:
-            _gender == UserGender.stated ? _otherGenderController.text : null,
+        genderOther: _gender == UserGender.stated
+            ? _otherGender ?? _otherGenderController.text
+            : null,
         bio: _bioController.text,
         title: _titleController.text,
         birthDay: _selectedBDay,
@@ -484,7 +486,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             lbl,
-            style: appTextTheme.headline6,
+            style: appTextTheme.subtitle2,
             textAlign: TextAlign.center,
           ),
         ),

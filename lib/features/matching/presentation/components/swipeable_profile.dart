@@ -119,6 +119,8 @@ class _SwipeProfileState extends State<SwipeProfile> {
       setState(() {
         _dragPosition += details.delta;
         final x = _dragPosition.dx;
+        final y = _dragPosition.dy;
+
         _rotationAngle = 45 * x / _screenSize.width; //45 is angle of rotation
         _stampToShow = _getCardSwipeType();
       });
@@ -139,14 +141,23 @@ class _SwipeProfileState extends State<SwipeProfile> {
           _passAnimation();
           break;
         case CardSwipeType.superlike:
-          //todo
+          setState(() {
+            _dragPosition = Offset.zero;
+            _rotationAngle = 0;
+          });
           break;
-        case CardSwipeType.noAction:
+        case CardSwipeType.showDetails:
           //reset
           setState(() {
             _dragPosition = Offset.zero;
             _rotationAngle = 0;
             _switchToDetailedView = !_switchToDetailedView;
+          });
+          break;
+        case CardSwipeType.noAction:
+          setState(() {
+            _dragPosition = Offset.zero;
+            _rotationAngle = 0;
           });
           break;
       }
@@ -173,6 +184,10 @@ class _SwipeProfileState extends State<SwipeProfile> {
       return CardSwipeType.superlike;
     }
 
+    if (y >= 20 && isStraightUp) {
+      return CardSwipeType.showDetails;
+    }
+
     return CardSwipeType.noAction;
   }
 
@@ -196,4 +211,4 @@ class _SwipeProfileState extends State<SwipeProfile> {
   }
 }
 
-enum CardSwipeType { like, pass, superlike, noAction }
+enum CardSwipeType { like, pass, showDetails, superlike, noAction }

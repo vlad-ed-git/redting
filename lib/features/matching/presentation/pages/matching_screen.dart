@@ -61,10 +61,7 @@ class _MatchingScreenState extends State<MatchingScreen>
               if (_currentSwipeBatchProfiles.isNotEmpty) _getSwipeAbleCards(),
               if (_shouldRevisitPassedOnProfiles()) _showRefreshOption(),
               if (_hasViewedAllProfiles())
-                RateAppCard(
-                  isSendingFeedback: state is SendingFeedbackState,
-                  onSubmitFeedback: _onSubmitDailyFeedback,
-                ),
+                _getRateCard(state is SendingFeedbackState),
               if (_nothingElseToDo()) const IdleMatchingCard()
             ],
           ),
@@ -288,5 +285,12 @@ class _MatchingScreenState extends State<MatchingScreen>
         isError: isError,
       ).create(context));
     }
+  }
+
+  Widget _getRateCard(bool isSendingFeedback) {
+    return RateAppCard(
+      isSendingFeedback: isSendingFeedback,
+      onSubmitFeedback: _onSubmitDailyFeedback,
+    );
   }
 }

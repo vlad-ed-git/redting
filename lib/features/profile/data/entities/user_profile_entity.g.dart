@@ -108,7 +108,7 @@ Map<String, dynamic> _$UserProfileEntityToJson(UserProfileEntity instance) =>
       'userId': instance.userId,
       'profilePhotoUrl': instance.profilePhotoUrl,
       'genderOther': instance.genderOther,
-      'gender': userGenderToStringVal[instance.gender]!,
+      'gender': userGenderToStringVal[instance.getGender()],
       'bio': instance.bio,
       'registerCountry': instance.registerCountry,
       'title': instance.title,

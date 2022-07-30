@@ -3,7 +3,7 @@ const appNameFirstWord = 'RED';
 const appNameLastWord = 'TING';
 const defaultIceBreaker = "Hi there. I’m vanilla! … Get it?";
 const initAppErr = "Something went wrong! Please restart app";
-
+const beAuthenticAlways = "Always Be your Authenticate self.";
 //splash screen
 const loadingAuthUser = 'Authenticating ...';
 const loadingAuthUserErr =
@@ -16,12 +16,12 @@ const phoneNumberErr = "Invalid mobile number";
 const unknownCodeSendingErr = "Failed to send verification code!";
 const loginBtn = 'Continue';
 const phoneVerificationHint =
-    "When you tap CONTINUE, RedTing will send a verification code via sms to your mobile number. Standard sms & data rates may apply. After verification you can then login";
+    "When you tap CONTINUE, RedTing will send a verification code via sms to your mobile number. Standard sms & data rates may apply. After verification you can then login. *You may be redirected to a browser, after completion, close browser to return here";
 const enterCodeSentTo = 'Enter code sent to ';
 const resendTxt = 'RESEND';
 const changePhoneTxt = 'CHANGE PHONE NUMBER';
 const signInTerms =
-    "By tapping CONTINUE, you are agreeing to RedTing's terms and conditions. Click this message to review them first.";
+    "Depending on your location, it might take a minute for the code to reach your sms inbox. By tapping CONTINUE, you are agreeing to RedTing's terms and conditions. Click this message to review them first.";
 const invalidVerificationCode =
     "The code you entered is invalid. Please try again";
 const failedToVerifyUnknown =
@@ -128,7 +128,7 @@ const likingUserFailed =
 const dislikingUserFailedErr = "Please check your internet connection";
 const fetchingProfilesToMatchFailed =
     "REDTING couldn't load profiles! Please check your internet connection";
-const likeStamp = "LIKE";
+const likeStamp = "FIT";
 const passStamp = "PASS";
 const noMoreProfiles =
     "That's all the people we have currently.\nEnjoy chatting with your current matches.\nIn the meantime, please share your experience at RedTing today.";

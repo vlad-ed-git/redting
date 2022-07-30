@@ -37,9 +37,11 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
   List<String> _datingPicsFileNames = [];
   int _minAge = 18, _maxAge = 60;
   UserGender? _myGenderPreference;
-  List<SexualOrientation> _mySexualOrientationPreferences = [];
-  bool _makeMyOrientationPublic = true;
-  bool _showMeMyOrientationOnly = true;
+  List<SexualOrientation> _mySexualOrientationPreferences = [
+    SexualOrientation.straight
+  ];
+  bool _makeMyOrientationPublic = false;
+  bool _showMeMyOrientationOnly = false;
   DatingProfileBloc? _eventDispatcher;
 
   @override
@@ -192,6 +194,7 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
                                       onPressed: () {
                                         _onSaveProfile(blocContext);
                                       },
+                                      flipColors: true,
                                       showLoading: _isSavingProfile,
                                       lbl: createDatingProfileBtn,
                                       loadingLbl:

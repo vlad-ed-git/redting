@@ -17,7 +17,7 @@ class StdAppName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle? txtTheme =
-        large ? appTextTheme.headline1 : appTextTheme.headline2;
+        large ? appTextTheme.headline3 : appTextTheme.headline4;
     return RichText(
         text: TextSpan(
       children: <TextSpan>[

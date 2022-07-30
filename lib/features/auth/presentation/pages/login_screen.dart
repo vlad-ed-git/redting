@@ -158,8 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Expanded(
             child: Text(
-              "$enterCodeSentTo ${countryToPhoneCodeMap[_selectedCountry]} ${_phoneController.text}",
-              style: appTextTheme.subtitle2,
+              "$enterCodeSentTo ${countryToPhoneCodeMap[_selectedCountry]}${_phoneController.text}",
+              style: appTextTheme.button,
             ),
           ),
           SizedBox(

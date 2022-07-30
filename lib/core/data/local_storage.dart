@@ -6,9 +6,7 @@ import 'package:redting/features/dating_profile/data/entities/dating_profile_ent
 import 'package:redting/features/dating_profile/data/entities/sexual_orientation_entity.dart';
 import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/matching/data/entities/ice_breaker_messages_entity.dart';
-import 'package:redting/features/matching/data/entities/like_notification_entity.dart';
 import 'package:redting/features/matching/domain/models/ice_breaker_msg.dart';
-import 'package:redting/features/matching/domain/models/like_notification.dart';
 import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
 import 'package:redting/features/profile/data/entities/user_verification_video_entity.dart';
@@ -74,12 +72,10 @@ class LocalStorage {
   /// Matching Feature Data
   static void _registerMatchingDataAdapters() {
     Hive.registerAdapter(IceBreakerMessagesEntityAdapter(), override: true);
-    Hive.registerAdapter(LikeNotificationEntityAdapter(), override: true);
   }
 
   static Future _openMatchingDataBox() async {
     await Hive.openBox<Map<dynamic, dynamic>?>(likedUsersBox);
     await Hive.openBox<IceBreakerMessages?>(iceBreakersBox);
-    await Hive.openBox<LikeNotification>(likeNotificationBox);
   }
 }

@@ -43,18 +43,21 @@ class _ViewProfileScreenState extends State<ViewProfileScreen>
               if (state is UserProfileInitialState && !_isInitialized) {
                 _onInitState(blocContext);
               }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (!_isInitialized || _isLoadingProfile)
-                    const SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: CircularProgress(),
-                    ),
-                  if (_isInitialized && !_isLoadingProfile)
-                    ..._buildUserProfileSections()
-                ],
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (!_isInitialized || _isLoadingProfile)
+                      const SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgress(),
+                      ),
+                    if (_isInitialized && !_isLoadingProfile)
+                      ..._buildUserProfileSections()
+                  ],
+                ),
               );
             })));
   }
@@ -108,13 +111,13 @@ class _ViewProfileScreenState extends State<ViewProfileScreen>
                   profilePhoto: _userProfile.profilePhotoUrl))),
       Text(
         "${_userProfile.name} ${_userProfile.age}",
-        style: appTextTheme.headline4
+        style: appTextTheme.headline6
             ?.copyWith(color: appTheme.colorScheme.primary),
         textAlign: TextAlign.center,
       ),
       Text(
         _userProfile.title,
-        style: appTextTheme.headline5,
+        style: appTextTheme.subtitle1,
         textAlign: TextAlign.center,
       ),
       const SizedBox(
@@ -122,6 +125,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen>
       ),
       Text(
         _userProfile.bio,
+        style: appTextTheme.bodyText1,
         textAlign: TextAlign.justify,
       ),
       const SizedBox(
@@ -161,7 +165,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen>
         padding: const EdgeInsets.all(paddingSm),
         child: Text(
           userGenderStr,
-          style: appTextTheme.button?.copyWith(color: Colors.black),
+          style: appTextTheme.bodyText2?.copyWith(color: Colors.black),
         ),
       ),
     );

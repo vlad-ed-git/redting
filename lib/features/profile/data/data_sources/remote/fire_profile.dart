@@ -4,6 +4,7 @@ import "dart:math";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
@@ -37,6 +38,9 @@ class FireProfile implements RemoteProfileDataSource {
           .set(profile.toJson());
       return profile;
     } catch (e) {
+      if (kDebugMode) {
+        print("============== fire $e ============");
+      }
       return null;
     }
   }
@@ -57,6 +61,9 @@ class FireProfile implements RemoteProfileDataSource {
       }
       return OperationResult(data: profile);
     } catch (e) {
+      if (kDebugMode) {
+        print("============== $e ============");
+      }
       return OperationResult(
           errorOccurred: true, errorMessage: getProfileError);
     }
@@ -72,6 +79,9 @@ class FireProfile implements RemoteProfileDataSource {
           .update(profile.toJson());
       return OperationResult(data: profile);
     } catch (e) {
+      if (kDebugMode) {
+        print("============== $e ============");
+      }
       return OperationResult(
           errorMessage: updateProfileError, errorOccurred: true);
     }
@@ -92,6 +102,9 @@ class FireProfile implements RemoteProfileDataSource {
       String downloadUrl = await photoRef.getDownloadURL();
       return OperationResult(data: downloadUrl);
     } catch (e) {
+      if (kDebugMode) {
+        print("============== $e ============");
+      }
       return OperationResult(
           errorMessage: uploadingPhotoErr, errorOccurred: true);
     }
@@ -115,6 +128,9 @@ class FireProfile implements RemoteProfileDataSource {
       }
       return OperationResult(data: verificationWord);
     } catch (e) {
+      if (kDebugMode) {
+        print("============== $e ============");
+      }
       return OperationResult(errorOccurred: true, errorMessage: "$e");
     }
   }
@@ -144,6 +160,9 @@ class FireProfile implements RemoteProfileDataSource {
           .set(usersVerificationVideo.toJson());
       return OperationResult(data: usersVerificationVideo);
     } catch (e) {
+      if (kDebugMode) {
+        print("============== $e ============");
+      }
       compressor.dispose();
       return OperationResult(
           errorMessage: errorUploadingVerificationVideo, errorOccurred: true);
@@ -159,6 +178,9 @@ class FireProfile implements RemoteProfileDataSource {
           .delete();
       return OperationResult();
     } catch (e) {
+      if (kDebugMode) {
+        print("============== $e ============");
+      }
       return OperationResult(
           errorOccurred: true, errorMessage: deletingVerificationVideoFailed);
     }

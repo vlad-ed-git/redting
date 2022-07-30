@@ -32,7 +32,7 @@ class _GenderPreferencesState extends State<GenderPreferences> {
         children: [
           Text(
             showMeGendersAndPreferencesLbl,
-            style: appTextTheme.headline4?.copyWith(color: Colors.black),
+            style: appTextTheme.subtitle1?.copyWith(color: Colors.black),
           ),
           const SizedBox(
             height: paddingStd,
@@ -72,7 +72,7 @@ class _GenderPreferencesState extends State<GenderPreferences> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             lbl,
-            style: appTextTheme.headline6?.copyWith(
+            style: appTextTheme.bodyText1?.copyWith(
               color: _gender == value
                   ? appTheme.colorScheme.primary
                   : Colors.black54,

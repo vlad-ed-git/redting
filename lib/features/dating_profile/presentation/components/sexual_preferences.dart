@@ -52,7 +52,7 @@ class _SexualPreferencesState extends State<SexualPreferences> {
         ),
         Text(
           mySexualOrientation,
-          style: appTextTheme.headline4?.copyWith(color: Colors.black),
+          style: appTextTheme.subtitle1?.copyWith(color: Colors.black),
         ),
         ..._getPreferences(),
         const SizedBox(
@@ -64,7 +64,7 @@ class _SexualPreferencesState extends State<SexualPreferences> {
           activeColor: appTheme.colorScheme.primary,
           title: Text(
             makeMyOrientationPublicLbl,
-            style: appTextTheme.subtitle1,
+            style: appTextTheme.bodyText1,
           ),
           value: _makeMyOrientationPublic,
           onChanged: (bool value) {
@@ -83,7 +83,7 @@ class _SexualPreferencesState extends State<SexualPreferences> {
           activeColor: appTheme.colorScheme.primary,
           title: Text(
             showMeMyOrientationOnly,
-            style: appTextTheme.subtitle1,
+            style: appTextTheme.bodyText1,
           ),
           value: _showMeMyOrientationOnly,
           onChanged: (bool value) {
@@ -137,7 +137,7 @@ class _SexualPreferencesState extends State<SexualPreferences> {
             Expanded(
               child: Text(
                 lbl,
-                style: appTextTheme.subtitle1?.copyWith(
+                style: appTextTheme.bodyText1?.copyWith(
                     color: _myPreferences.containsKey(value)
                         ? appTheme.colorScheme.primary
                         : Colors.black54),

@@ -5,10 +5,13 @@ abstract class MatchingRepository {
   Future<OperationResult> getThisUserInfo();
   Future<OperationResult> getDatingProfiles(
       MatchingUserProfileWrapper thisUserProfiles);
-  Future<OperationResult> likeUser(String thisUser, String likedUser,
+  Future<OperationResult> likeUser(String thisUserId, String likedUserId,
       String likedUserName, String likedUserProfilePhotoUrl);
-  Future loadIceBreakerMessages();
   Future<OperationResult> sendDailyFeedback(
       String userId, String feedback, int rating);
   Stream<List<OperationRealTimeResult>> listenToMatches();
+
+  /// initializations ---syncing ---
+  Future<bool> loadLikedUsersToCache();
+  Future<bool> loadIceBreakerMessagesToCache();
 }

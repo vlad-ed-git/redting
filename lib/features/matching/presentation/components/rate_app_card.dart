@@ -44,7 +44,7 @@ class _RateAppCardState extends State<RateAppCard> {
               Text(
                 noMoreProfiles,
                 textAlign: TextAlign.justify,
-                style: appTextTheme.subtitle1,
+                style: appTextTheme.subtitle2,
               ),
               const SizedBox(
                 height: paddingStd,
@@ -88,7 +88,6 @@ class _RateAppCardState extends State<RateAppCard> {
                           widget.onSubmitFeedback(_rating, _feedback);
                         }
                       },
-                      flipColors: true,
                       showLoading: widget.isSendingFeedback,
                       lbl: submitFeedbackBtn),
                 ),
