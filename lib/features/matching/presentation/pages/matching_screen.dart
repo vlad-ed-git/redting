@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/snack/snack.dart';
-import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
 import 'package:redting/features/matching/presentation/components/idle_matching_card.dart';
 import 'package:redting/features/matching/presentation/components/loading_card.dart';
 import 'package:redting/features/matching/presentation/components/rate_app_card.dart';
 import 'package:redting/features/matching/presentation/components/swipeable_profile.dart';
 import 'package:redting/features/matching/presentation/state/matching_bloc.dart';
+import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
@@ -26,7 +26,7 @@ class _MatchingScreenState extends State<MatchingScreen>
   bool _isInitialized = false;
 
   MatchingBloc? _eventDispatcher;
-  MatchingUserProfileWrapper? _thisUserInfo;
+  UserProfile? _thisUserInfo;
   bool _isLoading = false;
   bool _loadedAllProfiles = false;
 
@@ -35,8 +35,8 @@ class _MatchingScreenState extends State<MatchingScreen>
   /// WE ADD THEM IN REVERSE ORDER BECAUSE THEY ARE STACKED, SO THE LAST WILL BE SHOWN FIRST
   /// THEN WE KEEP TRACK OF PASSED i.e. disliked profiles [_passedProfiles]
   /// WHEN WE REACH THE END [_loadedAllProfiles], THE USER CAN VIEW THE DISLIKED PROFILES AGAIN
-  List<MatchingUserProfileWrapper> _currentSwipeBatchProfiles = [];
-  final List<MatchingUserProfileWrapper> _passedProfiles = [];
+  List<UserProfile> _currentSwipeBatchProfiles = [];
+  final List<UserProfile> _passedProfiles = [];
   bool _todaysFeedbackReceived = false;
 
   @override
@@ -169,20 +169,18 @@ class _MatchingScreenState extends State<MatchingScreen>
     if (_currentSwipeBatchProfiles.isEmpty) return const SizedBox.shrink();
     return Stack(
       children: _currentSwipeBatchProfiles.map((e) {
-        bool isFrontCard = _currentSwipeBatchProfiles.last.userProfile.userId ==
-            e.userProfile.userId;
+        bool isFrontCard = _currentSwipeBatchProfiles.last.userId == e.userId;
         return Align(
           alignment: Alignment.topCenter,
           child: SwipeProfile(
-            photoUrls: e.datingProfile.photos,
-            name: e.userProfile.name,
-            age: e.userProfile.age.toString(),
-            title: e.userProfile.title,
-            bio: e.userProfile.bio,
-            verificationVideo: e.userProfile.verificationVideo,
-            sexualOrientation: e.datingProfile.makeMyOrientationPublic
-                ? e.datingProfile.getUserSexualOrientation()
-                : [],
+            photoUrls: e.datingPhotos,
+            name: e.name,
+            age: e.age.toString(),
+            title: e.title,
+            bio: e.bio,
+            verificationVideo: e.getVerificationVideo(),
+            sexualOrientation:
+                e.makeMyOrientationPublic ? e.getUserSexualOrientation() : [],
             isFrontCard: isFrontCard,
             onSwiped: _onSwipe,
           ),
@@ -204,7 +202,7 @@ class _MatchingScreenState extends State<MatchingScreen>
           _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
         });
         _eventDispatcher?.add(LikeUserEvent(
-            likedByUser: _thisUserInfo!.userProfile.userId,
+            likedByUser: _thisUserInfo!.userId,
             likedUserProfile: swipedProfile));
         return;
       }
@@ -246,9 +244,7 @@ class _MatchingScreenState extends State<MatchingScreen>
 
   void _onSubmitDailyFeedback(int rating, String feedback) {
     _eventDispatcher?.add(SendUserFeedBackEvent(
-        rating: rating,
-        feedback: feedback,
-        userId: _thisUserInfo!.userProfile.userId));
+        rating: rating, feedback: feedback, userId: _thisUserInfo!.userId));
   }
 
   _hasViewedAllProfiles() {

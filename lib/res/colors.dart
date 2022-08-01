@@ -1,3 +1,3 @@
 import 'package:flutter/material.dart';
 
-var seedColor = Colors.redAccent.shade400;
+var seedColor = const Color(0xffA7171A);

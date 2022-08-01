@@ -1,5 +1,5 @@
 import 'package:redting/features/profile/domain/models/user_profile.dart';
-import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
+import 'package:redting/features/profile/domain/repositories/profile_repository.dart';
 
 class GetCachedProfileUseCase {
   final ProfileRepository profileRepository;

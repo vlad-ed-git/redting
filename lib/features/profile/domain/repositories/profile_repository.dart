@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:redting/core/utils/service_result.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 
 abstract class ProfileRepository {
-  Future<OperationResult> getUserProfileFromRemote();
+  Future<OperationResult> loadUserProfileFromRemoteIfExists();
   Future<UserProfile?> getCachedUserProfile();
 
   Future<OperationResult> createUserProfile({
@@ -31,4 +32,17 @@ abstract class ProfileRepository {
       {required File file, required String verificationCode});
   Future<OperationResult> generateVerificationWord();
   Future<OperationResult> deleteVerificationVideo();
+
+  Future<OperationResult> addDatingPhoto(
+      File photo, String filename, String userId);
+  Future<OperationResult> addDatingInfo(
+      UserProfile profile,
+      List<File> photoFiles,
+      List<String> photoFileNames,
+      int minAgePreference,
+      int maxAgePreference,
+      UserGender? genderPreference,
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation);
 }

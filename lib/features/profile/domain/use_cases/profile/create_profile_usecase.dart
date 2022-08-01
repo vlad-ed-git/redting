@@ -1,7 +1,7 @@
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
-import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
+import 'package:redting/features/profile/domain/repositories/profile_repository.dart';
 
 class CreateProfileUseCase {
   final ProfileRepository profileRepository;

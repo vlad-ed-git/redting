@@ -5,12 +5,14 @@ import 'package:redting/features/profile/data/data_sources/local/local_profile_s
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
 import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
+import 'package:redting/features/profile/data/entities/user_verification_video_entity.dart';
 import 'package:redting/features/profile/data/utils/compressors/image_compressor.dart';
 import 'package:redting/features/profile/data/utils/compressors/video_compressor.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
-import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
+import 'package:redting/features/profile/domain/repositories/profile_repository.dart';
 import 'package:redting/res/strings.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -96,59 +98,62 @@ class ProfileRepositoryImpl implements ProfileRepository {
           errorOccurred: true, errorMessage: createProfileError);
     }
 
-    //local
-    OperationResult result = await localProfileDataSource
-        .cacheAndReturnUserProfile(profile: savedProfile);
-    if (result.errorOccurred) {
-      return OperationResult(
-          errorOccurred: true, errorMessage: createProfileError);
-    }
-    return result;
+    return await _cacheUserProfileAndReturn(savedProfile);
   }
 
-  /// FETCH
-  @override
-  Future<OperationResult> getUserProfileFromRemote() async {
-    //remote
-    final OperationResult result =
-        await remoteProfileDataSource.getUserProfile();
+  Future<OperationResult> _cacheUserProfileAndReturn(
+      UserProfile profile) async {
+    UserProfile? cachedProfile = await localProfileDataSource
+        .cacheAndReturnUserProfile(profile: profile);
+    return OperationResult(
+        errorOccurred: (cachedProfile == null),
+        errorMessage: (cachedProfile == null) ? createProfileError : '',
+        data: cachedProfile);
+  }
 
-    if (result.errorOccurred) return result;
+  @override
+  Future<OperationResult> loadUserProfileFromRemoteIfExists() async {
+    //remote
+    final UserProfile? profile = await remoteProfileDataSource.getUserProfile();
+
+    if (profile == null) return OperationResult(); //does not exist
 
     //update cache
-    if (result.data is UserProfile) {
-      return await localProfileDataSource.cacheAndReturnUserProfile(
-          profile: result.data as UserProfile);
-    }
-
-    return result;
+    return _cacheUserProfileAndReturn(profile);
   }
 
-  /// UPLOADS
   @override
   Future<OperationResult> uploadProfilePhoto(
       {required File file, required String filename}) async {
-    return await remoteProfileDataSource.uploadProfilePhoto(
+    String? downloadUrl = await remoteProfileDataSource.uploadProfilePhoto(
         file: file, filename: filename, imageCompressor: imageCompressor);
+    return OperationResult(
+        errorOccurred: downloadUrl == null, data: downloadUrl);
   }
 
   @override
   Future<OperationResult> generateVerificationWord() async {
-    return await remoteProfileDataSource.generateVerificationWord();
+    String? verificationWord =
+        await remoteProfileDataSource.generateVerificationWord();
+    return OperationResult(
+        errorOccurred: verificationWord == null, data: verificationWord);
   }
 
   @override
   Future<OperationResult> uploadVerificationVideo(
       {required File file, required String verificationCode}) async {
-    return await remoteProfileDataSource.uploadVerificationVideo(
-        file: file,
-        verificationCode: verificationCode,
-        compressor: videoCompressor);
+    UserVerificationVideo? video =
+        await remoteProfileDataSource.compressAndUploadVerificationVideo(
+            file: file,
+            verificationCode: verificationCode,
+            compressor: videoCompressor);
+    return OperationResult(errorOccurred: video == null, data: video);
   }
 
   @override
   Future<OperationResult> deleteVerificationVideo() async {
-    return await remoteProfileDataSource.deleteVerificationVideo();
+    bool isSuccess = await remoteProfileDataSource.deleteVerificationVideo();
+    return OperationResult(errorOccurred: !isSuccess);
   }
 
   /// INSTANCE CREATION
@@ -169,7 +174,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         name: name,
         userId: userId,
         profilePhotoUrl: profilePhotoUrl,
-        gender: mapUserGenderToDataEntity(gender),
+        gender: genderModelToGenderEntity(gender),
         genderOther: genderOther,
         bio: bio,
         registerCountry: registerCountry,
@@ -179,11 +184,70 @@ class ProfileRepositoryImpl implements ProfileRepository {
         birthDay: birthDay,
         isBanned: isBanned,
         age: age,
-        verificationVideo: verificationVideo);
+        verificationVideo:
+            mapUserVerificationVideoModelToEntity(verificationVideo));
   }
 
   @override
   Future<UserProfile?> getCachedUserProfile() {
     return localProfileDataSource.getCachedUserProfile();
+  }
+
+  @override
+  Future<OperationResult> addDatingPhoto(
+      File photo, String filename, String userId) async {
+    String? downloadUrl = await remoteProfileDataSource.uploadDatingPhoto(
+        photo, filename, userId, imageCompressor);
+    return downloadUrl != null
+        ? OperationResult(data: downloadUrl)
+        : OperationResult(
+            errorOccurred: true, errorMessage: uploadingDatingProfilePhotoErr);
+  }
+
+  /// DATING PROFILE
+  @override
+  Future<OperationResult> addDatingInfo(
+      UserProfile profile,
+      List<File> datingPhotosFiles,
+      List<String> datingPhotoFileNames,
+      int minAgePreference,
+      int maxAgePreference,
+      UserGender? genderPreference,
+      List<SexualOrientation> userOrientation,
+      bool makeMyOrientationPublic,
+      bool onlyShowMeOthersOfSameOrientation) async {
+    //upload the files
+    List<String> datingPics = [];
+    int i = 0;
+    for (File file in datingPhotosFiles) {
+      OperationResult result =
+          await addDatingPhoto(file, datingPhotoFileNames[i], profile.userId);
+      if (result.data is String) {
+        datingPics.add(result.data);
+      }
+      i++;
+    }
+
+    if (userOrientation.isEmpty) {
+      //default orientation
+      userOrientation.add(SexualOrientation.straight);
+    }
+
+    profile.datingPhotos = datingPics;
+    profile.makeMyOrientationPublic = makeMyOrientationPublic;
+    profile.onlyShowMeOthersOfSameOrientation =
+        onlyShowMeOthersOfSameOrientation;
+    profile.minAgePreference = minAgePreference;
+    profile.maxAgePreference = maxAgePreference;
+    profile.setGenderPreferences(genderPreference);
+    profile.setUserSexualOrientation(userOrientation);
+
+    UserProfile? updatedProfile =
+        await remoteProfileDataSource.updateUserProfile(profile: profile);
+    if (updatedProfile == null) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: completingDatingProfileErr);
+    }
+    return _cacheUserProfileAndReturn(updatedProfile);
   }
 }

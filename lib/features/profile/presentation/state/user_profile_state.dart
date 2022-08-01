@@ -87,3 +87,16 @@ class LoadedVerificationVideoCodeState extends UserProfileState {
   final String verificationVideoCode;
   LoadedVerificationVideoCodeState(this.verificationVideoCode);
 }
+
+/// DATING INFO
+class AddingDatingInfoState extends UserProfileState {}
+
+class AddingDatingInfoFailedState extends UserProfileState {
+  final String errMsg;
+  AddingDatingInfoFailedState(this.errMsg);
+}
+
+class AddedDatingInfoState extends UserProfileState {
+  final UserProfile profile;
+  AddedDatingInfoState(this.profile);
+}

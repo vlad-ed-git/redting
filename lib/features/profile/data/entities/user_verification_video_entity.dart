@@ -10,20 +10,14 @@ part 'user_verification_video_entity.g.dart';
 class UserVerificationVideoEntity implements UserVerificationVideo {
   @HiveField(0)
   @override
-  String userId;
-
-  @HiveField(1)
-  @override
   String verificationCode;
 
-  @HiveField(2)
+  @HiveField(1)
   @override
   String videoUrl;
 
   UserVerificationVideoEntity(
-      {required this.userId,
-      required this.verificationCode,
-      required this.videoUrl});
+      {required this.verificationCode, required this.videoUrl});
 
   factory UserVerificationVideoEntity.fromJson(Map<String, dynamic> json) =>
       _$UserVerificationVideoEntityFromJson(json);
@@ -33,12 +27,11 @@ class UserVerificationVideoEntity implements UserVerificationVideo {
   UserVerificationVideo fromJson(Map<String, dynamic> json) {
     return UserVerificationVideoEntity.fromJson(json);
   }
+}
 
-  @override
-  bool isSameAs(UserVerificationVideo userVerificationVideo) {
-    return userVerificationVideo.userId == userVerificationVideo.userId &&
-        userVerificationVideo.videoUrl == userVerificationVideo.videoUrl &&
-        userVerificationVideo.verificationCode ==
-            userVerificationVideo.verificationCode;
-  }
+UserVerificationVideoEntity mapUserVerificationVideoModelToEntity(
+    UserVerificationVideo verificationVideo) {
+  return UserVerificationVideoEntity(
+      verificationCode: verificationVideo.verificationCode,
+      videoUrl: verificationVideo.videoUrl);
 }

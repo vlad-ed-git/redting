@@ -4,10 +4,12 @@ import 'package:redting/features/profile/data/data_sources/local/local_profile_s
 import 'package:redting/features/profile/data/data_sources/remote/fire_profile.dart';
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
 import 'package:redting/features/profile/data/repositories/profile_repository_impl.dart';
-import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
+import 'package:redting/features/profile/domain/repositories/profile_repository.dart';
+import 'package:redting/features/profile/domain/use_cases/profile/add_dating_info.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/create_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_cached_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_profile_from_remote_usecase.dart';
+import 'package:redting/features/profile/domain/use_cases/profile_photo/add_dating_pic.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/upload_profile_photo_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_usecases.dart';
 import 'package:redting/features/profile/domain/use_cases/verification_video/delete_verification_video_usecase.dart';
@@ -33,7 +35,9 @@ GetIt init(GetIt coreDiInstance) {
           generateVideoVerificationCodeUseCase: profileDiInstance(),
           uploadVerificationVideoUseCase: profileDiInstance(),
           deleteVerificationVideoUseCase: profileDiInstance(),
-          getCachedProfileUseCase: profileDiInstance()));
+          getCachedProfileUseCase: profileDiInstance(),
+          addDatingInfoUseCase: profileDiInstance(),
+          addDatingPicUseCase: profileDiInstance()));
 
   profileDiInstance.registerLazySingleton<GetProfileFromRemoteUseCase>(() =>
       GetProfileFromRemoteUseCase(profileRepository: profileDiInstance()));
@@ -56,6 +60,11 @@ GetIt init(GetIt coreDiInstance) {
 
   profileDiInstance.registerLazySingleton<DeleteVerificationVideoUseCase>(
       () => DeleteVerificationVideoUseCase(profileDiInstance()));
+
+  profileDiInstance.registerLazySingleton<AddDatingInfoUseCase>(
+      () => AddDatingInfoUseCase(profileDiInstance()));
+  profileDiInstance.registerLazySingleton<AddDatingPicUseCase>(
+      () => AddDatingPicUseCase(profileDiInstance()));
 
   //repository
   profileDiInstance

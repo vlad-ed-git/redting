@@ -45,7 +45,7 @@ class UnStyledTxtInput extends StatelessWidget {
             helperStyle: appTextTheme.caption
                 ?.copyWith(fontSize: 12, fontWeight: FontWeight.w200),
             labelText: label,
-            floatingLabelBehavior: isLongTxt
+            floatingLabelBehavior: label != null
                 ? FloatingLabelBehavior.always
                 : FloatingLabelBehavior.auto,
             isDense: true,

@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:redting/core/data/hive_type_ids.dart';
-import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 
 part 'sexual_orientation_entity.g.dart';
 
@@ -24,7 +24,7 @@ enum SexualOrientationEntity {
   questioning,
 }
 
-SexualOrientation mapSexualOrientationEntityToModel(
+SexualOrientation sexualOrientationEntityToModel(
     SexualOrientationEntity entity) {
   switch (entity) {
     case SexualOrientationEntity.straight:
@@ -46,7 +46,8 @@ SexualOrientation mapSexualOrientationEntityToModel(
   }
 }
 
-SexualOrientationEntity mapSexualOrientationToEntity(SexualOrientation model) {
+SexualOrientationEntity sexualOrientationModelToEntity(
+    SexualOrientation model) {
   switch (model) {
     case SexualOrientation.straight:
       return SexualOrientationEntity.straight;

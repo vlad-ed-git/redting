@@ -16,10 +16,7 @@ import 'package:redting/features/matching/domain/use_cases/sync_with_remote.dart
 import 'package:redting/features/matching/presentation/state/matches_listener/matches_listener_bloc.dart';
 import 'package:redting/features/matching/presentation/state/matching_bloc.dart';
 
-GetIt init(
-  GetIt profileDiInstance,
-  GetIt datingProfileDiInstance,
-) {
+GetIt init(GetIt profileDiInstance) {
   GetIt matchingDiInstance = GetIt.instance;
 
   matchingDiInstance
@@ -60,8 +57,8 @@ GetIt init(
       () => GetThisUsersInfoUseCase(matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<MatchingRepository>(() =>
-      MatchingRepositoryImpl(profileDiInstance(), datingProfileDiInstance(),
-          matchingDiInstance(), matchingDiInstance()));
+      MatchingRepositoryImpl(
+          profileDiInstance(), matchingDiInstance(), matchingDiInstance()));
 
   matchingDiInstance.registerLazySingleton<RemoteMatchingDataSource>(
       () => FireMatchingDataSource());

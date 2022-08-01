@@ -5,6 +5,7 @@ import 'package:redting/core/components/gradients/primary_gradients.dart';
 import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
+import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/splash/presentation/state/current_user_bloc.dart';
 import 'package:redting/res/assets_paths.dart';
 import 'package:redting/res/dimens.dart';
@@ -34,26 +35,28 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           if (state is LoadedCurrentUserState) {
             bool shouldLogin = state.authUser == null;
+
             bool shouldCreateProfile =
                 state.authUser != null && state.userProfile == null;
+
             bool shouldCreateDatingProfile = state.authUser != null &&
                 state.userProfile != null &&
-                state.datingProfile == null;
+                state.userProfile?.datingPhotos.isEmpty == true;
+
             bool shouldGoHome = state.authUser != null &&
                 state.userProfile != null &&
-                state.datingProfile != null;
+                state.userProfile?.datingPhotos.isNotEmpty == true;
 
             if (shouldLogin) {
               _goToLogin();
             }
 
             if (shouldCreateProfile) {
-              print(state.userProfile);
               _goToProfileScreen(authUser: state.authUser!);
             }
 
             if (shouldCreateDatingProfile) {
-              _goToDatingProfile(authUser: state.authUser!);
+              _goToDatingProfile(profile: state.userProfile!);
             }
 
             if (shouldGoHome) {
@@ -77,8 +80,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: paddingMd),
                       child: Image.asset(
-                        redShadowedLogoPath,
-                        height: 48,
+                        redLogoPath,
+                        height: 56,
                         fit: BoxFit.fitHeight,
                       ),
                     ),
@@ -133,12 +136,12 @@ class _SplashScreenState extends State<SplashScreen> {
         arguments: authUser);
   }
 
-  void _goToHome() {
-    Navigator.pushReplacementNamed(context, homeRoute);
+  void _goToDatingProfile({required UserProfile profile}) {
+    Navigator.pushReplacementNamed(context, addDatingProfileRoute,
+        arguments: profile);
   }
 
-  void _goToDatingProfile({required AuthUser authUser}) {
-    Navigator.pushReplacementNamed(context, createDatingProfileRoute,
-        arguments: authUser);
+  void _goToHome() {
+    Navigator.pushReplacementNamed(context, homeRoute);
   }
 }

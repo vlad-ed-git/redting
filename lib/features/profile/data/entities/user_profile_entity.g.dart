@@ -17,54 +17,76 @@ class UserProfileEntityAdapter extends TypeAdapter<UserProfileEntity> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserProfileEntity(
-        name: fields[0] as String,
-        userId: fields[1] as String,
-        profilePhotoUrl: fields[2] as String,
-        genderOther: fields[3] as String?,
-        gender: fields[4] as UserGenderEntity,
-        bio: fields[5] as String,
-        registerCountry: fields[6] as String,
-        title: fields[7] as String,
-        createdOn: fields[8] as DateTime,
-        lastUpdatedOn: fields[9] as DateTime,
-        birthDay: fields[10] as DateTime,
-        isBanned: fields[11] as bool,
-        verificationVideo: fields[12] as UserVerificationVideo,
-        age: fields[13] as int);
+      genderOther: fields[5] as String?,
+      gender: fields[18] as UserGenderEntity,
+      name: fields[11] as String,
+      profilePhotoUrl: fields[13] as String,
+      registerCountry: fields[14] as String,
+      title: fields[15] as String,
+      isBanned: fields[6] as bool,
+      age: fields[0] as int,
+      bio: fields[1] as String,
+      birthDay: fields[2] as DateTime,
+      createdOn: fields[3] as DateTime,
+      verificationVideo: fields[20] as UserVerificationVideoEntity,
+      lastUpdatedOn: fields[7] as DateTime,
+      makeMyOrientationPublic: fields[8] as bool,
+      onlyShowMeOthersOfSameOrientation: fields[12] as bool,
+      maxAgePreference: fields[9] as int,
+      minAgePreference: fields[10] as int,
+      datingPhotos: (fields[4] as List?)?.cast<String>(),
+      sexualOrientation: (fields[17] as List?)?.cast<SexualOrientationEntity>(),
+      userId: fields[16] as String,
+      genderPreferences: fields[19] as UserGenderEntity?,
+    );
   }
 
   @override
   void write(BinaryWriter writer, UserProfileEntity obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(21)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.age)
       ..writeByte(1)
-      ..write(obj.userId)
-      ..writeByte(2)
-      ..write(obj.profilePhotoUrl)
-      ..writeByte(3)
-      ..write(obj.genderOther)
-      ..writeByte(4)
-      ..write(obj.gender)
-      ..writeByte(5)
       ..write(obj.bio)
-      ..writeByte(6)
-      ..write(obj.registerCountry)
-      ..writeByte(7)
-      ..write(obj.title)
-      ..writeByte(8)
-      ..write(obj.createdOn)
-      ..writeByte(9)
-      ..write(obj.lastUpdatedOn)
-      ..writeByte(10)
+      ..writeByte(2)
       ..write(obj.birthDay)
-      ..writeByte(11)
+      ..writeByte(3)
+      ..write(obj.createdOn)
+      ..writeByte(4)
+      ..write(obj.datingPhotos)
+      ..writeByte(5)
+      ..write(obj.genderOther)
+      ..writeByte(6)
       ..write(obj.isBanned)
+      ..writeByte(7)
+      ..write(obj.lastUpdatedOn)
+      ..writeByte(8)
+      ..write(obj.makeMyOrientationPublic)
+      ..writeByte(9)
+      ..write(obj.maxAgePreference)
+      ..writeByte(10)
+      ..write(obj.minAgePreference)
+      ..writeByte(11)
+      ..write(obj.name)
       ..writeByte(12)
-      ..write(obj.verificationVideo)
+      ..write(obj.onlyShowMeOthersOfSameOrientation)
       ..writeByte(13)
-      ..write(obj.age);
+      ..write(obj.profilePhotoUrl)
+      ..writeByte(14)
+      ..write(obj.registerCountry)
+      ..writeByte(15)
+      ..write(obj.title)
+      ..writeByte(16)
+      ..write(obj.userId)
+      ..writeByte(17)
+      ..write(obj.sexualOrientation)
+      ..writeByte(18)
+      ..write(obj.gender)
+      ..writeByte(19)
+      ..write(obj.genderPreferences)
+      ..writeByte(20)
+      ..write(obj.verificationVideo);
   }
 
   @override
@@ -83,40 +105,96 @@ class UserProfileEntityAdapter extends TypeAdapter<UserProfileEntity> {
 // **************************************************************************
 
 UserProfileEntity _$UserProfileEntityFromJson(Map json) => UserProfileEntity(
-    name: json['name'] as String,
-    userId: json['userId'] as String,
-    profilePhotoUrl: json['profilePhotoUrl'] as String,
-    genderOther: json['genderOther'] as String?,
-    bio: json['bio'] as String,
-    registerCountry: json['registerCountry'] as String,
-    title: json['title'] as String,
-    createdOn:
-        const TimestampConverter().fromJson(json['createdOn'] as Timestamp),
-    lastUpdatedOn:
-        const TimestampConverter().fromJson(json['lastUpdatedOn'] as Timestamp),
-    birthDay:
-        const TimestampConverter().fromJson(json['birthDay'] as Timestamp),
-    isBanned: json['isBanned'] as bool,
-    gender: $enumDecode(userGenderEntityToStringVal, json['gender']),
-    verificationVideo: UserVerificationVideoEntity.fromJson(
-        Map<String, dynamic>.from(json['verificationVideo'] as Map)),
-    age: json['age'] as int);
+      genderOther: json['genderOther'] as String?,
+      gender: $enumDecode(_$UserGenderEntityEnumMap, json['gender']),
+      name: json['name'] as String,
+      profilePhotoUrl: json['profilePhotoUrl'] as String,
+      registerCountry: json['registerCountry'] as String,
+      title: json['title'] as String,
+      isBanned: json['isBanned'] as bool,
+      age: json['age'] as int,
+      bio: json['bio'] as String,
+      birthDay: DateTime.parse(json['birthDay'] as String),
+      createdOn: DateTime.parse(json['createdOn'] as String),
+      verificationVideo: UserVerificationVideoEntity.fromJson(
+          Map<String, dynamic>.from(json['verificationVideo'] as Map)),
+      lastUpdatedOn: DateTime.parse(json['lastUpdatedOn'] as String),
+      makeMyOrientationPublic:
+          json['makeMyOrientationPublic'] as bool? ?? false,
+      onlyShowMeOthersOfSameOrientation:
+          json['onlyShowMeOthersOfSameOrientation'] as bool? ?? true,
+      maxAgePreference: json['maxAgePreference'] as int? ?? 60,
+      minAgePreference: json['minAgePreference'] as int? ?? 18,
+      datingPhotos: (json['datingPhotos'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      sexualOrientation: (json['sexualOrientation'] as List<dynamic>?)
+          ?.map((e) => $enumDecode(_$SexualOrientationEntityEnumMap, e))
+          .toList(),
+      userId: json['userId'] as String? ?? "",
+      genderPreferences: $enumDecodeNullable(
+          _$UserGenderEntityEnumMap, json['genderPreferences']),
+    );
 
 Map<String, dynamic> _$UserProfileEntityToJson(UserProfileEntity instance) =>
     <String, dynamic>{
-      'name': instance.name,
-      'userId': instance.userId,
-      'profilePhotoUrl': instance.profilePhotoUrl,
-      'genderOther': instance.genderOther,
-      'gender': userGenderToStringVal[instance.getGender()],
+      'age': instance.age,
       'bio': instance.bio,
+      'birthDay': instance.birthDay.toIso8601String(),
+      'createdOn': instance.createdOn.toIso8601String(),
+      'datingPhotos': instance.datingPhotos,
+      'genderOther': instance.genderOther,
+      'isBanned': instance.isBanned,
+      'lastUpdatedOn': instance.lastUpdatedOn.toIso8601String(),
+      'makeMyOrientationPublic': instance.makeMyOrientationPublic,
+      'maxAgePreference': instance.maxAgePreference,
+      'minAgePreference': instance.minAgePreference,
+      'name': instance.name,
+      'onlyShowMeOthersOfSameOrientation':
+          instance.onlyShowMeOthersOfSameOrientation,
+      'profilePhotoUrl': instance.profilePhotoUrl,
       'registerCountry': instance.registerCountry,
       'title': instance.title,
-      'createdOn': const TimestampConverter().toJson(instance.createdOn),
-      'lastUpdatedOn':
-          const TimestampConverter().toJson(instance.lastUpdatedOn),
-      'birthDay': const TimestampConverter().toJson(instance.birthDay),
-      'isBanned': instance.isBanned,
+      'userId': instance.userId,
+      'sexualOrientation': instance.sexualOrientation
+          .map((e) => _$SexualOrientationEntityEnumMap[e]!)
+          .toList(),
+      'gender': _$UserGenderEntityEnumMap[instance.gender]!,
+      'genderPreferences':
+          _$UserGenderEntityEnumMap[instance.genderPreferences],
       'verificationVideo': instance.verificationVideo.toJson(),
-      'age': instance.age
     };
+
+const _$UserGenderEntityEnumMap = {
+  UserGenderEntity.male: 'male',
+  UserGenderEntity.female: 'female',
+  UserGenderEntity.stated: 'stated',
+};
+
+const _$SexualOrientationEntityEnumMap = {
+  SexualOrientationEntity.straight: 'straight',
+  SexualOrientationEntity.gay: 'gay',
+  SexualOrientationEntity.asexual: 'asexual',
+  SexualOrientationEntity.bisexual: 'bisexual',
+  SexualOrientationEntity.demiSexual: 'demiSexual',
+  SexualOrientationEntity.panSexual: 'panSexual',
+  SexualOrientationEntity.queer: 'queer',
+  SexualOrientationEntity.questioning: 'questioning',
+};
+
+const _$UserGenderModelEnumMap = {
+  UserGender.male: 'male',
+  UserGender.female: 'female',
+  UserGender.stated: 'stated',
+};
+
+const _$SexualOrientationModelEnumMap = {
+  SexualOrientation.straight: 'straight',
+  SexualOrientation.gay: 'gay',
+  SexualOrientation.asexual: 'asexual',
+  SexualOrientation.bisexual: 'bisexual',
+  SexualOrientation.demiSexual: 'demiSexual',
+  SexualOrientation.panSexual: 'panSexual',
+  SexualOrientation.queer: 'queer',
+  SexualOrientation.questioning: 'questioning',
+};

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:redting/core/utils/service_result.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
@@ -25,6 +26,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     on<DeleteVerificationVideoEvent>(_onDeleteVerificationVideoEvent);
     on<CreateUserProfileEvent>(_onCreateUserProfileEvent);
     on<LoadCachedProfileEvent>(_onLoadCachedProfileFromRemoteEvent);
+    on<AddDatingInfoEvent>(_onAddDatingInfoEvent);
   }
 
   FutureOr<void> _onLoadUserProfileFromRemoteEvent(
@@ -62,7 +64,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         .execute(file: event.photoFile, filename: event.filename);
 
     if (result.errorOccurred) {
-      emit(UpdatingProfilePhotoFailedState(result.errorMessage!));
+      emit(UpdatingProfilePhotoFailedState(result.errorMessage ?? uploadingPhotoErr));
     } else {
       emit(UpdatedProfilePhotoState(result.data as String));
     }
@@ -77,7 +79,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         await profileUseCases.generateVideoVerificationCodeUseCase.execute();
 
     if (result.errorOccurred) {
-      emit(LoadingVerificationVideoCodeFailedState(result.errorMessage!));
+      emit(LoadingVerificationVideoCodeFailedState(result.errorMessage ?? ""));
     } else {
       emit(LoadedVerificationVideoCodeState(result.data));
     }
@@ -92,7 +94,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         await profileUseCases.uploadVerificationVideoUseCase.execute(
             file: event.videoFile, verificationCode: event.verificationCode);
     if (result.errorOccurred) {
-      emit(UpdatingVerificationVideoFailedState(result.errorMessage!));
+      emit(UpdatingVerificationVideoFailedState(
+          result.errorMessage ?? errorUploadingVerificationVideo));
     } else {
       emit(UpdatedVerificationVideoState(result.data as UserVerificationVideo));
     }
@@ -133,6 +136,29 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       emit(ErrorCreatingUserProfileState(errMsg: result.errorMessage));
     } else {
       emit(CreatedUserProfileState(profile: result.data as UserProfile));
+    }
+  }
+
+  FutureOr<void> _onAddDatingInfoEvent(
+      AddDatingInfoEvent event, Emitter<UserProfileState> emit) async {
+    emit(AddingDatingInfoState());
+
+    OperationResult result = await profileUseCases.addDatingInfoUseCase.execute(
+        event.profile,
+        event.photoFiles,
+        event.datingPicsFileNames,
+        event.minAgePreference,
+        event.maxAgePreference,
+        event.genderPreference,
+        event.userOrientation,
+        event.makeMyOrientationPublic,
+        event.onlyShowMeOthersOfSameOrientation);
+
+    if (result.data is! UserProfile) {
+      emit(AddingDatingInfoFailedState(
+          result.errorMessage ?? completingDatingProfileErr));
+    } else {
+      emit(AddedDatingInfoState(result.data as UserProfile));
     }
   }
 }

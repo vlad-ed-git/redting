@@ -5,7 +5,6 @@ import 'package:redting/core/components/snack/snack.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/core/utils/txt_helpers.dart';
 import 'package:redting/features/chat/presentation/pages/chat_screen.dart';
-import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/matching/domain/models/matching_profiles.dart';
 import 'package:redting/features/matching/presentation/state/matches_listener/matches_listener_bloc.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
@@ -14,7 +13,6 @@ import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
 import 'package:redting/res/theme.dart';
 
-//TODO pull to refresh stream manually if it has auto closed?
 //TODO load more on scroll
 class MatchedScreen extends StatefulWidget {
   const MatchedScreen({Key? key}) : super(key: key);
@@ -28,7 +26,6 @@ class _MatchedScreenState extends State<MatchedScreen>
   Stream<List<OperationRealTimeResult>>? _stream;
   MatchesListenerBloc? _eventDispatcher;
   late UserProfile _thisUsersProfile;
-  late DatingProfile _thisUsersDatingProfile;
 
   @override
   bool get wantKeepAlive => true;
@@ -78,8 +75,7 @@ class _MatchedScreenState extends State<MatchedScreen>
     }
 
     if (state is LoadedThisUserProfileState) {
-      _thisUsersProfile = state.thisUserProfiles.userProfile;
-      _thisUsersDatingProfile = state.thisUserProfiles.datingProfile;
+      _thisUsersProfile = state.thisUserProfile;
       _eventDispatcher?.add(ListenToMatchesEvent());
     }
 

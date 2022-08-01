@@ -8,7 +8,7 @@ part of 'message_entity.dart';
 
 class MessageEntityAdapter extends TypeAdapter<MessageEntity> {
   @override
-  final int typeId = 9;
+  final int typeId = 7;
 
   @override
   MessageEntity read(BinaryReader reader) {
@@ -75,7 +75,7 @@ MessageEntity _$MessageEntityFromJson(Map json) => MessageEntity(
       sentBy: json['sentBy'] as String,
       sentTo: json['sentTo'] as String,
       sentAt: const TimestampConverter().fromJson(json['sentAt'] as Timestamp),
-      message: Message.decryptMsg((json['message'] as String?)),
+      message: json['message'] as String?,
       imageUrl: json['imageUrl'] as String?,
       chatRoomId: json['chatRoomId'] as String,
     );

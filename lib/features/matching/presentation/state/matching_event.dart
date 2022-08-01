@@ -6,13 +6,13 @@ abstract class MatchingEvent {}
 class InitializeEvent extends MatchingEvent {}
 
 class LoadProfilesToMatchEvent extends MatchingEvent {
-  final MatchingUserProfileWrapper profiles;
+  final UserProfile profiles;
   LoadProfilesToMatchEvent(this.profiles);
 }
 
 class LikeUserEvent extends MatchingEvent {
   final String likedByUser;
-  final MatchingUserProfileWrapper likedUserProfile;
+  final UserProfile likedUserProfile;
   LikeUserEvent({required this.likedUserProfile, required this.likedByUser});
 }
 

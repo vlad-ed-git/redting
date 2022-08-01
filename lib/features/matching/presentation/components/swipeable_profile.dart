@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/matching/presentation/components/swipeable_profile_components/detailed_view.dart';
 import 'package:redting/features/matching/presentation/components/swipeable_profile_components/overview.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/res/dimens.dart';
 

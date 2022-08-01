@@ -47,6 +47,7 @@ const maleGender = "Male";
 const femaleGender = "Female";
 const otherGenderHint = "I am ...";
 const birthDay = "Birthday";
+const birthDayHint = "Date of birth";
 
 //profile photo
 const uploadingPhotoErr = "Failed to update your profile photo";
@@ -93,7 +94,7 @@ const uploadingDatingProfilePhotoErr =
     "Failed to upload your photo! Please try again.";
 const deletingDatingProfilePhotoErr =
     "Failed to delete your RedTing profile photo! Please retry";
-const createDatingProfileErr =
+const completingDatingProfileErr =
     "Failed to create your RedTing profile! Please try again.";
 const deleteDatingProfileErr =
     "Failed to delete your RedTing profile! Please retry";
@@ -121,6 +122,8 @@ const gaySexualOrientationLbl = "gay";
 const createDatingProfileBtn = "ALL SET";
 const datingProfilePicsMissingErr = 'Please add at least 3 photos';
 const creatingDatingProfilePleaseWait = "just a bit ...";
+const datingPicsHint =
+    "*Show your face in some of these. Others will be able to see your verification video.";
 
 //matching
 const likingUserFailed =

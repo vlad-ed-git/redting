@@ -508,7 +508,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         _showBDatePickerDialog();
       },
       controller: _bDayController,
-      hint: birthDay,
+      hint: birthDayHint,
       keyboardType: TextInputType.none,
       label: birthDay,
     );

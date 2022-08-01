@@ -8,7 +8,7 @@ class MatchingInitialState extends MatchingState {}
 class LoadingState extends MatchingState {}
 
 class InitializedMatchingState extends MatchingState {
-  final MatchingUserProfileWrapper thisUserInfo;
+  final UserProfile thisUserInfo;
   InitializedMatchingState(this.thisUserInfo);
 }
 
@@ -18,7 +18,7 @@ class InitializingMatchingFailedState extends MatchingState {
 }
 
 class FetchedProfilesToMatchState extends MatchingState {
-  final List<MatchingUserProfileWrapper> matchingProfiles;
+  final List<UserProfile> matchingProfiles;
   FetchedProfilesToMatchState(this.matchingProfiles);
 }
 
@@ -32,7 +32,7 @@ class LikingUserState extends MatchingState {}
 
 class LikingUserFailedState extends MatchingState {
   //so you can undo like
-  final MatchingUserProfileWrapper likedUserProfile;
+  final UserProfile likedUserProfile;
   LikingUserFailedState(this.likedUserProfile);
 }
 

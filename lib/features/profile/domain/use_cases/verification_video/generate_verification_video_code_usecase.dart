@@ -1,5 +1,5 @@
 import 'package:redting/core/utils/service_result.dart';
-import 'package:redting/features/profile/domain/repositories/ProfileRepository.dart';
+import 'package:redting/features/profile/domain/repositories/profile_repository.dart';
 
 class GenerateVideoVerificationCodeUseCase {
   final ProfileRepository profileRepository;

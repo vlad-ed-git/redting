@@ -5,20 +5,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
 import 'package:redting/features/profile/data/entities/user_verification_video_entity.dart';
 import 'package:redting/features/profile/data/utils/compressors/image_compressor.dart';
 import 'package:redting/features/profile/data/utils/compressors/video_compressor.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/res/string_arrays.dart';
-import 'package:redting/res/strings.dart';
 
 const String userProfileCollection = "users";
 const String archivedProfilesCollection = "archived_users";
 const String usersProfilePhotosBucket = "profilePhotos";
 const String thisUserProfilePhotosBucket = "myProfilePhotos";
+const String datingProfilesPhotosBucket = "datingProfilePhotos";
+const String thisUserDatingProfilePhotosBucket = "myDatingProfilePhotos";
 
 const String verificationVideosCollection = "users_verification_videos";
 const String usersVerificationVideosBucket = "verificationVideos";
@@ -39,56 +40,51 @@ class FireProfile implements RemoteProfileDataSource {
       return profile;
     } catch (e) {
       if (kDebugMode) {
-        print("============== fire $e ============");
+        print("============== createUserProfile --firestore $e ============");
       }
       return null;
     }
   }
 
   @override
-  Future<OperationResult> getUserProfile() async {
+  Future<UserProfile?> getUserProfile() async {
     try {
       String? uid = _auth.currentUser?.uid;
-      if (uid == null) {
-        return OperationResult(
-            errorMessage: loadingAuthUserErr, errorOccurred: true);
-      }
+      if (uid == null) return null;
+
       var doc =
           await _fireStore.collection(userProfileCollection).doc(uid).get();
       UserProfile? profile;
       if (doc.data() != null) {
         profile = UserProfileEntity.fromJson(doc.data()!);
       }
-      return OperationResult(data: profile);
+      return profile;
     } catch (e) {
       if (kDebugMode) {
-        print("============== $e ============");
+        print("============== getUserProfile fire store $e ============");
       }
-      return OperationResult(
-          errorOccurred: true, errorMessage: getProfileError);
+      return null;
     }
   }
 
   @override
-  Future<OperationResult> updateUserProfile(
-      {required UserProfile profile}) async {
+  Future<UserProfile?> updateUserProfile({required UserProfile profile}) async {
     try {
       await _fireStore
           .collection(userProfileCollection)
           .doc(profile.userId)
           .update(profile.toJson());
-      return OperationResult(data: profile);
+      return profile;
     } catch (e) {
       if (kDebugMode) {
-        print("============== $e ============");
+        print("============== updateUserProfile fire store $e ============");
       }
-      return OperationResult(
-          errorMessage: updateProfileError, errorOccurred: true);
+      return null;
     }
   }
 
   @override
-  Future<OperationResult> uploadProfilePhoto(
+  Future<String?> uploadProfilePhoto(
       {required File file,
       required String filename,
       required ImageCompressor imageCompressor}) async {
@@ -100,19 +96,18 @@ class FireProfile implements RemoteProfileDataSource {
           "$usersProfilePhotosBucket/${_auth.currentUser!.uid}/$thisUserProfilePhotosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}_$filename");
       await photoRef.putFile(fileToUpload);
       String downloadUrl = await photoRef.getDownloadURL();
-      return OperationResult(data: downloadUrl);
+      return downloadUrl;
     } catch (e) {
       if (kDebugMode) {
-        print("============== $e ============");
+        print("============== uploadProfilePhoto fire store $e ============");
       }
-      return OperationResult(
-          errorMessage: uploadingPhotoErr, errorOccurred: true);
+      return null;
     }
   }
 
   /// VERIFICATION VIDEO
   @override
-  Future<OperationResult> generateVerificationWord() async {
+  Future<String?> generateVerificationWord() async {
     try {
       final List<int> possibleWordsLengths = [6, 8, 10]; //must be evens
 
@@ -126,17 +121,18 @@ class FireProfile implements RemoteProfileDataSource {
         String randomVowel = vowels[random.nextInt(vowels.length)];
         verificationWord = "$verificationWord$randomConsonant$randomVowel";
       }
-      return OperationResult(data: verificationWord);
+      return verificationWord;
     } catch (e) {
       if (kDebugMode) {
-        print("============== $e ============");
+        print(
+            "============== generateVerificationWord fire store $e ============");
       }
-      return OperationResult(errorOccurred: true, errorMessage: "$e");
+      return null;
     }
   }
 
   @override
-  Future<OperationResult> uploadVerificationVideo(
+  Future<UserVerificationVideo?> compressAndUploadVerificationVideo(
       {required File file,
       required String verificationCode,
       required VideoCompressor compressor}) async {
@@ -145,12 +141,11 @@ class FireProfile implements RemoteProfileDataSource {
           await compressor.compressVideoReturnCompressedOrOg(file);
       final storageRef = _storage.ref();
       final videoRef = storageRef.child(
-          "$usersVerificationVideosBucket/${_auth.currentUser!.uid}/$thisUserVerificationVideosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}_verification_video${verificationCode.trim()}");
+          "$usersVerificationVideosBucket/${_auth.currentUser!.uid}/$thisUserVerificationVideosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}_vv_${verificationCode.trim()}");
       await videoRef.putFile(fileToUpload);
       String verificationVideoUrl = await videoRef.getDownloadURL();
       UserVerificationVideoEntity usersVerificationVideo =
           UserVerificationVideoEntity(
-              userId: _auth.currentUser!.uid,
               verificationCode: verificationCode,
               videoUrl: verificationVideoUrl);
       compressor.dispose();
@@ -158,31 +153,51 @@ class FireProfile implements RemoteProfileDataSource {
           .collection(verificationVideosCollection)
           .doc(_auth.currentUser!.uid)
           .set(usersVerificationVideo.toJson());
-      return OperationResult(data: usersVerificationVideo);
+      return usersVerificationVideo;
     } catch (e) {
       if (kDebugMode) {
-        print("============== $e ============");
+        print(
+            "==============  compressAndUploadVerificationVideo fire store $e ============");
       }
       compressor.dispose();
-      return OperationResult(
-          errorMessage: errorUploadingVerificationVideo, errorOccurred: true);
+      return null;
     }
   }
 
   @override
-  Future<OperationResult> deleteVerificationVideo() async {
+  Future<bool> deleteVerificationVideo() async {
     try {
       await _fireStore
           .collection(verificationVideosCollection)
           .doc(_auth.currentUser!.uid)
           .delete();
-      return OperationResult();
+      return true; //success
     } catch (e) {
       if (kDebugMode) {
-        print("============== $e ============");
+        print(
+            "============== deleteVerificationVideo fire store $e ============");
       }
-      return OperationResult(
-          errorOccurred: true, errorMessage: deletingVerificationVideoFailed);
+      return false; // fail
+    }
+  }
+
+  @override
+  Future<String?> uploadDatingPhoto(File photo, String filename, String userId,
+      ImageCompressor imageCompressor) async {
+    try {
+      final fileToUpload =
+          await imageCompressor.compressImageAndGetCompressedOrOg(photo);
+      final storageRef = _storage.ref();
+      final photoRef = storageRef.child(
+          "$datingProfilesPhotosBucket/$userId/$thisUserDatingProfilePhotosBucket/${DateTime.now().millisecondsSinceEpoch.toString()}_$filename");
+      await photoRef.putFile(fileToUpload);
+      String downloadUrl = await photoRef.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      if (kDebugMode) {
+        print("===== uploadDatingPhoto firestore exception raised $e ====");
+      }
+      return null;
     }
   }
 }

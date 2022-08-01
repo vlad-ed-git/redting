@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/matching/domain/use_cases/matching_usecases.dart';
-import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
+import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/res/strings.dart';
 
 part 'matches_listener_event.dart';
@@ -30,12 +30,11 @@ class MatchesListenerBloc
     OperationResult result =
         await matchingUseCases.getThisUsersInfoUseCase.execute();
 
-    if (result.errorOccurred || result.data is! MatchingUserProfileWrapper) {
+    if (result.errorOccurred || result.data is! UserProfile) {
       emit(LoadingThisUserProfileFailedState(
           result.errorMessage ?? loadingAuthUserErr));
     } else {
-      emit(LoadedThisUserProfileState(
-          result.data as MatchingUserProfileWrapper));
+      emit(LoadedThisUserProfileState(result.data as UserProfile));
     }
   }
 }

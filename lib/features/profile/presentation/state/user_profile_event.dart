@@ -53,3 +53,26 @@ class CreateUserProfileEvent extends UserProfileEvent {
     required this.verificationVideo,
   });
 }
+
+//adding dating info
+class AddDatingInfoEvent extends UserProfileEvent {
+  final UserProfile profile;
+  final List<File> photoFiles;
+  final int minAgePreference;
+  final int maxAgePreference;
+  final UserGender? genderPreference;
+  final List<SexualOrientation> userOrientation;
+  final bool makeMyOrientationPublic;
+  final bool onlyShowMeOthersOfSameOrientation;
+  final List<String> datingPicsFileNames;
+  AddDatingInfoEvent(
+      this.profile,
+      this.photoFiles,
+      this.minAgePreference,
+      this.maxAgePreference,
+      this.genderPreference,
+      this.userOrientation,
+      this.makeMyOrientationPublic,
+      this.onlyShowMeOthersOfSameOrientation,
+      this.datingPicsFileNames);
+}

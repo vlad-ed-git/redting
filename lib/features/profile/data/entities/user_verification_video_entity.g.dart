@@ -18,21 +18,18 @@ class UserVerificationVideoEntityAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserVerificationVideoEntity(
-      userId: fields[0] as String,
-      verificationCode: fields[1] as String,
-      videoUrl: fields[2] as String,
+      verificationCode: fields[0] as String,
+      videoUrl: fields[1] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserVerificationVideoEntity obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.userId)
-      ..writeByte(1)
-      ..write(obj.verificationCode)
       ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.verificationCode)
+      ..writeByte(1)
       ..write(obj.videoUrl);
   }
 
@@ -53,7 +50,6 @@ class UserVerificationVideoEntityAdapter
 
 UserVerificationVideoEntity _$UserVerificationVideoEntityFromJson(Map json) =>
     UserVerificationVideoEntity(
-      userId: json['userId'] as String,
       verificationCode: json['verificationCode'] as String,
       videoUrl: json['videoUrl'] as String,
     );
@@ -61,7 +57,6 @@ UserVerificationVideoEntity _$UserVerificationVideoEntityFromJson(Map json) =>
 Map<String, dynamic> _$UserVerificationVideoEntityToJson(
         UserVerificationVideoEntity instance) =>
     <String, dynamic>{
-      'userId': instance.userId,
       'verificationCode': instance.verificationCode,
       'videoUrl': instance.videoUrl,
     };

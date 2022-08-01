@@ -4,8 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
 import 'package:redting/core/components/progress/circular_progress.dart';
-import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/matching/presentation/components/swipeable_profile_components/container_card.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
@@ -205,7 +205,7 @@ class _DetailedViewCardState extends State<DetailedViewCard> {
               child: Padding(
                 padding: const EdgeInsets.all(paddingSm),
                 child: Text(
-                  sexualOrientationMap[e] ?? '',
+                  sexualOrientationToStrMap[e] ?? '',
                   style: appTextTheme.button?.copyWith(color: Colors.white),
                 ),
               ),

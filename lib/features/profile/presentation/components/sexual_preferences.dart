@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
 import 'package:redting/res/string_maps.dart';
@@ -101,7 +101,7 @@ class _SexualPreferencesState extends State<SexualPreferences> {
   }
 
   List<Widget> _getPreferences() {
-    List<Widget> orientationWidgets = sexualOrientationMap.entries
+    List<Widget> orientationWidgets = sexualOrientationToStrMap.entries
         .map((e) => _getPreference(e.value, e.key))
         .toList();
     return orientationWidgets;

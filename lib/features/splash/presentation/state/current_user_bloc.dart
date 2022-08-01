@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
-import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/splash/domain/current_user_status_util.dart';
 import 'package:redting/features/splash/domain/usecases/fetch_current_user.dart';
@@ -25,8 +24,7 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     if (status.errorFetchingStatus) {
       emit(ErrorLoadingCurrentUserState(loadingAuthUserErr));
     } else {
-      emit(LoadedCurrentUserState(
-          status.authUser, status.profile, status.datingProfile));
+      emit(LoadedCurrentUserState(status.authUser, status.profile));
     }
   }
 }

@@ -1,22 +1,24 @@
 import 'dart:io';
 
-import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/data/utils/compressors/image_compressor.dart';
 import 'package:redting/features/profile/data/utils/compressors/video_compressor.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 
 abstract class RemoteProfileDataSource {
-  Future<OperationResult> getUserProfile();
-  Future<OperationResult> updateUserProfile({required UserProfile profile});
+  Future<UserProfile?> getUserProfile();
+  Future<UserProfile?> updateUserProfile({required UserProfile profile});
   Future<UserProfile?> createUserProfile({required UserProfile profile});
-  Future<OperationResult> uploadProfilePhoto(
+  Future<String?> uploadProfilePhoto(
       {required File file,
       required String filename,
       required ImageCompressor imageCompressor});
-  Future<OperationResult> uploadVerificationVideo(
+  Future<UserVerificationVideo?> compressAndUploadVerificationVideo(
       {required File file,
       required String verificationCode,
       required VideoCompressor compressor});
-  Future<OperationResult> generateVerificationWord();
-  Future<OperationResult> deleteVerificationVideo();
+  Future<String?> generateVerificationWord();
+  Future<bool> deleteVerificationVideo();
+  Future<String?> uploadDatingPhoto(File photo, String filename, String userId,
+      ImageCompressor imageCompressor);
 }

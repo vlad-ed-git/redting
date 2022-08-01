@@ -1,10 +1,9 @@
 import 'package:redting/core/utils/service_result.dart';
-import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
+import 'package:redting/features/profile/domain/models/user_profile.dart';
 
 abstract class MatchingRepository {
   Future<OperationResult> getThisUserInfo();
-  Future<OperationResult> getDatingProfiles(
-      MatchingUserProfileWrapper thisUserProfiles);
+  Future<OperationResult> getProfilesToMatchWith(UserProfile thisUserProfiles);
   Future<OperationResult> likeUser(String thisUserId, String likedUserId,
       String likedUserName, String likedUserProfilePhotoUrl);
   Future<OperationResult> sendDailyFeedback(

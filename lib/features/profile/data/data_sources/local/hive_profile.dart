@@ -1,50 +1,54 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:redting/core/data/hive_names.dart';
-import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/data/data_sources/local/local_profile_source.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
-import 'package:redting/res/strings.dart';
 
 class UserProfileHive implements LocalProfileDataSource {
   final Box _profileHiveBox = Hive.box<UserProfile?>(userProfileBox);
 
   @override
-  Future<OperationResult> cacheAndReturnUserProfile(
+  Future<UserProfile?> cacheAndReturnUserProfile(
       {required UserProfile profile}) async {
     try {
       await _profileHiveBox.put(userProfileKey, profile);
-      return OperationResult(data: profile);
+      return profile;
     } catch (e) {
-      print("============ $e ===========");
-      return OperationResult(
-          errorMessage: createProfileError, errorOccurred: true);
+      if (kDebugMode) {
+        print(
+            "============ cacheAndReturnUserProfile exception hive $e ===========");
+      }
+      return null;
     }
   }
 
   @override
-  Future<OperationResult> clearUserProfileCache() async {
+  Future<bool> clearUserProfileCache() async {
     try {
       await _profileHiveBox.delete(userProfileKey);
-      return OperationResult();
+      return true; //success
     } catch (e) {
-      print("============ $e ===========");
-      return OperationResult(
-          errorMessage: deleteProfileError, errorOccurred: true);
+      if (kDebugMode) {
+        print(
+            "============  clearUserProfileCache exception hive $e ===========");
+      }
+      return false;
     }
   }
 
   @override
-  Future<OperationResult> updateUserProfileCache(
+  Future<UserProfile?> updateUserProfileCache(
       {required UserProfile profile}) async {
     try {
-      OperationResult result = await clearUserProfileCache();
-      if (result.errorOccurred) return result;
-
+      bool isCleared = await clearUserProfileCache();
+      if (!isCleared) return null;
       return await cacheAndReturnUserProfile(profile: profile);
     } catch (e) {
-      print("============ $e ===========");
-      return OperationResult(
-          errorMessage: updateProfileError, errorOccurred: true);
+      if (kDebugMode) {
+        print(
+            "============ updateUserProfileCache exception hive $e ===========");
+      }
+      return null;
     }
   }
 
@@ -53,7 +57,9 @@ class UserProfileHive implements LocalProfileDataSource {
     try {
       return await _profileHiveBox.get(userProfileKey) as UserProfile?;
     } catch (e) {
-      print("============ $e ===========");
+      if (kDebugMode) {
+        print("============ $e ===========");
+      }
       return null;
     }
   }

@@ -11,8 +11,8 @@ class ListeningToMatchesState extends MatchesListenerState {
 }
 
 class LoadedThisUserProfileState extends MatchesListenerState {
-  final MatchingUserProfileWrapper thisUserProfiles;
-  LoadedThisUserProfileState(this.thisUserProfiles);
+  final UserProfile thisUserProfile;
+  LoadedThisUserProfileState(this.thisUserProfile);
 }
 
 class LoadingThisUserProfileFailedState extends MatchesListenerState {

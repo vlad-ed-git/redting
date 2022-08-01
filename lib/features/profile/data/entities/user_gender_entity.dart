@@ -14,7 +14,7 @@ enum UserGenderEntity {
   stated
 }
 
-UserGender mapUserGenderEntityToDomainModel(UserGenderEntity genderEntity) {
+UserGender genderEntityToGenderModel(UserGenderEntity genderEntity) {
   switch (genderEntity) {
     case UserGenderEntity.male:
       return UserGender.male;
@@ -25,7 +25,7 @@ UserGender mapUserGenderEntityToDomainModel(UserGenderEntity genderEntity) {
   }
 }
 
-UserGenderEntity mapUserGenderToDataEntity(UserGender gender) {
+UserGenderEntity genderModelToGenderEntity(UserGender gender) {
   switch (gender) {
     case UserGender.male:
       return UserGenderEntity.male;

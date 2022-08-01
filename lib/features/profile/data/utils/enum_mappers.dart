@@ -1,5 +1,5 @@
-import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
+import 'package:redting/features/profile/data/entities/user_gender_entity.dart';
 
 const userGenderToStringVal = {
   UserGender.male: 'male',

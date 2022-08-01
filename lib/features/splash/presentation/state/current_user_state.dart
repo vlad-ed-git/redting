@@ -10,8 +10,7 @@ class LoadingCurrentUserState extends CurrentUserState {}
 class LoadedCurrentUserState extends CurrentUserState {
   final AuthUser? authUser;
   final UserProfile? userProfile;
-  final DatingProfile? datingProfile;
-  LoadedCurrentUserState(this.authUser, this.userProfile, this.datingProfile);
+  LoadedCurrentUserState(this.authUser, this.userProfile);
 }
 
 class ErrorLoadingCurrentUserState extends CurrentUserState {

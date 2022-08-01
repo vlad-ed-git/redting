@@ -3,9 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:redting/core/utils/consts.dart';
 import 'package:redting/core/utils/service_result.dart';
-import 'package:redting/features/dating_profile/data/data_sources/remote/fire_dating_profile.dart';
-import 'package:redting/features/dating_profile/data/entities/dating_profile_entity.dart';
-import 'package:redting/features/dating_profile/domain/models/dating_profile.dart';
 import 'package:redting/features/matching/data/data_sources/remote/remote_matching_data_source.dart';
 import 'package:redting/features/matching/data/entities/ice_breaker_messages_entity.dart';
 import 'package:redting/features/matching/data/entities/liked_user_entity.dart';
@@ -14,10 +11,10 @@ import 'package:redting/features/matching/domain/models/daily_user_feedback.dart
 import 'package:redting/features/matching/domain/models/ice_breaker_msg.dart';
 import 'package:redting/features/matching/domain/models/liked_user.dart';
 import 'package:redting/features/matching/domain/models/matching_profiles.dart';
-import 'package:redting/features/matching/domain/utils/matching_user_profile_wrapper.dart';
 import 'package:redting/features/profile/data/data_sources/remote/fire_profile.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
 import 'package:redting/features/profile/data/utils/enum_mappers.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/res/strings.dart';
@@ -32,7 +29,7 @@ const String dailyUserFeedbackCollection = "daily_user_feedback";
 class FireMatchingDataSource implements RemoteMatchingDataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-  DocumentSnapshot<Object?>? _startUserProfileMatchAfterDoc;
+  DocumentSnapshot<Object?>? _lastDocInFetchedProfilesToMatchWith;
   DocumentSnapshot<Object?>? _startMatchesAfterDoc;
 
   @override
@@ -166,132 +163,43 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
     }
   }
 
-  /// GETTING PROFILES
-  Query<Map<String, dynamic>> _getQueryForFirstUserProfileMatchesBatch(
-    int lessThanAge,
-    int moreThanAge,
-    UserGender? myGenderPreference,
-  ) {
-    if (myGenderPreference != null) {
-      return _fireStore
-          .collection(userProfileCollection)
-          .where(UserProfileEntity.ageFieldName, isLessThan: lessThanAge)
-          .where(UserProfileEntity.ageFieldName, isGreaterThan: moreThanAge)
-          .where(UserProfileEntity.genderFieldName,
-              isEqualTo: userGenderToStringVal[myGenderPreference])
-          .where(UserProfileEntity.isBannedFieldName, isEqualTo: false)
-          .orderBy(UserProfileEntity.ageFieldName, descending: true)
-          .limit(queryPageResultsSize);
-    } else {
-      return _fireStore
-          .collection(userProfileCollection)
-          .where(UserProfileEntity.ageFieldName, isLessThan: lessThanAge)
-          .where(UserProfileEntity.ageFieldName, isGreaterThan: moreThanAge)
-          .where(UserProfileEntity.isBannedFieldName, isEqualTo: false)
-          .orderBy(UserProfileEntity.ageFieldName, descending: true)
-          .limit(queryPageResultsSize);
-    }
-  }
-
-  Query<Map<String, dynamic>> _getQueryForNextUserProfileMatchesBatch(
-      int lessThanAge,
-      int moreThanAge,
-      UserGender? myGenderPreference,
-      DocumentSnapshot<Object?> startUserProfileMatchAfterDoc) {
-    if (myGenderPreference != null) {
-      return _fireStore
-          .collection(userProfileCollection)
-          .where(UserProfileEntity.ageFieldName, isLessThan: lessThanAge)
-          .where(UserProfileEntity.ageFieldName, isGreaterThan: moreThanAge)
-          .where(UserProfileEntity.genderFieldName,
-              isEqualTo: userGenderToStringVal[myGenderPreference])
-          .where(UserProfileEntity.isBannedFieldName, isEqualTo: false)
-          .orderBy(UserProfileEntity.ageFieldName, descending: true)
-          .startAfterDocument(startUserProfileMatchAfterDoc)
-          .limit(queryPageResultsSize);
-    } else {
-      return _fireStore
-          .collection(userProfileCollection)
-          .where(UserProfileEntity.ageFieldName, isLessThan: lessThanAge)
-          .where(UserProfileEntity.ageFieldName, isGreaterThan: moreThanAge)
-          .where(UserProfileEntity.isBannedFieldName, isEqualTo: false)
-          .orderBy(UserProfileEntity.ageFieldName, descending: true)
-          .startAfterDocument(startUserProfileMatchAfterDoc)
-          .limit(queryPageResultsSize);
-    }
-  }
-
-  DatingProfile? _checkIfMatchingPref(DatingProfile matchingDatingProfile,
-      UserProfile thisUsersProfile, DatingProfile thisUsersDatingProfile) {
-    ///filter by age
-
-    if (matchingDatingProfile.minAgePreference <= thisUsersProfile.age &&
-        matchingDatingProfile.maxAgePreference >= thisUsersProfile.age) {
-      ///filter by gender preference
-      UserGender? otherUserGenderPref =
-          matchingDatingProfile.getGenderPreferences();
-      UserGender? thisUsersGender = thisUsersProfile.getGender();
-      if (otherUserGenderPref == null ||
-          otherUserGenderPref == thisUsersGender) {
-        bool filterByThisUsersOrientation =
-            thisUsersDatingProfile.onlyShowMeOthersOfSameOrientation;
-        bool otherUserCaresAboutOrientation =
-            matchingDatingProfile.onlyShowMeOthersOfSameOrientation;
-
-        //if both parties do not care about orientation
-        if (!filterByThisUsersOrientation && !otherUserCaresAboutOrientation) {
-          return matchingDatingProfile;
-        }
-
-        ///filter by orientation
-        var thisUsersSexOrientation =
-            thisUsersDatingProfile.getUserSexualOrientation().toSet();
-        var otherUsersSexOrientation =
-            matchingDatingProfile.getUserSexualOrientation().toSet();
-        var intersection =
-            thisUsersSexOrientation.intersection(otherUsersSexOrientation);
-        if (intersection.isNotEmpty) {
-          return matchingDatingProfile;
-        }
-        return null;
-      }
-      return null;
-    }
-    return null;
-  }
-
+  /// GETTING PROFILES TO SWIPE
   @override
-  Future<List<MatchingUserProfileWrapper>?> getDatingProfiles(
-      UserProfile thisUsersProfile,
-      DatingProfile thisUsersDatingProfile) async {
+  Future<List<UserProfile>?> getProfilesToMatchWith(
+    UserProfile userProfile,
+  ) async {
     try {
-      UserGender? myGenderPreference =
-          thisUsersDatingProfile.getGenderPreferences();
-      int lessThanAge = thisUsersDatingProfile.maxAgePreference + 1;
-      int moreThanAge = thisUsersDatingProfile.minAgePreference - 1;
+      UserGender? usersGenderPreference = userProfile.getGenderPreferences();
+      int lessThanAge = userProfile.maxAgePreference + 1;
+      int moreThanAge = userProfile.minAgePreference - 1;
 
       Query<Map<String, dynamic>> query;
-      if (_startUserProfileMatchAfterDoc != null) {
+      if (_lastDocInFetchedProfilesToMatchWith != null) {
         //get the next batch
-        query = _getQueryForNextUserProfileMatchesBatch(lessThanAge,
-            moreThanAge, myGenderPreference, _startUserProfileMatchAfterDoc!);
+        query = _getQueryForProfilesToMatchAfterWithBatch(
+            lessThanAge: lessThanAge,
+            moreThanAge: moreThanAge,
+            usersGenderPreference: usersGenderPreference,
+            startAfterDoc: _lastDocInFetchedProfilesToMatchWith!);
       } else {
         //get the next batch
-        query = _getQueryForFirstUserProfileMatchesBatch(
-            lessThanAge, moreThanAge, myGenderPreference);
+        query = _getQueryForFirstBatchProfilesToMatchWith(
+            lessThanAge: lessThanAge,
+            moreThanAge: moreThanAge,
+            usersGenderPreference: usersGenderPreference);
       }
 
-      QuerySnapshot<Map<String, dynamic>> matchingUserProfiles =
-          await query.get();
+      QuerySnapshot<Map<String, dynamic>> fittingProfiles = await query.get();
 
       //track the last one
-      if (matchingUserProfiles.docs.isNotEmpty) {
-        _startUserProfileMatchAfterDoc = matchingUserProfiles.docs.last;
+      if (fittingProfiles.docs.isNotEmpty) {
+        _lastDocInFetchedProfilesToMatchWith = fittingProfiles.docs.last;
       }
 
-      /// fetch and filter out dating profiles
-      return await _filterByDatingProfilePreferences(
-          matchingUserProfiles, thisUsersProfile, thisUsersDatingProfile);
+      return _filterProfilesToMatchWithByGenderAndSexPreferences(
+        fittingProfiles,
+        userProfile,
+      );
     } catch (e) {
       if (kDebugMode) {
         print("================= getDatingProfiles $e =============== ");
@@ -300,40 +208,126 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
     }
   }
 
-  _filterByDatingProfilePreferences(
-      QuerySnapshot<Map<String, dynamic>> matchingUserProfiles,
-      UserProfile thisUsersProfile,
-      DatingProfile thisUsersDatingProfile) async {
-    List<MatchingUserProfileWrapper> matchingDatingProfilesList = [];
-    for (var snapshot in matchingUserProfiles.docs) {
-      try {
-        UserProfile matchingUserProfile =
-            UserProfileEntity.fromJson(snapshot.data());
+  List<UserProfile> _filterProfilesToMatchWithByGenderAndSexPreferences(
+    QuerySnapshot<Map<String, dynamic>> fittingProfiles,
+    UserProfile userProfile,
+  ) {
+    int usersAge = userProfile.age;
+    UserGender? usersGender = userProfile.getGender();
+    bool restrictSexualOrientation =
+        userProfile.onlyShowMeOthersOfSameOrientation;
+    List<SexualOrientation> usersSexOrientation =
+        userProfile.getUserSexualOrientation();
 
-        if (matchingUserProfile.userId == thisUsersProfile.userId) {
-          continue; //skip this user if matched with self
-        }
+    List<UserProfile> fittingProfilesList = [];
+    for (var snapshot in fittingProfiles.docs) {
+      UserProfile canMatchWith = UserProfileEntity.fromJson(snapshot.data());
 
-        DocumentSnapshot<Map<String, dynamic>> foundDatingProfile =
-            await _fireStore
-                .collection(datingProfilesCollection)
-                .doc(matchingUserProfile.userId)
-                .get();
-        if (foundDatingProfile.data() != null) {
-          DatingProfile matchingDatingProfile =
-              DatingProfileEntity.fromJson(foundDatingProfile.data()!);
-          DatingProfile? foundMatch = _checkIfMatchingPref(
-              matchingDatingProfile, thisUsersProfile, thisUsersDatingProfile);
-          if (foundMatch != null) {
-            matchingDatingProfilesList.add(MatchingUserProfileWrapper(
-                matchingUserProfile, matchingDatingProfile));
-          }
+      if (kDebugMode) {
+        print(
+            "==== comparing user ${userProfile.toJson()} with ${canMatchWith.toJson()} ==");
+      }
+
+      if (canMatchWith.isSameAs(userProfile)) {
+        if (kDebugMode) {
+          print("==== has matched with self ==");
         }
-      } catch (_) {
+        continue; //skip the rest - user is self
+      }
+
+      /// match age
+      if (canMatchWith.minAgePreference > usersAge ||
+          canMatchWith.maxAgePreference < usersAge) {
+        if (kDebugMode) {
+          print("==== does not meet other users age criteria ==");
+        }
         continue;
       }
+
+      /// match gender?
+      UserGender? otherUserGenderPref = canMatchWith.getGenderPreferences();
+      bool isSuitableGender =
+          otherUserGenderPref == null || otherUserGenderPref == usersGender;
+      bool bothDoNotCareAboutSexualOrientation =
+          canMatchWith.onlyShowMeOthersOfSameOrientation &&
+              restrictSexualOrientation;
+      if (isSuitableGender && bothDoNotCareAboutSexualOrientation) {
+        fittingProfilesList.add(canMatchWith);
+        if (kDebugMode) {
+          print("==== suitable gender & do not care about sex ==");
+        }
+        continue; //skip the rest
+      }
+
+      ///filter by orientation
+      final thisUsersSexOrientationSet = usersSexOrientation.toSet();
+      final otherUsersSexOrientationSet =
+          canMatchWith.getUserSexualOrientation().toSet();
+      final intersectionOfSexOrientationPreferences =
+          thisUsersSexOrientationSet.intersection(otherUsersSexOrientationSet);
+      bool matchingSexOrientation =
+          intersectionOfSexOrientationPreferences.isNotEmpty;
+      if (isSuitableGender && matchingSexOrientation) {
+        if (kDebugMode) {
+          print("==== suitable gender & sex orientation matches ==");
+        }
+        fittingProfilesList.add(canMatchWith);
+      }
     }
-    return matchingDatingProfilesList;
+    return fittingProfilesList;
+  }
+
+  Query<Map<String, dynamic>> _getQueryForProfilesToMatchAfterWithBatch(
+      {required int lessThanAge,
+      required int moreThanAge,
+      UserGender? usersGenderPreference,
+      required DocumentSnapshot<Object?> startAfterDoc}) {
+    if (usersGenderPreference != null) {
+      return _fireStore
+          .collection(userProfileCollection)
+          .where(UserProfileEntity.ageFieldName, isLessThan: lessThanAge)
+          .where(UserProfileEntity.ageFieldName, isGreaterThan: moreThanAge)
+          .where(UserProfileEntity.genderFieldName,
+              isEqualTo: userGenderToStringVal[usersGenderPreference])
+          .where(UserProfileEntity.isBannedFieldName, isEqualTo: false)
+          .orderBy(UserProfileEntity.ageFieldName, descending: true)
+          .startAfterDocument(startAfterDoc)
+          .limit(queryPageResultsSize);
+    } else {
+      return _fireStore
+          .collection(userProfileCollection)
+          .where(UserProfileEntity.ageFieldName, isLessThan: lessThanAge)
+          .where(UserProfileEntity.ageFieldName, isGreaterThan: moreThanAge)
+          .where(UserProfileEntity.isBannedFieldName, isEqualTo: false)
+          .orderBy(UserProfileEntity.ageFieldName, descending: true)
+          .startAfterDocument(startAfterDoc)
+          .limit(queryPageResultsSize);
+    }
+  }
+
+  Query<Map<String, dynamic>> _getQueryForFirstBatchProfilesToMatchWith(
+      {required int lessThanAge,
+      required int moreThanAge,
+      UserGender? usersGenderPreference}) {
+    if (usersGenderPreference != null) {
+      return _fireStore
+          .collection(userProfileCollection)
+          .where(UserProfileEntity.ageFieldName, isLessThan: lessThanAge)
+          .where(UserProfileEntity.ageFieldName, isGreaterThan: moreThanAge)
+          .where(UserProfileEntity.genderFieldName,
+              isEqualTo: userGenderToStringVal[usersGenderPreference])
+          .where(UserProfileEntity.isBannedFieldName, isEqualTo: false)
+          .orderBy(UserProfileEntity.ageFieldName, descending: true)
+          .limit(queryPageResultsSize);
+    } else {
+      return _fireStore
+          .collection(userProfileCollection)
+          .where(UserProfileEntity.ageFieldName, isLessThan: lessThanAge)
+          .where(UserProfileEntity.ageFieldName, isGreaterThan: moreThanAge)
+          .where(UserProfileEntity.isBannedFieldName, isEqualTo: false)
+          .orderBy(UserProfileEntity.ageFieldName, descending: true)
+          .limit(queryPageResultsSize);
+    }
   }
 
   /// user feedback

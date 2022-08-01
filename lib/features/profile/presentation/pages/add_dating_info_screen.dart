@@ -9,29 +9,29 @@ import 'package:redting/core/components/screens/screen_container.dart';
 import 'package:redting/core/components/snack/snack.dart';
 import 'package:redting/core/components/text/app_name_std_style.dart';
 import 'package:redting/core/utils/consts.dart';
-import 'package:redting/features/auth/domain/models/auth_user.dart';
-import 'package:redting/features/dating_profile/domain/models/sexual_orientation.dart';
-import 'package:redting/features/dating_profile/presentation/components/age_preference_slider.dart';
-import 'package:redting/features/dating_profile/presentation/components/dating_pics.dart';
-import 'package:redting/features/dating_profile/presentation/components/gender_preferences.dart';
-import 'package:redting/features/dating_profile/presentation/components/sexual_preferences.dart';
-import 'package:redting/features/dating_profile/presentation/state/dating_profile_bloc.dart';
+import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
+import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/presentation/components/age_preference_slider.dart';
+import 'package:redting/features/profile/presentation/components/dating_pics.dart';
+import 'package:redting/features/profile/presentation/components/gender_preferences.dart';
+import 'package:redting/features/profile/presentation/components/sexual_preferences.dart';
+import 'package:redting/features/profile/presentation/state/user_profile_bloc.dart';
 import 'package:redting/res/dimens.dart';
+import 'package:redting/res/fonts.dart';
 import 'package:redting/res/routes.dart';
 import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
-class CreateDatingProfileScreen extends StatefulWidget {
-  const CreateDatingProfileScreen({Key? key}) : super(key: key);
+class AddDatingInfoScreen extends StatefulWidget {
+  const AddDatingInfoScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreateDatingProfileScreen> createState() =>
-      _CreateDatingProfileScreenState();
+  State<AddDatingInfoScreen> createState() => _AddDatingInfoScreenState();
 }
 
-class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
-  late AuthUser loggedInUser;
+class _AddDatingInfoScreenState extends State<AddDatingInfoScreen> {
+  late UserProfile userProfile;
   bool _isSavingProfile = false;
   List<File> _datingPicsFiles = [];
   List<String> _datingPicsFileNames = [];
@@ -42,13 +42,20 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
   ];
   bool _makeMyOrientationPublic = false;
   bool _showMeMyOrientationOnly = false;
-  DatingProfileBloc? _eventDispatcher;
+  UserProfileBloc? _eventDispatcher;
 
   @override
   Widget build(BuildContext context) {
     RouteSettings? settings = ModalRoute.of(context)?.settings;
-    if (settings != null && settings.arguments is AuthUser) {
-      loggedInUser = settings.arguments as AuthUser;
+    if (settings != null && settings.arguments is UserProfile) {
+      userProfile = settings.arguments as UserProfile;
+      _makeMyOrientationPublic = userProfile.makeMyOrientationPublic;
+      _showMeMyOrientationOnly = userProfile.onlyShowMeOthersOfSameOrientation;
+      _myGenderPreference = userProfile.getGender() == UserGender.male
+          ? UserGender.female
+          : (userProfile.getGender() == UserGender.female)
+              ? UserGender.male
+              : null;
     }
 
     var screenHeight = MediaQuery.of(context).size.height;
@@ -56,12 +63,12 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
     return BlocProvider(
         lazy: false,
         create: (BuildContext blocProviderContext) =>
-            GetIt.instance<DatingProfileBloc>(),
-        child: BlocListener<DatingProfileBloc, DatingProfileState>(
+            GetIt.instance<UserProfileBloc>(),
+        child: BlocListener<UserProfileBloc, UserProfileState>(
             listener: _listenToStateChange,
-            child: BlocBuilder<DatingProfileBloc, DatingProfileState>(
+            child: BlocBuilder<UserProfileBloc, UserProfileState>(
                 builder: (blocContext, state) {
-              if (state is DatingProfileInitialState) {
+              if (state is UserProfileInitialState) {
                 _onInitState(blocContext);
               }
 
@@ -108,6 +115,9 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
                                 vertical: paddingMd, horizontal: paddingStd),
                             child: ListBody(
                               children: [
+                                Text(datingPicsHint,
+                                    style: appTextTheme.bodyText1?.copyWith(
+                                        color: appTheme.colorScheme.primary)),
                                 DatingPicsWidget(
                                   onError: (String errMsg) {
                                     _showSnack(errMsg);
@@ -210,8 +220,8 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
             })));
   }
 
-  void _listenToStateChange(BuildContext context, DatingProfileState state) {
-    if (state is CreatingProfileState) {
+  void _listenToStateChange(BuildContext context, UserProfileState state) {
+    if (state is AddingDatingInfoState) {
       if (mounted) {
         setState(() {
           _isSavingProfile = true;
@@ -219,7 +229,7 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
       }
     }
 
-    if (state is CreatedProfileState) {
+    if (state is AddedDatingInfoState) {
       if (mounted) {
         setState(() {
           _isSavingProfile = false;
@@ -228,7 +238,7 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
       Navigator.pushReplacementNamed(context, splashRoute);
     }
 
-    if (state is CreatingProfileFailedState) {
+    if (state is AddingDatingInfoFailedState) {
       if (mounted) {
         setState(() {
           _isSavingProfile = false;
@@ -247,9 +257,9 @@ class _CreateDatingProfileScreenState extends State<CreateDatingProfileScreen> {
       _showSnack(datingProfilePicsMissingErr);
       return;
     }
-    _eventDispatcher ??= BlocProvider.of<DatingProfileBloc>(blocContext);
-    _eventDispatcher?.add(CreateProfileEvent(
-      loggedInUser.userId,
+    _eventDispatcher ??= BlocProvider.of<UserProfileBloc>(blocContext);
+    _eventDispatcher?.add(AddDatingInfoEvent(
+      userProfile,
       _datingPicsFiles,
       _minAge,
       _maxAge,
