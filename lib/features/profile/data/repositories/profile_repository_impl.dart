@@ -77,7 +77,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return OperationResult(errorOccurred: true, errorMessage: bDayNotSet);
     }
 
-    UserProfile profile = _createUserProfileInstance(
+    UserProfile profile = _createNewUserProfileInstance(
         name: name,
         userId: userId,
         profilePhotoUrl: profilePhotoUrl,
@@ -156,38 +156,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return OperationResult(errorOccurred: !isSuccess);
   }
 
-  /// INSTANCE CREATION
-  UserProfile _createUserProfileInstance(
-      {required String name,
-      required String userId,
-      required String profilePhotoUrl,
-      String? genderOther,
-      required UserGender gender,
-      required String bio,
-      required String registerCountry,
-      required String title,
-      required DateTime birthDay,
-      bool isBanned = false,
-      required UserVerificationVideo verificationVideo}) {
-    int age = DateTime.now().year - birthDay.year;
-    return UserProfileEntity(
-        name: name,
-        userId: userId,
-        profilePhotoUrl: profilePhotoUrl,
-        gender: genderModelToGenderEntity(gender),
-        genderOther: genderOther,
-        bio: bio,
-        registerCountry: registerCountry,
-        title: title,
-        createdOn: DateTime.now(),
-        lastUpdatedOn: DateTime.now(),
-        birthDay: birthDay,
-        isBanned: isBanned,
-        age: age,
-        verificationVideo:
-            mapUserVerificationVideoModelToEntity(verificationVideo));
-  }
-
   @override
   Future<UserProfile?> getCachedUserProfile() {
     return localProfileDataSource.getCachedUserProfile();
@@ -249,5 +217,138 @@ class ProfileRepositoryImpl implements ProfileRepository {
           errorOccurred: true, errorMessage: completingDatingProfileErr);
     }
     return _cacheUserProfileAndReturn(updatedProfile);
+  }
+
+  @override
+  Future<OperationResult> updateUserProfile({
+    required UserProfile profile,
+    required String name,
+    required String profilePhotoUrl,
+    required String? genderOther,
+    required UserGender gender,
+    required String bio,
+    required String title,
+    required DateTime birthDay,
+    required String registerCountry,
+  }) async {
+    if (name.isEmpty) {
+      return OperationResult(errorOccurred: true, errorMessage: nameMissingErr);
+    }
+    if (profilePhotoUrl.isEmpty) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: emptyProfilePhotoErr);
+    }
+
+    if (!UserProfile.isValidGender(gender: gender, genderOther: genderOther)) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: noGenderSpecified);
+    }
+    if ((bio.isEmpty || bio.length < UserProfile.userBioMinLen)) {
+      return OperationResult(errorOccurred: true, errorMessage: bioIsEmptyErr);
+    }
+    if (title.isEmpty || title.length < UserProfile.userTitleMinLen) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: titleIsEmptyErr);
+    }
+    if (title.length > UserProfile.userTitleMaxLen) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: titleIsTooLongErr);
+    }
+    if (!UserProfile.isOfLegalAge(birthDay: birthDay)) {
+      return OperationResult(errorOccurred: true, errorMessage: bDayNotSet);
+    }
+
+    UserProfile updatedProfile = _createUpdatedProfileInstance(
+        oldProfile: profile,
+        name: name,
+        profilePhotoUrl: profilePhotoUrl,
+        genderOther: genderOther,
+        gender: gender,
+        bio: bio,
+        title: title,
+        birthDay: birthDay,
+        registerCountry: registerCountry);
+    //remote
+    UserProfile? newProfile = await remoteProfileDataSource.updateUserProfile(
+        profile: updatedProfile);
+    if (newProfile == null) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: updateProfileError);
+    }
+    return await _cacheUserProfileAndReturn(newProfile);
+  }
+
+  /// INSTANCES
+
+  UserProfile _createUpdatedProfileInstance({
+    required UserProfile oldProfile,
+    required String name,
+    required String profilePhotoUrl,
+    required String? genderOther,
+    required UserGender gender,
+    required String bio,
+    required String title,
+    required DateTime birthDay,
+    required String registerCountry,
+  }) {
+    int age = DateTime.now().year - birthDay.year;
+    UserProfile updatedProfile = UserProfileEntity(
+      name: name,
+      userId: oldProfile.userId,
+      profilePhotoUrl: profilePhotoUrl,
+      gender: genderModelToGenderEntity(gender),
+      genderOther: genderOther,
+      bio: bio,
+      registerCountry: registerCountry,
+      title: title,
+      createdOn: oldProfile.createdOn,
+      lastUpdatedOn: DateTime.now(),
+      birthDay: birthDay,
+      isBanned: oldProfile.isBanned,
+      age: age,
+      verificationVideo: mapUserVerificationVideoModelToEntity(
+          oldProfile.getVerificationVideo()),
+    );
+    updatedProfile.datingPhotos = oldProfile.datingPhotos;
+    updatedProfile.makeMyOrientationPublic = oldProfile.makeMyOrientationPublic;
+    updatedProfile.onlyShowMeOthersOfSameOrientation =
+        oldProfile.onlyShowMeOthersOfSameOrientation;
+    updatedProfile.minAgePreference = oldProfile.minAgePreference;
+    updatedProfile.maxAgePreference = oldProfile.maxAgePreference;
+    updatedProfile.setGenderPreferences(oldProfile.getGenderPreferences());
+    updatedProfile
+        .setUserSexualOrientation(oldProfile.getUserSexualOrientation());
+    return updatedProfile;
+  }
+
+  UserProfile _createNewUserProfileInstance(
+      {required String name,
+      required String userId,
+      required String profilePhotoUrl,
+      String? genderOther,
+      required UserGender gender,
+      required String bio,
+      required String registerCountry,
+      required String title,
+      required DateTime birthDay,
+      bool isBanned = false,
+      required UserVerificationVideo verificationVideo}) {
+    int age = DateTime.now().year - birthDay.year;
+    return UserProfileEntity(
+        name: name,
+        userId: userId,
+        profilePhotoUrl: profilePhotoUrl,
+        gender: genderModelToGenderEntity(gender),
+        genderOther: genderOther,
+        bio: bio,
+        registerCountry: registerCountry,
+        title: title,
+        createdOn: DateTime.now(),
+        lastUpdatedOn: DateTime.now(),
+        birthDay: birthDay,
+        isBanned: isBanned,
+        age: age,
+        verificationVideo:
+            mapUserVerificationVideoModelToEntity(verificationVideo));
   }
 }

@@ -100,3 +100,16 @@ class AddedDatingInfoState extends UserProfileState {
   final UserProfile profile;
   AddedDatingInfoState(this.profile);
 }
+
+/// USER PROFILE UPDATING
+class UpdatingUserProfileState extends UserProfileState {}
+
+class UpdatedUserProfileState extends UserProfileState {
+  final UserProfile newProfile;
+  UpdatedUserProfileState(this.newProfile);
+}
+
+class ErrorUpdatingUserProfileState extends UserProfileState {
+  final String errMsg;
+  ErrorUpdatingUserProfileState(this.errMsg);
+}

@@ -45,4 +45,16 @@ abstract class ProfileRepository {
       List<SexualOrientation> userOrientation,
       bool makeMyOrientationPublic,
       bool onlyShowMeOthersOfSameOrientation);
+
+  Future<OperationResult> updateUserProfile({
+    required UserProfile profile,
+    required String name,
+    required String profilePhotoUrl,
+    required String? genderOther,
+    required UserGender gender,
+    required String bio,
+    required String title,
+    required DateTime birthDay,
+    required String registerCountry,
+  });
 }

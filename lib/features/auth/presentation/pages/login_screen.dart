@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/buttons/main_elevated_btn.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
-import 'package:redting/core/components/selectors/country_selector.dart';
+import 'package:redting/core/components/selectors/country_code_selector.dart';
 import 'package:redting/core/components/text_input/outlined_txtfield.dart';
 import 'package:redting/core/components/text_input/six_code_input.dart';
 import 'package:redting/features/auth/presentation/state/auth_user_bloc.dart';
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CountrySelector(
+          CountryCodeSelector(
               selectedCountry: _selectedCountry,
               onCountrySelected: (String country) {
                 setState(() {

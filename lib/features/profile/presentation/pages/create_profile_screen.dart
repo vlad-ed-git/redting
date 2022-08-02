@@ -242,7 +242,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         },
         lbl: createProfileBtn,
         showLoading: _isCreatingUserProfile,
-        flipColors: true,
+        primaryBg: true,
       ),
     );
   }
@@ -574,6 +574,11 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   @override
   void dispose() {
     _eventDispatcher?.close();
+    _nameController.dispose();
+    _titleController.dispose();
+    _bioController.dispose();
+    _otherGenderController.dispose();
+    _bDayController.dispose();
     super.dispose();
   }
 }

@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:redting/res/countries.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
-import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
-class CountrySelector extends StatefulWidget {
+class CountryCodeSelector extends StatefulWidget {
   final String selectedCountry;
   final Function(String country) onCountrySelected;
-  const CountrySelector({
+  const CountryCodeSelector({
     Key? key,
     required this.selectedCountry,
     required this.onCountrySelected,
   }) : super(key: key);
 
   @override
-  State<CountrySelector> createState() => _CountrySelectorState();
+  State<CountryCodeSelector> createState() => _CountryCodeSelectorState();
 }
 
-class _CountrySelectorState extends State<CountrySelector> {
+class _CountryCodeSelectorState extends State<CountryCodeSelector> {
   bool _isShowingPopUp = false;
   void _showCountrySelector() async {
     if (_isShowingPopUp) return;
@@ -78,18 +77,10 @@ class _CountrySelectorState extends State<CountrySelector> {
             borderRadius: BorderRadius.circular(14),
             border: const Border.fromBorderSide(
                 BorderSide(color: Colors.grey, width: 1))),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: paddingStd),
-            child: Text(
-              widget.selectedCountry.isNotEmpty
-                  ? widget.selectedCountry
-                  : selectFromCountryLbl,
-              style: appTextTheme.subtitle1,
-              textAlign: TextAlign.start,
-              overflow: TextOverflow.ellipsis,
-            ),
+        child: Center(
+          child: Text(
+            countryToPhoneCodeMap[widget.selectedCountry] ?? '',
+            style: appTextTheme.headline5,
           ),
         ),
       ),

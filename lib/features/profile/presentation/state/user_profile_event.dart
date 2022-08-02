@@ -76,3 +76,26 @@ class AddDatingInfoEvent extends UserProfileEvent {
       this.onlyShowMeOthersOfSameOrientation,
       this.datingPicsFileNames);
 }
+
+class UpdateUserProfileEvent extends UserProfileEvent {
+  final UserProfile profile;
+  final String name;
+  final String profilePhotoUrl;
+  final String? genderOther;
+  final UserGender gender;
+  final String bio;
+  final String title;
+  final DateTime birthDay;
+  final String registerCountry;
+
+  UpdateUserProfileEvent(
+      {required this.profile,
+      required this.name,
+      required this.profilePhotoUrl,
+      required this.genderOther,
+      required this.gender,
+      required this.bio,
+      required this.title,
+      required this.birthDay,
+      required this.registerCountry});
+}

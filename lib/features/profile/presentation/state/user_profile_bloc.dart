@@ -27,6 +27,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     on<CreateUserProfileEvent>(_onCreateUserProfileEvent);
     on<LoadCachedProfileEvent>(_onLoadCachedProfileFromRemoteEvent);
     on<AddDatingInfoEvent>(_onAddDatingInfoEvent);
+    on<UpdateUserProfileEvent>(_onUpdatingUserProfileEvent);
   }
 
   FutureOr<void> _onLoadUserProfileFromRemoteEvent(
@@ -64,7 +65,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         .execute(file: event.photoFile, filename: event.filename);
 
     if (result.errorOccurred) {
-      emit(UpdatingProfilePhotoFailedState(result.errorMessage ?? uploadingPhotoErr));
+      emit(UpdatingProfilePhotoFailedState(
+          result.errorMessage ?? uploadingPhotoErr));
     } else {
       emit(UpdatedProfilePhotoState(result.data as String));
     }
@@ -159,6 +161,30 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
           result.errorMessage ?? completingDatingProfileErr));
     } else {
       emit(AddedDatingInfoState(result.data as UserProfile));
+    }
+  }
+
+  FutureOr<void> _onUpdatingUserProfileEvent(
+      UpdateUserProfileEvent event, Emitter<UserProfileState> emit) async {
+    emit(UpdatingUserProfileState());
+
+    OperationResult result = await profileUseCases.updateUserProfileUseCase
+        .execute(
+            profile: event.profile,
+            name: event.name,
+            profilePhotoUrl: event.profilePhotoUrl,
+            genderOther: event.genderOther,
+            gender: event.gender,
+            bio: event.bio,
+            title: event.title,
+            birthDay: event.birthDay,
+            registerCountry: event.registerCountry);
+
+    if (result.errorOccurred || result.data is! UserProfile) {
+      emit(ErrorUpdatingUserProfileState(
+          result.errorMessage ?? updateProfileError));
+    } else {
+      emit(UpdatedUserProfileState(result.data as UserProfile));
     }
   }
 }

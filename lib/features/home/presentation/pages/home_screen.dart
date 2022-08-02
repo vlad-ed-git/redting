@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
 import 'package:redting/core/components/screens/screen_container.dart';
-import 'package:redting/core/components/text/app_name_std_style.dart';
+import 'package:redting/features/home/presentation/components/build_app_bar.dart';
 import 'package:redting/features/matching/presentation/pages/matched_screen.dart';
 import 'package:redting/features/matching/presentation/pages/matching_screen.dart';
+import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/presentation/pages/view_profile_destination.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
+import 'package:redting/res/routes.dart';
 import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
@@ -22,15 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
   HomeDestinations _homeDestinations = HomeDestinations.matching;
   late List<Widget> _destinationScreens;
   late PageController _destinationPagesController;
+  late UserProfile _userProfile;
 
   @override
   void initState() {
-    _destinationScreens = [
-      const MatchingScreen(),
-      const MatchedScreen(),
-      const ViewProfileScreen(),
-    ];
-
     _destinationPagesController =
         PageController(initialPage: _getSelectedIndex());
     super.initState();
@@ -44,17 +41,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    RouteSettings? settings = ModalRoute.of(context)?.settings;
+    if (settings != null && settings.arguments is UserProfile) {
+      _userProfile = settings.arguments as UserProfile;
+    }
     return ScreenContainer(
         child: Scaffold(
       extendBodyBehindAppBar: false,
       extendBody: true,
-      appBar: AppBar(
-        toolbarHeight: appBarHeight,
-        backgroundColor: Colors.transparent,
-        title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [StdAppName()]),
-      ),
+      appBar: buildAppBar(onSettingsClicked: () {
+        Navigator.pushNamed(context, editDatingPreferencesRoute,
+            arguments: _userProfile);
+      }),
       body: PageView(
         controller: _destinationPagesController,
         physics: const NeverScrollableScrollPhysics(),
@@ -136,6 +134,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> _getDestinationPages() {
+    _destinationScreens = [
+      MatchingScreen(profile: _userProfile),
+      MatchedScreen(profile: _userProfile),
+      ViewProfileScreen(profile: _userProfile),
+    ];
     return _destinationScreens
         .map((pageScreen) => _getDestinationScreenContainer(pageScreen))
         .toList(growable: false);

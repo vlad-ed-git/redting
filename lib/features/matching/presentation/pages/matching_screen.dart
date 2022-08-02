@@ -12,7 +12,8 @@ import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
 class MatchingScreen extends StatefulWidget {
-  const MatchingScreen({Key? key}) : super(key: key);
+  final UserProfile profile;
+  const MatchingScreen({Key? key, required this.profile}) : super(key: key);
 
   @override
   State<MatchingScreen> createState() => _MatchingScreenState();
@@ -23,10 +24,7 @@ class _MatchingScreenState extends State<MatchingScreen>
   @override
   bool get wantKeepAlive => true;
 
-  bool _isInitialized = false;
-
   MatchingBloc? _eventDispatcher;
-  UserProfile? _thisUserInfo;
   bool _isLoading = false;
   bool _loadedAllProfiles = false;
 
@@ -49,7 +47,7 @@ class _MatchingScreenState extends State<MatchingScreen>
           GetIt.instance<MatchingBloc>(),
       child: BlocBuilder<MatchingBloc, MatchingState>(
           builder: (blocContext, state) {
-        if (state is MatchingInitialState && !_isInitialized) {
+        if (state is MatchingInitialState) {
           _onInitState(blocContext);
         }
         return BlocListener<MatchingBloc, MatchingState>(
@@ -71,13 +69,6 @@ class _MatchingScreenState extends State<MatchingScreen>
   }
 
   void _listenToStates(BuildContext context, MatchingState state) {
-    if (state is InitializedMatchingState) {
-      setState(() {
-        _isInitialized = true;
-      });
-      _loadInitialMatchingProfiles(context, state);
-    }
-
     if (state is LoadingState) {
       if (mounted) {
         setState(() {
@@ -85,16 +76,6 @@ class _MatchingScreenState extends State<MatchingScreen>
         });
       }
     }
-
-    if (state is InitializingMatchingFailedState) {
-      _showSnack(state.errMsg);
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-
     if (state is FetchingMatchesFailedState) {
       _showSnack(state.errMsg);
       if (mounted) {
@@ -142,26 +123,11 @@ class _MatchingScreenState extends State<MatchingScreen>
 
   void _onInitState(BuildContext blocContext) {
     _eventDispatcher ??= BlocProvider.of<MatchingBloc>(blocContext);
-    _eventDispatcher?.add(InitializeEvent());
+    _loadNextProfilestoMatchWithBatch();
   }
 
-  void _loadInitialMatchingProfiles(
-    BuildContext blocContext,
-    InitializedMatchingState state,
-  ) {
-    if (mounted) {
-      setState(() {
-        _thisUserInfo = state.thisUserInfo;
-        _isLoading = false;
-      });
-    }
-    _eventDispatcher ??= BlocProvider.of<MatchingBloc>(blocContext);
-    _loadNextProfilesBatch();
-  }
-
-  void _loadNextProfilesBatch() {
-    if (_thisUserInfo == null) return;
-    _eventDispatcher?.add(LoadProfilesToMatchEvent(_thisUserInfo!));
+  void _loadNextProfilestoMatchWithBatch() {
+    _eventDispatcher?.add(LoadProfilesToMatchEvent(widget.profile));
   }
 
   /// CARDS
@@ -194,7 +160,7 @@ class _MatchingScreenState extends State<MatchingScreen>
       if (_currentSwipeBatchProfiles.isEmpty) return; //safe check
       final swipedProfile = _currentSwipeBatchProfiles.removeLast();
       if (_currentSwipeBatchProfiles.isEmpty) {
-        _loadNextProfilesBatch();
+        _loadNextProfilestoMatchWithBatch();
       }
       //on like
       if (gesture == CardSwipeType.like) {
@@ -202,7 +168,7 @@ class _MatchingScreenState extends State<MatchingScreen>
           _currentSwipeBatchProfiles = _currentSwipeBatchProfiles;
         });
         _eventDispatcher?.add(LikeUserEvent(
-            likedByUser: _thisUserInfo!.userId,
+            likedByUser: widget.profile.userId,
             likedUserProfile: swipedProfile));
         return;
       }
@@ -244,7 +210,7 @@ class _MatchingScreenState extends State<MatchingScreen>
 
   void _onSubmitDailyFeedback(int rating, String feedback) {
     _eventDispatcher?.add(SendUserFeedBackEvent(
-        rating: rating, feedback: feedback, userId: _thisUserInfo!.userId));
+        rating: rating, feedback: feedback, userId: widget.profile.userId));
   }
 
   _hasViewedAllProfiles() {

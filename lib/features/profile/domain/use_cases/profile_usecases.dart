@@ -2,6 +2,7 @@ import 'package:redting/features/profile/domain/use_cases/profile/add_dating_inf
 import 'package:redting/features/profile/domain/use_cases/profile/create_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_cached_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_profile_from_remote_usecase.dart';
+import 'package:redting/features/profile/domain/use_cases/profile/update_user_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/add_dating_pic.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/upload_profile_photo_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/verification_video/delete_verification_video_usecase.dart';
@@ -19,6 +20,7 @@ class ProfileUseCases {
   final GetCachedProfileUseCase getCachedProfileUseCase;
   final AddDatingPicUseCase addDatingPicUseCase;
   final AddDatingInfoUseCase addDatingInfoUseCase;
+  final UpdateUserProfileUseCase updateUserProfileUseCase;
   ProfileUseCases(
       {required this.createProfileUseCase,
       required this.getProfileFromRemoteUseCase,
@@ -28,5 +30,6 @@ class ProfileUseCases {
       required this.deleteVerificationVideoUseCase,
       required this.getCachedProfileUseCase,
       required this.addDatingPicUseCase,
-      required this.addDatingInfoUseCase});
+      required this.addDatingInfoUseCase,
+      required this.updateUserProfileUseCase});
 }

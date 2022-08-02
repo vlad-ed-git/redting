@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
             }
 
             if (shouldGoHome) {
-              _goToHome();
+              _goToHome(profile: state.userProfile!);
             }
           }
         },
@@ -141,7 +141,7 @@ class _SplashScreenState extends State<SplashScreen> {
         arguments: profile);
   }
 
-  void _goToHome() {
-    Navigator.pushReplacementNamed(context, homeRoute);
+  void _goToHome({required UserProfile profile}) {
+    Navigator.pushReplacementNamed(context, homeRoute, arguments: profile);
   }
 }

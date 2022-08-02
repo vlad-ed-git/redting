@@ -61,7 +61,9 @@ abstract class UserProfile {
 
   static bool isValidGender({required UserGender gender, String? genderOther}) {
     if (gender != UserGender.stated) return true;
-    return (genderOther != null) && (genderOther.isEmpty == false);
+    return (genderOther != null) &&
+        (genderOther.trim().length > 2) &&
+        (genderOther.isEmpty == false);
   }
 
   /// OTHER ENUM DATA

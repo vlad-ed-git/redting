@@ -15,7 +15,8 @@ import 'package:redting/res/theme.dart';
 
 //TODO load more on scroll
 class MatchedScreen extends StatefulWidget {
-  const MatchedScreen({Key? key}) : super(key: key);
+  final UserProfile profile;
+  const MatchedScreen({Key? key, required this.profile}) : super(key: key);
 
   @override
   State<MatchedScreen> createState() => _MatchedScreenState();
@@ -25,11 +26,9 @@ class _MatchedScreenState extends State<MatchedScreen>
     with AutomaticKeepAliveClientMixin<MatchedScreen> {
   Stream<List<OperationRealTimeResult>>? _stream;
   MatchesListenerBloc? _eventDispatcher;
-  late UserProfile _thisUsersProfile;
 
   @override
   bool get wantKeepAlive => true;
-  bool _isInitialized = false;
 
   final matchesScrollController = ScrollController();
   final Map<String, MatchingProfiles> _matchedProfiles = {};
@@ -43,7 +42,7 @@ class _MatchedScreenState extends State<MatchedScreen>
             GetIt.instance<MatchesListenerBloc>(),
         child: BlocBuilder<MatchesListenerBloc, MatchesListenerState>(
             builder: (blocContext, state) {
-          if (state is MatchesListenerInitialState && !_isInitialized) {
+          if (state is MatchesListenerInitialState) {
             _onInitState(blocContext);
           }
           return BlocListener<MatchesListenerBloc, MatchesListenerState>(
@@ -69,16 +68,9 @@ class _MatchedScreenState extends State<MatchedScreen>
   void _listenToStates(BuildContext context, MatchesListenerState state) {
     if (state is ListeningToMatchesState) {
       setState(() {
-        _isInitialized = true;
         _stream = state.stream;
       });
     }
-
-    if (state is LoadedThisUserProfileState) {
-      _thisUsersProfile = state.thisUserProfile;
-      _eventDispatcher?.add(ListenToMatchesEvent());
-    }
-
     if (state is LoadingThisUserProfileFailedState) {
       _showSnack(state.errMsg);
     }
@@ -86,7 +78,7 @@ class _MatchedScreenState extends State<MatchedScreen>
 
   void _onInitState(BuildContext blocContext) {
     _eventDispatcher ??= BlocProvider.of<MatchesListenerBloc>(blocContext);
-    _eventDispatcher?.add(LoadThisUserProfileEvent());
+    _eventDispatcher?.add(ListenToMatchesEvent());
   }
 
   @override
@@ -126,9 +118,9 @@ class _MatchedScreenState extends State<MatchedScreen>
   Widget _matchToMessageWidget(MatchingProfiles profiles) {
     List<MatchingMembers> thisAndTheOtherUser = profiles.getMembers();
     final otherUser = thisAndTheOtherUser
-        .firstWhere((profile) => profile.userId != _thisUsersProfile.userId);
+        .firstWhere((profile) => profile.userId != widget.profile.userId);
     final thisUser = thisAndTheOtherUser
-        .firstWhere((profile) => profile.userId == _thisUsersProfile.userId);
+        .firstWhere((profile) => profile.userId == widget.profile.userId);
     final iceBreaker = profiles.iceBreakers[0];
     return Container(
       key: ValueKey(otherUser.userId),

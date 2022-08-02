@@ -149,3 +149,11 @@ const myMatchesDestinationLbl = "Matched";
 //chat
 const errorSendingImageMessage = "Failed to send image";
 const errorSendingTxtMessage = "Failed to send your message";
+
+//editing profile
+const editDatingPreferences = "Matching Preferences";
+const editProfile = "Edit Profile";
+const updateProfileSuccess = "Your changes have been saved";
+const updateProfileFail = "Failed to save your changes";
+const updateProfileBtn = "Update Profile";
+const selectFromCountryLbl = "From Country";

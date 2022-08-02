@@ -204,7 +204,7 @@ class _AddDatingInfoScreenState extends State<AddDatingInfoScreen> {
                                       onPressed: () {
                                         _onSaveProfile(blocContext);
                                       },
-                                      flipColors: true,
+                                      primaryBg: true,
                                       showLoading: _isSavingProfile,
                                       lbl: createDatingProfileBtn,
                                       loadingLbl:

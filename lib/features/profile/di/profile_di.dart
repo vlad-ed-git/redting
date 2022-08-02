@@ -9,6 +9,7 @@ import 'package:redting/features/profile/domain/use_cases/profile/add_dating_inf
 import 'package:redting/features/profile/domain/use_cases/profile/create_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_cached_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_profile_from_remote_usecase.dart';
+import 'package:redting/features/profile/domain/use_cases/profile/update_user_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/add_dating_pic.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/upload_profile_photo_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_usecases.dart';
@@ -37,7 +38,8 @@ GetIt init(GetIt coreDiInstance) {
           deleteVerificationVideoUseCase: profileDiInstance(),
           getCachedProfileUseCase: profileDiInstance(),
           addDatingInfoUseCase: profileDiInstance(),
-          addDatingPicUseCase: profileDiInstance()));
+          addDatingPicUseCase: profileDiInstance(),
+          updateUserProfileUseCase: profileDiInstance()));
 
   profileDiInstance.registerLazySingleton<GetProfileFromRemoteUseCase>(() =>
       GetProfileFromRemoteUseCase(profileRepository: profileDiInstance()));
@@ -60,6 +62,9 @@ GetIt init(GetIt coreDiInstance) {
 
   profileDiInstance.registerLazySingleton<DeleteVerificationVideoUseCase>(
       () => DeleteVerificationVideoUseCase(profileDiInstance()));
+
+  profileDiInstance.registerLazySingleton<UpdateUserProfileUseCase>(
+      () => UpdateUserProfileUseCase(profileDiInstance()));
 
   profileDiInstance.registerLazySingleton<AddDatingInfoUseCase>(
       () => AddDatingInfoUseCase(profileDiInstance()));
