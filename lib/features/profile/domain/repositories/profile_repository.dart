@@ -5,6 +5,7 @@ import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
+import 'package:redting/features/profile/domain/utils/dating_pic.dart';
 
 abstract class ProfileRepository {
   Future<OperationResult> loadUserProfileFromRemoteIfExists();
@@ -35,10 +36,9 @@ abstract class ProfileRepository {
 
   Future<OperationResult> addDatingPhoto(
       File photo, String filename, String userId);
-  Future<OperationResult> addDatingInfo(
+  Future<OperationResult> setDatingInfo(
       UserProfile profile,
-      List<File> photoFiles,
-      List<String> photoFileNames,
+      List<DatingPic> datingPics,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,

@@ -94,8 +94,8 @@ const uploadingDatingProfilePhotoErr =
     "Failed to upload your photo! Please try again.";
 const deletingDatingProfilePhotoErr =
     "Failed to delete your RedTing profile photo! Please retry";
-const completingDatingProfileErr =
-    "Failed to create your RedTing profile! Please try again.";
+const setDatingInfoErr =
+    "Failed to save your dating preferences! Please try again.";
 const deleteDatingProfileErr =
     "Failed to delete your RedTing profile! Please retry";
 const getDatingProfileErr = "Failed to get your RedTing profile! Please retry";

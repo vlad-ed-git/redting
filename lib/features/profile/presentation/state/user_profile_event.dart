@@ -55,26 +55,25 @@ class CreateUserProfileEvent extends UserProfileEvent {
 }
 
 //adding dating info
-class AddDatingInfoEvent extends UserProfileEvent {
+class SetDatingInfoEvent extends UserProfileEvent {
   final UserProfile profile;
-  final List<File> photoFiles;
+  final List<DatingPic> datingPics;
   final int minAgePreference;
   final int maxAgePreference;
   final UserGender? genderPreference;
   final List<SexualOrientation> userOrientation;
   final bool makeMyOrientationPublic;
   final bool onlyShowMeOthersOfSameOrientation;
-  final List<String> datingPicsFileNames;
-  AddDatingInfoEvent(
-      this.profile,
-      this.photoFiles,
-      this.minAgePreference,
-      this.maxAgePreference,
-      this.genderPreference,
-      this.userOrientation,
-      this.makeMyOrientationPublic,
-      this.onlyShowMeOthersOfSameOrientation,
-      this.datingPicsFileNames);
+  SetDatingInfoEvent(
+    this.profile,
+    this.datingPics,
+    this.minAgePreference,
+    this.maxAgePreference,
+    this.genderPreference,
+    this.userOrientation,
+    this.makeMyOrientationPublic,
+    this.onlyShowMeOthersOfSameOrientation,
+  );
 }
 
 class UpdateUserProfileEvent extends UserProfileEvent {

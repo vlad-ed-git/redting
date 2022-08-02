@@ -5,10 +5,10 @@ import 'package:redting/features/profile/data/data_sources/remote/fire_profile.d
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
 import 'package:redting/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:redting/features/profile/domain/repositories/profile_repository.dart';
-import 'package:redting/features/profile/domain/use_cases/profile/add_dating_info.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/create_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_cached_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/get_profile_from_remote_usecase.dart';
+import 'package:redting/features/profile/domain/use_cases/profile/set_dating_info_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile/update_user_profile_usecase.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/add_dating_pic.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_photo/upload_profile_photo_usecase.dart';
@@ -37,7 +37,7 @@ GetIt init(GetIt coreDiInstance) {
           uploadVerificationVideoUseCase: profileDiInstance(),
           deleteVerificationVideoUseCase: profileDiInstance(),
           getCachedProfileUseCase: profileDiInstance(),
-          addDatingInfoUseCase: profileDiInstance(),
+          setDatingInfoUseCase: profileDiInstance(),
           addDatingPicUseCase: profileDiInstance(),
           updateUserProfileUseCase: profileDiInstance()));
 
@@ -66,8 +66,8 @@ GetIt init(GetIt coreDiInstance) {
   profileDiInstance.registerLazySingleton<UpdateUserProfileUseCase>(
       () => UpdateUserProfileUseCase(profileDiInstance()));
 
-  profileDiInstance.registerLazySingleton<AddDatingInfoUseCase>(
-      () => AddDatingInfoUseCase(profileDiInstance()));
+  profileDiInstance.registerLazySingleton<SetDatingInfoUseCase>(
+      () => SetDatingInfoUseCase(profileDiInstance()));
   profileDiInstance.registerLazySingleton<AddDatingPicUseCase>(
       () => AddDatingPicUseCase(profileDiInstance()));
 

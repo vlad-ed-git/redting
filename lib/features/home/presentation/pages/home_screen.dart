@@ -5,10 +5,10 @@ import 'package:redting/features/home/presentation/components/build_app_bar.dart
 import 'package:redting/features/matching/presentation/pages/matched_screen.dart';
 import 'package:redting/features/matching/presentation/pages/matching_screen.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/presentation/pages/edit_dating_info_screen.dart';
 import 'package:redting/features/profile/presentation/pages/view_profile_destination.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
-import 'package:redting/res/routes.dart';
 import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
@@ -50,8 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBodyBehindAppBar: false,
       extendBody: true,
       appBar: buildAppBar(onSettingsClicked: () {
-        Navigator.pushNamed(context, editDatingPreferencesRoute,
-            arguments: _userProfile);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditDatingInfoScreen(
+              userProfile: _userProfile,
+            ),
+          ),
+        );
       }),
       body: PageView(
         controller: _destinationPagesController,

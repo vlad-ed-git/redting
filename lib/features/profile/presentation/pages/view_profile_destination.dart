@@ -8,11 +8,11 @@ import 'package:redting/core/utils/consts.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/presentation/components/view_only/profile_photo_uneditable.dart';
+import 'package:redting/features/profile/presentation/pages/edit_dating_info_screen.dart';
 import 'package:redting/features/profile/presentation/pages/edit_profile_screen.dart';
 import 'package:redting/features/profile/presentation/state/user_profile_bloc.dart';
 import 'package:redting/res/dimens.dart';
 import 'package:redting/res/fonts.dart';
-import 'package:redting/res/routes.dart';
 import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
@@ -140,8 +140,14 @@ class _ViewProfileScreenState extends State<ViewProfileScreen>
           child: MainElevatedBtn(
               suffixIcon: Icons.settings,
               onPressed: () {
-                Navigator.pushNamed(context, editDatingPreferencesRoute,
-                    arguments: widget.profile);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditDatingInfoScreen(
+                      userProfile: widget.profile,
+                    ),
+                  ),
+                );
               },
               showLoading: false,
               lbl: editDatingPreferences),

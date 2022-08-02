@@ -89,16 +89,16 @@ class LoadedVerificationVideoCodeState extends UserProfileState {
 }
 
 /// DATING INFO
-class AddingDatingInfoState extends UserProfileState {}
+class SettingDatingInfoState extends UserProfileState {}
 
-class AddingDatingInfoFailedState extends UserProfileState {
+class SettingDatingInfoFailedState extends UserProfileState {
   final String errMsg;
-  AddingDatingInfoFailedState(this.errMsg);
+  SettingDatingInfoFailedState(this.errMsg);
 }
 
-class AddedDatingInfoState extends UserProfileState {
+class SetDatingInfoState extends UserProfileState {
   final UserProfile profile;
-  AddedDatingInfoState(this.profile);
+  SetDatingInfoState(this.profile);
 }
 
 /// USER PROFILE UPDATING

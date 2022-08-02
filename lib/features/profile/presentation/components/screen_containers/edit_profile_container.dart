@@ -27,7 +27,7 @@ class EditProfileContainer extends StatelessWidget {
                     constraints: BoxConstraints(
                         minWidth: screenWidth, minHeight: screenHeight),
                     child: Padding(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             vertical: paddingMd, horizontal: paddingStd),
                         child: child)))));
     ;

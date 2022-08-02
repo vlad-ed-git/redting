@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:redting/core/utils/consts.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/profile/data/data_sources/local/local_profile_source.dart';
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
@@ -13,6 +14,7 @@ import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/features/profile/domain/repositories/profile_repository.dart';
+import 'package:redting/features/profile/domain/utils/dating_pic.dart';
 import 'package:redting/res/strings.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -174,26 +176,37 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   /// DATING PROFILE
   @override
-  Future<OperationResult> addDatingInfo(
+  Future<OperationResult> setDatingInfo(
       UserProfile profile,
-      List<File> datingPhotosFiles,
-      List<String> datingPhotoFileNames,
+      List<DatingPic> datingPics,
       int minAgePreference,
       int maxAgePreference,
       UserGender? genderPreference,
       List<SexualOrientation> userOrientation,
       bool makeMyOrientationPublic,
       bool onlyShowMeOthersOfSameOrientation) async {
+    if (datingPics.length < minDatingProfilePhotosRequired) {
+      return OperationResult(
+          errorOccurred: true, errorMessage: datingProfilePicsMissingErr);
+    }
+
     //upload the files
-    List<String> datingPics = [];
-    int i = 0;
-    for (File file in datingPhotosFiles) {
-      OperationResult result =
-          await addDatingPhoto(file, datingPhotoFileNames[i], profile.userId);
-      if (result.data is String) {
-        datingPics.add(result.data);
+    List<String> newDatingPicsUrls = [];
+    for (DatingPic dPic in datingPics) {
+      if (dPic.file != null) {
+        //there is a file to upload
+        File file = dPic.file!;
+        String name = dPic.fileName ?? "${DateTime.now()}.jpeg";
+        OperationResult result =
+            await addDatingPhoto(file, name, profile.userId);
+        if (result.data is String) {
+          newDatingPicsUrls.add(result.data);
+        }
+      } else {
+        if (dPic.photoUrl != null) {
+          newDatingPicsUrls.add(dPic.photoUrl!);
+        }
       }
-      i++;
     }
 
     if (userOrientation.isEmpty) {
@@ -201,7 +214,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       userOrientation.add(SexualOrientation.straight);
     }
 
-    profile.datingPhotos = datingPics;
+    profile.datingPhotos = newDatingPicsUrls;
     profile.makeMyOrientationPublic = makeMyOrientationPublic;
     profile.onlyShowMeOthersOfSameOrientation =
         onlyShowMeOthersOfSameOrientation;
@@ -214,7 +227,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         await remoteProfileDataSource.updateUserProfile(profile: profile);
     if (updatedProfile == null) {
       return OperationResult(
-          errorOccurred: true, errorMessage: completingDatingProfileErr);
+          errorOccurred: true, errorMessage: setDatingInfoErr);
     }
     return _cacheUserProfileAndReturn(updatedProfile);
   }

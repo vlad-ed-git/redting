@@ -12,6 +12,7 @@ import 'package:redting/core/utils/consts.dart';
 import 'package:redting/features/profile/domain/models/sexual_orientation.dart';
 import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
+import 'package:redting/features/profile/domain/utils/dating_pic.dart';
 import 'package:redting/features/profile/presentation/components/age_preference_slider.dart';
 import 'package:redting/features/profile/presentation/components/dating_pics.dart';
 import 'package:redting/features/profile/presentation/components/gender_preferences.dart';
@@ -23,18 +24,17 @@ import 'package:redting/res/routes.dart';
 import 'package:redting/res/strings.dart';
 import 'package:redting/res/theme.dart';
 
-class AddDatingInfoScreen extends StatefulWidget {
-  const AddDatingInfoScreen({Key? key}) : super(key: key);
+class SetNewDatingInfoScreen extends StatefulWidget {
+  const SetNewDatingInfoScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddDatingInfoScreen> createState() => _AddDatingInfoScreenState();
+  State<SetNewDatingInfoScreen> createState() => _SetNewDatingInfoScreenState();
 }
 
-class _AddDatingInfoScreenState extends State<AddDatingInfoScreen> {
+class _SetNewDatingInfoScreenState extends State<SetNewDatingInfoScreen> {
   late UserProfile userProfile;
   bool _isSavingProfile = false;
-  List<File> _datingPicsFiles = [];
-  List<String> _datingPicsFileNames = [];
+  List<DatingPic> _datingPics = [];
   int _minAge = 18, _maxAge = 60;
   UserGender? _myGenderPreference;
   List<SexualOrientation> _mySexualOrientationPreferences = [
@@ -124,7 +124,7 @@ class _AddDatingInfoScreenState extends State<AddDatingInfoScreen> {
                                   },
                                   onRemoveFile: _onRemovePhoto,
                                   onChange: _onAddPhoto,
-                                  imageFile: _datingPicsFiles,
+                                  datingPics: _datingPics,
                                   disableClick: _isSavingProfile,
                                 ),
                                 const SizedBox(
@@ -221,7 +221,7 @@ class _AddDatingInfoScreenState extends State<AddDatingInfoScreen> {
   }
 
   void _listenToStateChange(BuildContext context, UserProfileState state) {
-    if (state is AddingDatingInfoState) {
+    if (state is SettingDatingInfoState) {
       if (mounted) {
         setState(() {
           _isSavingProfile = true;
@@ -229,7 +229,7 @@ class _AddDatingInfoScreenState extends State<AddDatingInfoScreen> {
       }
     }
 
-    if (state is AddedDatingInfoState) {
+    if (state is SetDatingInfoState) {
       if (mounted) {
         setState(() {
           _isSavingProfile = false;
@@ -238,7 +238,7 @@ class _AddDatingInfoScreenState extends State<AddDatingInfoScreen> {
       Navigator.pushReplacementNamed(context, splashRoute);
     }
 
-    if (state is AddingDatingInfoFailedState) {
+    if (state is SettingDatingInfoFailedState) {
       if (mounted) {
         setState(() {
           _isSavingProfile = false;
@@ -253,51 +253,50 @@ class _AddDatingInfoScreenState extends State<AddDatingInfoScreen> {
   /// EVENTS
   void _onSaveProfile(BuildContext blocContext) {
     if (_isSavingProfile) return;
-    if (_datingPicsFiles.length < minDatingProfilePhotosAllowed) {
-      _showSnack(datingProfilePicsMissingErr);
-      return;
-    }
     _eventDispatcher ??= BlocProvider.of<UserProfileBloc>(blocContext);
-    _eventDispatcher?.add(AddDatingInfoEvent(
+    _eventDispatcher?.add(SetDatingInfoEvent(
       userProfile,
-      _datingPicsFiles,
+      _datingPics,
       _minAge,
       _maxAge,
       _myGenderPreference,
       _mySexualOrientationPreferences,
       _makeMyOrientationPublic,
       _showMeMyOrientationOnly,
-      _datingPicsFileNames,
     ));
   }
 
   _onAddPhoto(File newFile, String filename, int photoNum) {
     if (photoNum < maxDatingProfilePhotos) {
-      if (_datingPicsFiles.length > photoNum) {
-        _datingPicsFiles[photoNum] = newFile;
-        _datingPicsFileNames[photoNum] = filename;
+      if (_datingPics.length > photoNum) {
+        _datingPics[photoNum].fileName = filename;
+        _datingPics[photoNum].file = newFile;
       } else {
-        _datingPicsFiles.add(newFile);
-        _datingPicsFileNames.add(filename);
+        _datingPics.add(
+            DatingPic(position: photoNum, file: newFile, fileName: filename));
       }
     }
     if (mounted) {
       setState(() {
-        _datingPicsFiles = _datingPicsFiles;
-        _datingPicsFileNames = _datingPicsFileNames;
+        _datingPics = _datingPics;
       });
     }
   }
 
-  _onRemovePhoto(int pos) {
-    if (_datingPicsFiles.length > pos) {
-      _datingPicsFiles.removeAt(pos);
-      _datingPicsFileNames.removeAt(pos);
+  _onRemovePhoto(int photoNum) {
+    if (photoNum < maxDatingProfilePhotos) {
+      if (_datingPics.length > photoNum) {
+        _datingPics[photoNum].fileName = null;
+        _datingPics[photoNum].file = null;
+      } else {
+        _datingPics.add(DatingPic(
+          position: photoNum,
+        ));
+      }
     }
     if (mounted) {
       setState(() {
-        _datingPicsFiles = _datingPicsFiles;
-        _datingPicsFileNames = _datingPicsFileNames;
+        _datingPics = _datingPics;
       });
     }
   }

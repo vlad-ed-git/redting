@@ -9,6 +9,7 @@ import 'package:redting/features/profile/domain/models/user_gender.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/features/profile/domain/use_cases/profile_usecases.dart';
+import 'package:redting/features/profile/domain/utils/dating_pic.dart';
 import 'package:redting/res/strings.dart';
 
 part 'user_profile_event.dart';
@@ -26,7 +27,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     on<DeleteVerificationVideoEvent>(_onDeleteVerificationVideoEvent);
     on<CreateUserProfileEvent>(_onCreateUserProfileEvent);
     on<LoadCachedProfileEvent>(_onLoadCachedProfileFromRemoteEvent);
-    on<AddDatingInfoEvent>(_onAddDatingInfoEvent);
+    on<SetDatingInfoEvent>(_onSetDatingInfoEvent);
     on<UpdateUserProfileEvent>(_onUpdatingUserProfileEvent);
   }
 
@@ -141,14 +142,13 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     }
   }
 
-  FutureOr<void> _onAddDatingInfoEvent(
-      AddDatingInfoEvent event, Emitter<UserProfileState> emit) async {
-    emit(AddingDatingInfoState());
+  FutureOr<void> _onSetDatingInfoEvent(
+      SetDatingInfoEvent event, Emitter<UserProfileState> emit) async {
+    emit(SettingDatingInfoState());
 
-    OperationResult result = await profileUseCases.addDatingInfoUseCase.execute(
+    OperationResult result = await profileUseCases.setDatingInfoUseCase.execute(
         event.profile,
-        event.photoFiles,
-        event.datingPicsFileNames,
+        event.datingPics,
         event.minAgePreference,
         event.maxAgePreference,
         event.genderPreference,
@@ -157,10 +157,10 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
         event.onlyShowMeOthersOfSameOrientation);
 
     if (result.data is! UserProfile) {
-      emit(AddingDatingInfoFailedState(
-          result.errorMessage ?? completingDatingProfileErr));
+      emit(SettingDatingInfoFailedState(
+          result.errorMessage ?? setDatingInfoErr));
     } else {
-      emit(AddedDatingInfoState(result.data as UserProfile));
+      emit(SetDatingInfoState(result.data as UserProfile));
     }
   }
 
