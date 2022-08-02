@@ -18,7 +18,7 @@ abstract class ChatRepository {
     required String imageFileName,
   });
 
-  Stream<List<OperationRealTimeResult>> listenToLatestMessaesBetweenUsers(
+  Stream<List<OperationRealTimeResult>> listenToLatestMessagesBetweenUsers(
       MatchingMembers thisUser, MatchingMembers thatUser);
 
   Future<List<Message>> loadOlderMessages(

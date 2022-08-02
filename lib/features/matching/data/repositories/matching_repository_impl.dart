@@ -50,6 +50,10 @@ class MatchingRepositoryImpl implements MatchingRepository {
       String likedUserName, String likedUserProfilePhotoUrl) async {
     try {
       String iceBreaker = await _getRandomIceBreakerMessage();
+      if (iceBreaker.isEmpty) {
+        return OperationResult(
+            errorMessage: likingUserFailed, errorOccurred: true);
+      }
 
       LikedUser likedUser = LikedUserEntity(
           likedByUserId: thisUserId,
@@ -90,9 +94,7 @@ class MatchingRepositoryImpl implements MatchingRepository {
       if (icebreakersCacheMessages.isEmpty) {
         IceBreakerMessages? icebreakers =
             localDataSource.getIceBreakerMessages();
-        if (icebreakers != null) {
-          icebreakersCacheMessages.addAll(icebreakers.messages);
-        }
+        icebreakersCacheMessages.addAll(icebreakers!.messages);
       }
 
       return randomWordInList(icebreakersCacheMessages);
@@ -110,11 +112,9 @@ class MatchingRepositoryImpl implements MatchingRepository {
     try {
       IceBreakerMessages? icebreakers =
           await remoteDataSource.getIceBreakerMessages();
-      if (icebreakers != null) {
-        localDataSource.cacheIceBreakersAndGet(icebreakers);
-        icebreakersCacheMessages.clear();
-        icebreakersCacheMessages.addAll(icebreakers.messages);
-      }
+      localDataSource.cacheIceBreakersAndGet(icebreakers!);
+      icebreakersCacheMessages.clear();
+      icebreakersCacheMessages.addAll(icebreakers.messages);
       return true;
     } catch (e) {
       if (kDebugMode) {

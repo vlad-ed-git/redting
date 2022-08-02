@@ -69,6 +69,20 @@ class _MatchingScreenState extends State<MatchingScreen>
   }
 
   void _listenToStates(BuildContext context, MatchingState state) {
+    if (state is InitializedMatchingState) {
+      setState(() {
+        _isLoading = false;
+      });
+      _loadNextProfilesToMatchWithBatch();
+    }
+
+    if (state is InitializingMatchingFailedState) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showSnack(state.errMsg);
+    }
+
     if (state is LoadingState) {
       if (mounted) {
         setState(() {
@@ -123,10 +137,10 @@ class _MatchingScreenState extends State<MatchingScreen>
 
   void _onInitState(BuildContext blocContext) {
     _eventDispatcher ??= BlocProvider.of<MatchingBloc>(blocContext);
-    _loadNextProfilestoMatchWithBatch();
+    _eventDispatcher?.add(InitializeEvent());
   }
 
-  void _loadNextProfilestoMatchWithBatch() {
+  void _loadNextProfilesToMatchWithBatch() {
     _eventDispatcher?.add(LoadProfilesToMatchEvent(widget.profile));
   }
 
@@ -160,7 +174,7 @@ class _MatchingScreenState extends State<MatchingScreen>
       if (_currentSwipeBatchProfiles.isEmpty) return; //safe check
       final swipedProfile = _currentSwipeBatchProfiles.removeLast();
       if (_currentSwipeBatchProfiles.isEmpty) {
-        _loadNextProfilestoMatchWithBatch();
+        _loadNextProfilesToMatchWithBatch();
       }
       //on like
       if (gesture == CardSwipeType.like) {

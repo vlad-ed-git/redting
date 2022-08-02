@@ -10,6 +10,7 @@ class ListenToLatestMessagesUseCase {
     required MatchingMembers thisUser,
     required MatchingMembers thatUser,
   }) {
-    return chatRepository.listenToLatestMessaesBetweenUsers(thisUser, thatUser);
+    return chatRepository.listenToLatestMessagesBetweenUsers(
+        thisUser, thatUser);
   }
 }

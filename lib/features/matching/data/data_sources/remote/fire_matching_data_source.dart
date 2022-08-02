@@ -76,6 +76,8 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
           .doc(matchingProfiles.userAUserBIdsConcatNSorted)
           .update({
         MatchingProfilesEntity.haveMatchedFieldName: true,
+        MatchingProfilesEntity.iceBreakersFieldName:
+            FieldValue.arrayUnion(matchingProfiles.iceBreakers),
         MatchingProfilesEntity.likersFieldName:
             FieldValue.arrayUnion(matchingProfiles.likers),
         MatchingProfilesEntity.membersFieldName: FieldValue.arrayUnion(
@@ -223,24 +225,13 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
     for (var snapshot in fittingProfiles.docs) {
       UserProfile canMatchWith = UserProfileEntity.fromJson(snapshot.data());
 
-      if (kDebugMode) {
-        print(
-            "==== comparing user ${userProfile.toJson()} with ${canMatchWith.toJson()} ==");
-      }
-
       if (canMatchWith.isSameAs(userProfile)) {
-        if (kDebugMode) {
-          print("==== has matched with self ==");
-        }
         continue; //skip the rest - user is self
       }
 
       /// match age
       if (canMatchWith.minAgePreference > usersAge ||
           canMatchWith.maxAgePreference < usersAge) {
-        if (kDebugMode) {
-          print("==== does not meet other users age criteria ==");
-        }
         continue;
       }
 
@@ -253,9 +244,6 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
               restrictSexualOrientation;
       if (isSuitableGender && bothDoNotCareAboutSexualOrientation) {
         fittingProfilesList.add(canMatchWith);
-        if (kDebugMode) {
-          print("==== suitable gender & do not care about sex ==");
-        }
         continue; //skip the rest
       }
 
@@ -268,9 +256,6 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
       bool matchingSexOrientation =
           intersectionOfSexOrientationPreferences.isNotEmpty;
       if (isSuitableGender && matchingSexOrientation) {
-        if (kDebugMode) {
-          print("==== suitable gender & sex orientation matches ==");
-        }
         fittingProfilesList.add(canMatchWith);
       }
     }

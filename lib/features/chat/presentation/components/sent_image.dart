@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redting/core/components/progress/circular_progress.dart';
 import 'package:redting/res/dimens.dart';
+import 'package:redting/res/theme.dart';
 
 class SentImage extends StatelessWidget {
   final String photoUrl;
@@ -33,6 +34,14 @@ class SentImage extends StatelessWidget {
               placeholder: (_, __) {
                 return const Center(child: CircularProgress());
               },
+              errorWidget: (___, __, _) => SizedBox(
+                width: 40,
+                height: 40,
+                child: Center(
+                  child: Icon(Icons.error_outline,
+                      color: appTheme.colorScheme.primary),
+                ),
+              ),
               fit: BoxFit.cover,
             ),
           ),

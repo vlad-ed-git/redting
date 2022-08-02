@@ -18,7 +18,7 @@ class ChatRepositoryImpl implements ChatRepository {
       {required this.remoteSource, required this.imageCompressor});
 
   @override
-  Stream<List<OperationRealTimeResult>> listenToLatestMessaesBetweenUsers(
+  Stream<List<OperationRealTimeResult>> listenToLatestMessagesBetweenUsers(
       MatchingMembers thisUser, MatchingMembers thatUser) {
     String chatRoomId = Message.getChatRoomId(thisUser.userId, thatUser.userId);
     //since we are getting the very first batch
