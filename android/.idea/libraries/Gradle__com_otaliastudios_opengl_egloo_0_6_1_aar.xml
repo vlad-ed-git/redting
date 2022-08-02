@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.otaliastudios.opengl:egloo:0.6.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/5d828af4b0492494108b039652e14519/transformed/jetified-egloo-0.6.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5d828af4b0492494108b039652e14519/transformed/jetified-egloo-0.6.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5d828af4b0492494108b039652e14519/transformed/jetified-egloo-0.6.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.otaliastudios.opengl/egloo/0.6.1/cffa08de30ce013563c8af82d751a5028f5b3e07/egloo-0.6.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.otaliastudios.opengl/egloo/0.6.1/4faa394a18d1b5dc220bceb38279738460a58d69/egloo-0.6.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

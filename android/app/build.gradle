@@ -21,14 +21,14 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def appMinSDK = localProperties.getProperty('flutter.minSDKVersion')
-if (appMinSDK == null) {
-    appMinSDK = '23'
+def minSdk = localProperties.getProperty('flutter.minSDKVersion')
+if (minSdk == null) {
+    minSdk = '23'
 }
 
-def appTargetSDK = localProperties.getProperty('flutter.targetSDKVersion')
-if (appTargetSDK == null) {
-    appTargetSDK = '32'
+def targetSdk = localProperties.getProperty('flutter.targetSDKVersion')
+if (targetSdk == null) {
+    targetSdk = '32'
 }
 
 apply plugin: 'com.android.application'
@@ -60,8 +60,8 @@ android {
         applicationId "com.redting.developers"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion appMinSDK
-        targetSdkVersion appTargetSDK
+        minSdkVersion minSdk.toInteger()
+        targetSdkVersion targetSdk.toInteger()
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
