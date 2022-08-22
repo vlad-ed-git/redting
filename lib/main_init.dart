@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:get_it/get_it.dart';
 import 'package:redting/core/data/local_storage.dart';
 import 'package:redting/core/di/core_dependencies.dart' as core_di;
 import 'package:redting/features/auth/di/auth_di.dart' as auth_di;
+import 'package:redting/features/blind_date_setup/di/blind_date_di.dart'
+    as blind_date_di;
 import 'package:redting/features/chat/di/chat_di.dart' as chat_di;
 import 'package:redting/features/matching/di/matching_di.dart' as matching_di;
 import 'package:redting/features/profile/di/profile_di.dart' as profile_di;
@@ -41,12 +42,13 @@ class MainAppInit {
 
   static void _initDependencies() {
     try {
-      GetIt coreDiInstance = core_di.init();
-      GetIt authDiInstance = auth_di.init();
-      GetIt profileDiInstance = profile_di.init(coreDiInstance);
-      matching_di.init(profileDiInstance);
-      chat_di.init(coreDiInstance);
-      splash_di.init(authDiInstance, profileDiInstance);
+      core_di.init();
+      auth_di.init();
+      profile_di.init();
+      matching_di.init();
+      chat_di.init();
+      splash_di.init();
+      blind_date_di.init();
     } catch (e) {
       print("===================== $e ============= ");
     }

@@ -5,7 +5,7 @@ class GenerateVideoVerificationCodeUseCase {
   final ProfileRepository profileRepository;
   GenerateVideoVerificationCodeUseCase({required this.profileRepository});
 
-  Future<OperationResult> execute() async {
+  Future<ServiceResult> execute() async {
     return await profileRepository.generateVerificationWord();
   }
 }

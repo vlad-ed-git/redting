@@ -27,7 +27,7 @@ class AuthUserBloc extends Bloc<AuthUserEvent, AuthUserState> {
     //loading
     emit(LoadingAuthState());
 
-    OperationResult result = await authUseCases.getAuthenticatedUser.execute();
+    ServiceResult result = await authUseCases.getAuthenticatedUser.execute();
     if (result.errorOccurred) {
       emit(ErrorLoadingAuthUserState());
     } else if (result.data is AuthUser) {
@@ -64,7 +64,7 @@ class AuthUserBloc extends Bloc<AuthUserEvent, AuthUserState> {
     }
 
     if (result.isAutoVerified) {
-      OperationResult signInResult = await authUseCases.signUserInUseCase
+      ServiceResult signInResult = await authUseCases.signUserInUseCase
           .execute(credential: result.credential);
 
       if (signInResult.errorOccurred) {
@@ -86,7 +86,7 @@ class AuthUserBloc extends Bloc<AuthUserEvent, AuthUserState> {
       SignInAuthUserEvent event, Emitter<AuthUserState> emit) async {
     //loading
     emit(LoadingAuthState());
-    OperationResult signInResult = await authUseCases.signUserInUseCase
+    ServiceResult signInResult = await authUseCases.signUserInUseCase
         .execute(smsCode: event.smsCode, verificationId: event.verificationId);
 
     if (signInResult.errorOccurred) {

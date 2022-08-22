@@ -1,8 +1,8 @@
-class OperationResult {
+class ServiceResult {
   bool errorOccurred;
   String? errorMessage;
   dynamic data;
-  OperationResult({this.errorOccurred = false, this.data, this.errorMessage});
+  ServiceResult({this.errorOccurred = false, this.data, this.errorMessage});
 }
 
 class OperationRealTimeResult {

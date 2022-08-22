@@ -30,7 +30,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       required this.imageCompressor});
 
   @override
-  Future<OperationResult> createUserProfile(
+  Future<ServiceResult> createUserProfile(
       {required String name,
       required String userId,
       required String profilePhotoUrl,
@@ -44,39 +44,38 @@ class ProfileRepositoryImpl implements ProfileRepository {
     //check the data
 
     if (name.isEmpty) {
-      return OperationResult(errorOccurred: true, errorMessage: nameMissingErr);
+      return ServiceResult(errorOccurred: true, errorMessage: nameMissingErr);
     }
     if (userId.isEmpty) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true,
           errorMessage: userIdMissingDuringProfileCreateErr);
     }
     if (profilePhotoUrl.isEmpty) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: emptyProfilePhotoErr);
     }
     if (verificationVideo == null) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: noVerificationVideo);
     }
 
     if (!UserProfile.isValidGender(gender: gender, genderOther: genderOther)) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: noGenderSpecified);
     }
     if ((bio.isEmpty || bio.length < UserProfile.userBioMinLen)) {
-      return OperationResult(errorOccurred: true, errorMessage: bioIsEmptyErr);
+      return ServiceResult(errorOccurred: true, errorMessage: bioIsEmptyErr);
     }
     if (title.isEmpty || title.length < UserProfile.userTitleMinLen) {
-      return OperationResult(
-          errorOccurred: true, errorMessage: titleIsEmptyErr);
+      return ServiceResult(errorOccurred: true, errorMessage: titleIsEmptyErr);
     }
     if (title.length > UserProfile.userTitleMaxLen) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: titleIsTooLongErr);
     }
     if (!UserProfile.isOfLegalAge(birthDay: birthDay)) {
-      return OperationResult(errorOccurred: true, errorMessage: bDayNotSet);
+      return ServiceResult(errorOccurred: true, errorMessage: bDayNotSet);
     }
 
     UserProfile profile = _createNewUserProfileInstance(
@@ -96,66 +95,64 @@ class ProfileRepositoryImpl implements ProfileRepository {
     UserProfile? savedProfile =
         await remoteProfileDataSource.createUserProfile(profile: profile);
     if (savedProfile == null) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: createProfileError);
     }
 
     return await _cacheUserProfileAndReturn(savedProfile);
   }
 
-  Future<OperationResult> _cacheUserProfileAndReturn(
-      UserProfile profile) async {
+  Future<ServiceResult> _cacheUserProfileAndReturn(UserProfile profile) async {
     UserProfile? cachedProfile = await localProfileDataSource
         .cacheAndReturnUserProfile(profile: profile);
-    return OperationResult(
+    return ServiceResult(
         errorOccurred: (cachedProfile == null),
         errorMessage: (cachedProfile == null) ? createProfileError : '',
         data: cachedProfile);
   }
 
   @override
-  Future<OperationResult> loadUserProfileFromRemoteIfExists() async {
+  Future<ServiceResult> loadUserProfileFromRemoteIfExists() async {
     //remote
     final UserProfile? profile = await remoteProfileDataSource.getUserProfile();
 
-    if (profile == null) return OperationResult(); //does not exist
+    if (profile == null) return ServiceResult(); //does not exist
 
     //update cache
     return _cacheUserProfileAndReturn(profile);
   }
 
   @override
-  Future<OperationResult> uploadProfilePhoto(
+  Future<ServiceResult> uploadProfilePhoto(
       {required File file, required String filename}) async {
     String? downloadUrl = await remoteProfileDataSource.uploadProfilePhoto(
         file: file, filename: filename, imageCompressor: imageCompressor);
-    return OperationResult(
-        errorOccurred: downloadUrl == null, data: downloadUrl);
+    return ServiceResult(errorOccurred: downloadUrl == null, data: downloadUrl);
   }
 
   @override
-  Future<OperationResult> generateVerificationWord() async {
+  Future<ServiceResult> generateVerificationWord() async {
     String? verificationWord =
         await remoteProfileDataSource.generateVerificationWord();
-    return OperationResult(
+    return ServiceResult(
         errorOccurred: verificationWord == null, data: verificationWord);
   }
 
   @override
-  Future<OperationResult> uploadVerificationVideo(
+  Future<ServiceResult> uploadVerificationVideo(
       {required File file, required String verificationCode}) async {
     UserVerificationVideo? video =
         await remoteProfileDataSource.compressAndUploadVerificationVideo(
             file: file,
             verificationCode: verificationCode,
             compressor: videoCompressor);
-    return OperationResult(errorOccurred: video == null, data: video);
+    return ServiceResult(errorOccurred: video == null, data: video);
   }
 
   @override
-  Future<OperationResult> deleteVerificationVideo() async {
+  Future<ServiceResult> deleteVerificationVideo() async {
     bool isSuccess = await remoteProfileDataSource.deleteVerificationVideo();
-    return OperationResult(errorOccurred: !isSuccess);
+    return ServiceResult(errorOccurred: !isSuccess);
   }
 
   @override
@@ -164,19 +161,19 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<OperationResult> addDatingPhoto(
+  Future<ServiceResult> addDatingPhoto(
       File photo, String filename, String userId) async {
     String? downloadUrl = await remoteProfileDataSource.uploadDatingPhoto(
         photo, filename, userId, imageCompressor);
     return downloadUrl != null
-        ? OperationResult(data: downloadUrl)
-        : OperationResult(
+        ? ServiceResult(data: downloadUrl)
+        : ServiceResult(
             errorOccurred: true, errorMessage: uploadingDatingProfilePhotoErr);
   }
 
   /// DATING PROFILE
   @override
-  Future<OperationResult> setDatingInfo(
+  Future<ServiceResult> setDatingInfo(
       UserProfile profile,
       List<DatingPic> datingPics,
       int minAgePreference,
@@ -186,7 +183,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       bool makeMyOrientationPublic,
       bool onlyShowMeOthersOfSameOrientation) async {
     if (datingPics.length < minDatingProfilePhotosRequired) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: datingProfilePicsMissingErr);
     }
 
@@ -197,8 +194,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         //there is a file to upload
         File file = dPic.file!;
         String name = dPic.fileName ?? "${DateTime.now()}.jpeg";
-        OperationResult result =
-            await addDatingPhoto(file, name, profile.userId);
+        ServiceResult result = await addDatingPhoto(file, name, profile.userId);
         if (result.data is String) {
           newDatingPicsUrls.add(result.data);
         }
@@ -226,14 +222,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
     UserProfile? updatedProfile =
         await remoteProfileDataSource.updateUserProfile(profile: profile);
     if (updatedProfile == null) {
-      return OperationResult(
-          errorOccurred: true, errorMessage: setDatingInfoErr);
+      return ServiceResult(errorOccurred: true, errorMessage: setDatingInfoErr);
     }
     return _cacheUserProfileAndReturn(updatedProfile);
   }
 
   @override
-  Future<OperationResult> updateUserProfile({
+  Future<ServiceResult> updateUserProfile({
     required UserProfile profile,
     required String name,
     required String profilePhotoUrl,
@@ -245,30 +240,29 @@ class ProfileRepositoryImpl implements ProfileRepository {
     required String registerCountry,
   }) async {
     if (name.isEmpty) {
-      return OperationResult(errorOccurred: true, errorMessage: nameMissingErr);
+      return ServiceResult(errorOccurred: true, errorMessage: nameMissingErr);
     }
     if (profilePhotoUrl.isEmpty) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: emptyProfilePhotoErr);
     }
 
     if (!UserProfile.isValidGender(gender: gender, genderOther: genderOther)) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: noGenderSpecified);
     }
     if ((bio.isEmpty || bio.length < UserProfile.userBioMinLen)) {
-      return OperationResult(errorOccurred: true, errorMessage: bioIsEmptyErr);
+      return ServiceResult(errorOccurred: true, errorMessage: bioIsEmptyErr);
     }
     if (title.isEmpty || title.length < UserProfile.userTitleMinLen) {
-      return OperationResult(
-          errorOccurred: true, errorMessage: titleIsEmptyErr);
+      return ServiceResult(errorOccurred: true, errorMessage: titleIsEmptyErr);
     }
     if (title.length > UserProfile.userTitleMaxLen) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: titleIsTooLongErr);
     }
     if (!UserProfile.isOfLegalAge(birthDay: birthDay)) {
-      return OperationResult(errorOccurred: true, errorMessage: bDayNotSet);
+      return ServiceResult(errorOccurred: true, errorMessage: bDayNotSet);
     }
 
     UserProfile updatedProfile = _createUpdatedProfileInstance(
@@ -285,7 +279,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     UserProfile? newProfile = await remoteProfileDataSource.updateUserProfile(
         profile: updatedProfile);
     if (newProfile == null) {
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: updateProfileError);
     }
     return await _cacheUserProfileAndReturn(newProfile);

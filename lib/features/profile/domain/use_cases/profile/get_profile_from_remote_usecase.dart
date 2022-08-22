@@ -5,7 +5,7 @@ class GetProfileFromRemoteUseCase {
   final ProfileRepository profileRepository;
   GetProfileFromRemoteUseCase({required this.profileRepository});
 
-  Future<OperationResult> execute() async {
+  Future<ServiceResult> execute() async {
     return await profileRepository.loadUserProfileFromRemoteIfExists();
   }
 }

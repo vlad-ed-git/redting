@@ -5,7 +5,7 @@ class SignUserInUseCase {
   final AuthRepository repository;
   SignUserInUseCase({required this.repository});
 
-  Future<OperationResult> execute(
+  Future<ServiceResult> execute(
       {String? verificationId, String? smsCode, dynamic credential}) async {
     return await repository.signInUser(verificationId, smsCode, credential);
   }

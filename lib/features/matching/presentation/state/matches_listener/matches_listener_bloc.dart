@@ -27,7 +27,7 @@ class MatchesListenerBloc
 
   FutureOr<void> _onLoadThisUserProfileEvent(LoadThisUserProfileEvent event,
       Emitter<MatchesListenerState> emit) async {
-    OperationResult result =
+    ServiceResult result =
         await matchingUseCases.getThisUsersInfoUseCase.execute();
 
     if (result.errorOccurred || result.data is! UserProfile) {

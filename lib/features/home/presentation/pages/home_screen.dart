@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:redting/core/components/gradients/primary_gradients.dart';
-import 'package:redting/core/components/screens/screen_container.dart';
+import 'package:redting/core/components/screens/gradient_screen_container.dart';
+import 'package:redting/core/components/screens/scaffold_wrapper.dart';
+import 'package:redting/features/blind_date_setup/presentation/pages/blind_date_setup_screen.dart';
+import 'package:redting/features/blind_date_setup/presentation/pages/blind_dates_screen.dart';
 import 'package:redting/features/home/presentation/components/build_app_bar.dart';
 import 'package:redting/features/matching/presentation/pages/matched_screen.dart';
 import 'package:redting/features/matching/presentation/pages/matching_screen.dart';
@@ -45,15 +47,23 @@ class _HomeScreenState extends State<HomeScreen> {
     if (settings != null && settings.arguments is UserProfile) {
       _userProfile = settings.arguments as UserProfile;
     }
-    return ScreenContainer(
+    return ScaffoldWrapper(
         child: Scaffold(
       extendBodyBehindAppBar: false,
-      extendBody: true,
       appBar: buildAppBar(onSettingsClicked: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => EditDatingInfoScreen(
+              userProfile: _userProfile,
+            ),
+          ),
+        );
+      }, onSetupBlindDateClicked: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BlindDateSetupScreen(
               userProfile: _userProfile,
             ),
           ),
@@ -85,6 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(Icons.local_fire_department_rounded),
           label: myMatchesDestinationLbl),
       const NavigationDestination(
+          icon: Icon(Icons.group_sharp), label: blindDatesScreenNavTitle),
+      const NavigationDestination(
           icon: Icon(Icons.account_circle_outlined),
           label: myProfileDestinationLbl),
     ];
@@ -111,8 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
         return 0;
       case HomeDestinations.matched:
         return 1;
-      case HomeDestinations.profile:
+      case HomeDestinations.blindDates:
         return 2;
+      case HomeDestinations.profile:
+        return 3;
     }
   }
 
@@ -133,6 +147,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (index == 2) {
       setState(() {
+        _homeDestinations = HomeDestinations.blindDates;
+        _destinationPagesController.jumpToPage(_getSelectedIndex());
+      });
+    }
+
+    if (index == 3) {
+      setState(() {
         _homeDestinations = HomeDestinations.profile;
         _destinationPagesController.jumpToPage(_getSelectedIndex());
       });
@@ -143,25 +164,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _destinationScreens = [
       MatchingScreen(profile: _userProfile),
       MatchedScreen(profile: _userProfile),
+      const BlindDatesScreen(),
       ViewProfileScreen(profile: _userProfile),
     ];
     return _destinationScreens
-        .map((pageScreen) => _getDestinationScreenContainer(pageScreen))
+        .map((pageScreen) => GradientScreenContainer(screen: pageScreen))
         .toList(growable: false);
-  }
-
-  Widget _getDestinationScreenContainer(Widget screen) {
-    var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-        decoration: BoxDecoration(gradient: threeColorOpaqueGradientTB),
-        constraints:
-            BoxConstraints(minWidth: screenWidth, minHeight: screenHeight),
-        child: Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: paddingMd, horizontal: paddingStd),
-            child: screen));
   }
 }
 
-enum HomeDestinations { matching, matched, profile }
+enum HomeDestinations { matching, matched, blindDates, profile }

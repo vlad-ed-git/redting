@@ -22,7 +22,7 @@ class ChatRepositoryImpl implements ChatRepository {
       MatchingMembers thisUser, MatchingMembers thatUser) {
     String chatRoomId = Message.getChatRoomId(thisUser.userId, thatUser.userId);
     //since we are getting the very first batch
-    remoteSource.resetChatRoomPaginatorTracker(chatRoomId);
+    remoteSource.resetChatRoomPageTracker(chatRoomId);
     return remoteSource.listenToChatStreamBetweenUsers(chatRoomId);
   }
 
@@ -34,7 +34,7 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<OperationResult> sendImageMessage(
+  Future<ServiceResult> sendImageMessage(
       {required MatchingMembers thisUser,
       required MatchingMembers thatUser,
       required File imageFile,
@@ -44,7 +44,7 @@ class ChatRepositoryImpl implements ChatRepository {
           thisUser.userId, imageFile, imageFileName, imageCompressor);
       if (downloadUrl == null) {
         //failed
-        return OperationResult(
+        return ServiceResult(
             errorOccurred: true, errorMessage: errorSendingImageMessage);
       }
 
@@ -64,13 +64,13 @@ class ChatRepositoryImpl implements ChatRepository {
       if (kDebugMode) {
         print("============ sendImageMessage exc $e =========");
       }
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: errorSendingImageMessage);
     }
   }
 
   @override
-  Future<OperationResult> encryptAndSendTextMessage(
+  Future<ServiceResult> encryptAndSendTextMessage(
       {required MatchingMembers thisUser,
       required MatchingMembers thatUser,
       required String message}) async {
@@ -93,7 +93,7 @@ class ChatRepositoryImpl implements ChatRepository {
       if (kDebugMode) {
         print("============ sendTextMessage exc $e =========");
       }
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: errorSendingTxtMessage);
     }
   }

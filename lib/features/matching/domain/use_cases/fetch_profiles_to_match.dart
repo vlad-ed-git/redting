@@ -6,7 +6,7 @@ class FetchProfilesToMatch {
   final MatchingRepository repository;
   FetchProfilesToMatch(this.repository);
 
-  Future<OperationResult> execute(UserProfile thisUserProfile) async {
+  Future<ServiceResult> execute(UserProfile thisUserProfile) async {
     return await repository.getProfilesToMatchWith(thisUserProfile);
   }
 }

@@ -6,12 +6,12 @@ class SendTxtMessageUseCase {
   final ChatRepository chatRepository;
   SendTxtMessageUseCase(this.chatRepository);
 
-  Future<OperationResult> execute({
+  Future<ServiceResult> execute({
     required MatchingMembers thisUser,
     required MatchingMembers thatUser,
     required String message,
   }) async {
-    return chatRepository.encryptAndSendTextMessage(
+    return await chatRepository.encryptAndSendTextMessage(
         thisUser: thisUser, thatUser: thatUser, message: message);
   }
 }

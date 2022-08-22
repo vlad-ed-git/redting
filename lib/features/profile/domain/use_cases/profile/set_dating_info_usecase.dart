@@ -11,7 +11,7 @@ class SetDatingInfoUseCase {
     this.repository,
   );
 
-  Future<OperationResult> execute(
+  Future<ServiceResult> execute(
       UserProfile profile,
       List<DatingPic> datingPics,
       int minAgePreference,

@@ -7,9 +7,9 @@ import 'package:redting/features/profile/data/utils/compressors/image_compressor
 abstract class RemoteChatSource {
   Future<String?> uploadPhoto(String userId, File imageFile,
       String imageFileName, ImageCompressor imageCompressor);
-  Future<OperationResult> setIdAndSendMessage(Message message);
+  Future<ServiceResult> setIdAndSendMessage(Message message);
   Stream<List<OperationRealTimeResult>> listenToChatStreamBetweenUsers(
       String chatRoomId);
   Future<List<Message>> loadOldMessages(String chatRoomId);
-  resetChatRoomPaginatorTracker(String chatRoomId);
+  resetChatRoomPageTracker(String chatRoomId);
 }

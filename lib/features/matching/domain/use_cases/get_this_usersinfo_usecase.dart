@@ -5,7 +5,7 @@ class GetThisUsersInfoUseCase {
   final MatchingRepository repository;
   GetThisUsersInfoUseCase(this.repository);
 
-  Future<OperationResult> execute() async {
+  Future<ServiceResult> execute() async {
     return await repository.getThisUserInfo();
   }
 }

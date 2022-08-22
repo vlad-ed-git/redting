@@ -5,7 +5,7 @@ class DeleteVerificationVideoUseCase {
   final ProfileRepository profileRepository;
   DeleteVerificationVideoUseCase(this.profileRepository);
 
-  Future<OperationResult> execute() async {
+  Future<ServiceResult> execute() async {
     return await profileRepository.deleteVerificationVideo();
   }
 }

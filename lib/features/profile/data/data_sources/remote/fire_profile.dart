@@ -6,10 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:redting/features/profile/data/data_sources/remote/remote_profile_source.dart';
+import 'package:redting/features/profile/data/entities/user_phones_entity.dart';
 import 'package:redting/features/profile/data/entities/user_profile_entity.dart';
 import 'package:redting/features/profile/data/entities/user_verification_video_entity.dart';
 import 'package:redting/features/profile/data/utils/compressors/image_compressor.dart';
 import 'package:redting/features/profile/data/utils/compressors/video_compressor.dart';
+import 'package:redting/features/profile/domain/models/user_phones.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/profile/domain/models/user_verification_video.dart';
 import 'package:redting/res/string_arrays.dart';
@@ -25,6 +27,9 @@ const String verificationVideosCollection = "users_verification_videos";
 const String usersVerificationVideosBucket = "verificationVideos";
 const String thisUserVerificationVideosBucket = "myVerificationVideos";
 
+const userPhonesCollection = "user_phones";
+const userPhonesCollectionIdField = "userId";
+
 class FireProfile implements RemoteProfileDataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -37,10 +42,18 @@ class FireProfile implements RemoteProfileDataSource {
           .collection(userProfileCollection)
           .doc(profile.userId)
           .set(profile.toJson());
+      //store phone - id map
+      UserPhone userPhone = UserPhoneEntity(
+          userId: profile.userId, phoneNumber: _auth.currentUser!.phoneNumber!);
+      await _fireStore
+          .collection(userPhonesCollection)
+          .doc(userPhone.phoneNumber)
+          .set(userPhone.toJson());
+
       return profile;
     } catch (e) {
       if (kDebugMode) {
-        print("============== createUserProfile --firestore $e ============");
+        print("============== createUserProfile --fire store $e ============");
       }
       return null;
     }

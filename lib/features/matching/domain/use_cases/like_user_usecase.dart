@@ -5,7 +5,7 @@ class LikeUserUseCase {
   final MatchingRepository repository;
   LikeUserUseCase(this.repository);
 
-  Future<OperationResult> execute(String thisUser, String likedUser,
+  Future<ServiceResult> execute(String thisUser, String likedUser,
       String likedUserName, String likedUserProfilePhotoUrl) async {
     return await repository.likeUser(
         thisUser, likedUser, likedUserName, likedUserProfilePhotoUrl);

@@ -8,13 +8,13 @@ class SendPhotoUseCase {
   final ChatRepository chatRepository;
   SendPhotoUseCase(this.chatRepository);
 
-  Future<OperationResult> execute({
+  Future<ServiceResult> execute({
     required MatchingMembers thisUser,
     required MatchingMembers thatUser,
     required File imageFile,
     required String imageFileName,
   }) async {
-    return chatRepository.sendImageMessage(
+    return await chatRepository.sendImageMessage(
         thisUser: thisUser,
         thatUser: thatUser,
         imageFile: imageFile,

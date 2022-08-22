@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/buttons/main_elevated_btn.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
-import 'package:redting/core/components/screens/screen_container.dart';
+import 'package:redting/core/components/screens/scaffold_wrapper.dart';
 import 'package:redting/core/components/selectors/country_code_selector.dart';
 import 'package:redting/core/components/text_input/outlined_txtfield.dart';
 import 'package:redting/core/components/text_input/six_code_input.dart';
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
           listener: _listenToStateChange,
           child: BlocBuilder<AuthUserBloc, AuthUserState>(
               builder: (blocContext, state) {
-            return ScreenContainer(
+            return ScaffoldWrapper(
                 child: WillPopScope(
               onWillPop: () async {
                 return _onBackPressed(blocContext);
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
   List<Widget> _getPhoneStepWidgets() {
     return [
       Text(
-        phoneNumberLbl,
+        yourPhoneNumberLbl,
         style: appTextTheme.subtitle2,
       ),
       const SizedBox(
@@ -253,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 200, maxWidth: 200),
           child: MainElevatedBtn(
-            onPressed: () {
+            onClick: () {
               _onClickedContinue(blocContext);
             },
             lbl: loginBtn,

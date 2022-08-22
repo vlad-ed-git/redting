@@ -24,7 +24,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
     emit(LoadingState());
 
     await matchingUseCases.syncWithRemote.execute();
-    OperationResult result =
+    ServiceResult result =
         await matchingUseCases.getThisUsersInfoUseCase.execute();
     if (result.errorOccurred || result.data is! UserProfile) {
       emit(InitializingMatchingFailedState(
@@ -39,7 +39,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   FutureOr<void> _onLoadProfilesEvent(
       LoadProfilesToMatchEvent event, Emitter<MatchingState> emit) async {
     emit(LoadingState());
-    OperationResult result =
+    ServiceResult result =
         await matchingUseCases.fetchProfilesToMatch.execute(event.profiles);
     if (result.errorOccurred || result.data is! List<UserProfile>) {
       emit(FetchingMatchesFailedState(
@@ -52,7 +52,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   FutureOr<void> _onLikeUserEvent(
       LikeUserEvent event, Emitter<MatchingState> emit) async {
     emit(LikingUserState());
-    OperationResult result = await matchingUseCases.likeUserUseCase.execute(
+    ServiceResult result = await matchingUseCases.likeUserUseCase.execute(
         event.likedByUser,
         event.likedUserProfile.userId,
         event.likedUserProfile.name,
@@ -67,7 +67,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   FutureOr<void> _onSendUserFeedBackEvent(
       SendUserFeedBackEvent event, Emitter<MatchingState> emit) async {
     emit(SendingFeedbackState());
-    OperationResult result = await matchingUseCases.sendUserDailyFeedback
+    ServiceResult result = await matchingUseCases.sendUserDailyFeedback
         .execute(event.userId, event.feedback, event.rating);
 
     if (result.errorOccurred) {

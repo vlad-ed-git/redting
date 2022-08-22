@@ -40,29 +40,30 @@ class _MatchedScreenState extends State<MatchedScreen>
         lazy: false,
         create: (BuildContext blocProviderContext) =>
             GetIt.instance<MatchesListenerBloc>(),
-        child: BlocBuilder<MatchesListenerBloc, MatchesListenerState>(
-            builder: (blocContext, state) {
-          if (state is MatchesListenerInitialState) {
-            _onInitState(blocContext);
-          }
-          return BlocListener<MatchesListenerBloc, MatchesListenerState>(
-              listener: _listenToStates,
-              child: StreamBuilder<List<OperationRealTimeResult>>(
+        child: BlocListener<MatchesListenerBloc, MatchesListenerState>(
+            listener: _listenToStates,
+            child: BlocBuilder<MatchesListenerBloc, MatchesListenerState>(
+                builder: (blocContext, state) {
+              if (state is MatchesListenerInitialState) {
+                _onInitState(blocContext);
+              }
+              return StreamBuilder<List<OperationRealTimeResult>>(
                   stream: _stream,
                   builder: (context, snapshot) {
                     if (snapshot.hasData && snapshot.data != null) {
                       _respondToDataChanges(snapshot.data!);
                     }
 
-                    return SingleChildScrollView(
+                    return ListView.builder(
+                      itemCount: _matchedProfiles.values.length,
                       physics: const BouncingScrollPhysics(),
-                      child: ListBody(
-                          children: _matchedProfiles.values
-                              .map((profile) => _matchToMessageWidget(profile))
-                              .toList()),
+                      itemBuilder: (BuildContext context, int index) {
+                        return _matchToMessageWidget(
+                            _matchedProfiles.values.toList()[index]);
+                      },
                     );
-                  }));
-        }));
+                  });
+            })));
   }
 
   void _listenToStates(BuildContext context, MatchesListenerState state) {

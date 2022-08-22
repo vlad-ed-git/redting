@@ -5,7 +5,7 @@ class SendUserDailyFeedback {
   final MatchingRepository repository;
   SendUserDailyFeedback(this.repository);
 
-  Future<OperationResult> execute(
+  Future<ServiceResult> execute(
       String userId, String feedback, int rating) async {
     return await repository.sendDailyFeedback(userId, feedback, rating);
   }

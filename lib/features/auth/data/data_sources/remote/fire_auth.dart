@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/auth/data/data_sources/remote/remote_auth.dart';
@@ -7,21 +8,22 @@ import 'package:redting/res/strings.dart';
 
 class FireAuth implements RemoteAuthSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   @override
-  OperationResult getAuthUser() {
+  ServiceResult getAuthUser() {
     try {
       User? user = _auth.currentUser;
-      if (user == null) return OperationResult();
+      if (user == null) return ServiceResult();
 
-      return OperationResult(
+      return ServiceResult(
           data: AuthUserEntity(
         userId: user.uid,
         phoneNumber: user.phoneNumber!,
       ));
     } catch (e) {
       /// probably phone number is unset
-      return OperationResult(errorOccurred: true, errorMessage: "$e");
+      return ServiceResult(errorOccurred: true, errorMessage: "$e");
     }
   }
 
@@ -59,28 +61,29 @@ class FireAuth implements RemoteAuthSource {
   }
 
   @override
-  Future<OperationResult> signInWithCredentials(dynamic credential) async {
+  Future<ServiceResult> signInWithCredentials(dynamic credential) async {
     try {
       UserCredential userCredentials =
           await _auth.signInWithCredential(credential as PhoneAuthCredential);
-      return OperationResult(data: userCredentials);
+
+      return ServiceResult(data: userCredentials);
     } on FirebaseAuthException catch (e) {
       if (e.code == "invalid-verification-code") {
-        return OperationResult(
+        return ServiceResult(
             errorOccurred: true, errorMessage: invalidVerificationCode);
       }
 
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: failedToVerifyUnknown);
     }
   }
 
   @override
-  Future<OperationResult> signInWithVerificationCode(
+  Future<ServiceResult> signInWithVerificationCode(
       String verificationId, String smsCode) async {
     // Create a PhoneAuthCredential with the code
-    if (smsCode.isEmpty) {
-      return OperationResult(
+    if (smsCode.trim().isEmpty) {
+      return ServiceResult(
           errorOccurred: true, errorMessage: invalidVerificationCode);
     }
     PhoneAuthCredential credential = PhoneAuthProvider.credential(

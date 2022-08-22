@@ -117,7 +117,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen>
           constraints: const BoxConstraints(maxWidth: 200),
           child: MainElevatedBtn(
               suffixIcon: Icons.edit,
-              onPressed: () {
+              onClick: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -139,7 +139,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen>
           constraints: const BoxConstraints(maxWidth: 300),
           child: MainElevatedBtn(
               suffixIcon: Icons.settings,
-              onPressed: () {
+              onClick: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(

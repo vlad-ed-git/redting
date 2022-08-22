@@ -185,7 +185,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           child: MainElevatedBtn(
                             primaryBg: true,
                             showLoading: _isUpdatingUserProfile,
-                            onPressed: () {
+                            onClick: () {
                               _onSaveProfile(blocContext);
                             },
                             lbl: updateProfileBtn,

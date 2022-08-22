@@ -6,14 +6,13 @@ import 'package:redting/features/matching/domain/models/matching_profiles.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 
 abstract class RemoteMatchingDataSource {
-  Future<OperationResult> likeUser(
+  Future<ServiceResult> likeUser(
       LikedUser likedUser, MatchingProfiles matchingProfiles);
   Future<IceBreakerMessages?> getIceBreakerMessages();
   Future<List<UserProfile>?> getProfilesToMatchWith(
     UserProfile thisUsersProfile,
   );
-  Future<OperationResult> sendDailyFeedback(
-      DailyUserFeedback dailyUserFeedback);
+  Future<ServiceResult> sendDailyFeedback(DailyUserFeedback dailyUserFeedback);
   Stream<List<OperationRealTimeResult>> listenToMatches();
-  Future<OperationResult> getUsersILike();
+  Future<ServiceResult> getUsersILike();
 }

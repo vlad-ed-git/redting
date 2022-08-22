@@ -21,72 +21,70 @@ import 'package:redting/features/profile/presentation/state/user_profile_bloc.da
 /// FACTORY - instantiated every time we request
 ///  SINGLETON - only a single instance is created
 
-GetIt init(GetIt coreDiInstance) {
-  final GetIt profileDiInstance = GetIt.instance;
+GetIt init() {
+  final GetIt diInstance = GetIt.instance;
   //auth bloc
-  profileDiInstance.registerFactory<UserProfileBloc>(
-      () => UserProfileBloc(profileUseCases: profileDiInstance()));
+  diInstance.registerFactory<UserProfileBloc>(
+      () => UserProfileBloc(profileUseCases: diInstance()));
 
   //useCases
-  profileDiInstance.registerLazySingleton<ProfileUseCases>(() =>
-      ProfileUseCases(
-          createProfileUseCase: profileDiInstance(),
-          getProfileFromRemoteUseCase: profileDiInstance(),
-          uploadProfilePhotoUseCase: profileDiInstance(),
-          generateVideoVerificationCodeUseCase: profileDiInstance(),
-          uploadVerificationVideoUseCase: profileDiInstance(),
-          deleteVerificationVideoUseCase: profileDiInstance(),
-          getCachedProfileUseCase: profileDiInstance(),
-          setDatingInfoUseCase: profileDiInstance(),
-          addDatingPicUseCase: profileDiInstance(),
-          updateUserProfileUseCase: profileDiInstance()));
+  diInstance.registerLazySingleton<ProfileUseCases>(() => ProfileUseCases(
+      createProfileUseCase: diInstance(),
+      getProfileFromRemoteUseCase: diInstance(),
+      uploadProfilePhotoUseCase: diInstance(),
+      generateVideoVerificationCodeUseCase: diInstance(),
+      uploadVerificationVideoUseCase: diInstance(),
+      deleteVerificationVideoUseCase: diInstance(),
+      getCachedProfileUseCase: diInstance(),
+      setDatingInfoUseCase: diInstance(),
+      addDatingPicUseCase: diInstance(),
+      updateUserProfileUseCase: diInstance()));
 
-  profileDiInstance.registerLazySingleton<GetProfileFromRemoteUseCase>(() =>
-      GetProfileFromRemoteUseCase(profileRepository: profileDiInstance()));
+  diInstance.registerLazySingleton<GetProfileFromRemoteUseCase>(
+      () => GetProfileFromRemoteUseCase(profileRepository: diInstance()));
 
-  profileDiInstance.registerLazySingleton<CreateProfileUseCase>(
-      () => CreateProfileUseCase(profileRepository: profileDiInstance()));
+  diInstance.registerLazySingleton<CreateProfileUseCase>(
+      () => CreateProfileUseCase(profileRepository: diInstance()));
 
-  profileDiInstance.registerLazySingleton<UploadProfilePhotoUseCase>(
-      () => UploadProfilePhotoUseCase(profileRepository: profileDiInstance()));
+  diInstance.registerLazySingleton<UploadProfilePhotoUseCase>(
+      () => UploadProfilePhotoUseCase(profileRepository: diInstance()));
 
-  profileDiInstance.registerLazySingleton<GenerateVideoVerificationCodeUseCase>(
-      () => GenerateVideoVerificationCodeUseCase(
-          profileRepository: profileDiInstance()));
+  diInstance.registerLazySingleton<GenerateVideoVerificationCodeUseCase>(() =>
+      GenerateVideoVerificationCodeUseCase(profileRepository: diInstance()));
 
-  profileDiInstance.registerLazySingleton<GetCachedProfileUseCase>(
-      () => GetCachedProfileUseCase(profileRepository: profileDiInstance()));
+  diInstance.registerLazySingleton<GetCachedProfileUseCase>(
+      () => GetCachedProfileUseCase(profileRepository: diInstance()));
 
-  profileDiInstance.registerLazySingleton<UploadVerificationVideoUseCase>(() =>
-      UploadVerificationVideoUseCase(profileRepository: profileDiInstance()));
+  diInstance.registerLazySingleton<UploadVerificationVideoUseCase>(
+      () => UploadVerificationVideoUseCase(profileRepository: diInstance()));
 
-  profileDiInstance.registerLazySingleton<DeleteVerificationVideoUseCase>(
-      () => DeleteVerificationVideoUseCase(profileDiInstance()));
+  diInstance.registerLazySingleton<DeleteVerificationVideoUseCase>(
+      () => DeleteVerificationVideoUseCase(diInstance()));
 
-  profileDiInstance.registerLazySingleton<UpdateUserProfileUseCase>(
-      () => UpdateUserProfileUseCase(profileDiInstance()));
+  diInstance.registerLazySingleton<UpdateUserProfileUseCase>(
+      () => UpdateUserProfileUseCase(diInstance()));
 
-  profileDiInstance.registerLazySingleton<SetDatingInfoUseCase>(
-      () => SetDatingInfoUseCase(profileDiInstance()));
-  profileDiInstance.registerLazySingleton<AddDatingPicUseCase>(
-      () => AddDatingPicUseCase(profileDiInstance()));
+  diInstance.registerLazySingleton<SetDatingInfoUseCase>(
+      () => SetDatingInfoUseCase(diInstance()));
+  diInstance.registerLazySingleton<AddDatingPicUseCase>(
+      () => AddDatingPicUseCase(diInstance()));
 
   //repository
-  profileDiInstance
+  diInstance
       .registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(
-            remoteProfileDataSource: profileDiInstance(),
-            imageCompressor: coreDiInstance(),
-            localProfileDataSource: profileDiInstance(),
-            videoCompressor: coreDiInstance(),
+            remoteProfileDataSource: diInstance(),
+            imageCompressor: diInstance(),
+            localProfileDataSource: diInstance(),
+            videoCompressor: diInstance(),
           ));
 
   //remote data source
-  profileDiInstance
+  diInstance
       .registerLazySingleton<RemoteProfileDataSource>(() => FireProfile());
 
   //local data source
-  profileDiInstance
+  diInstance
       .registerLazySingleton<LocalProfileDataSource>(() => UserProfileHive());
 
-  return profileDiInstance;
+  return diInstance;
 }

@@ -16,12 +16,12 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<OperationResult> getCachedAuthUser() async {
+  Future<ServiceResult> getCachedAuthUser() async {
     try {
       AuthUser? authUser = localAuth.getAuthUser();
-      return OperationResult(data: authUser);
+      return ServiceResult(data: authUser);
     } catch (e) {
-      return OperationResult(errorOccurred: true, errorMessage: "$e");
+      return ServiceResult(errorOccurred: true, errorMessage: "$e");
     }
   }
 
@@ -33,9 +33,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<OperationResult> signInUser(
+  Future<ServiceResult> signInUser(
       String? verificationId, String? smsCode, dynamic credential) async {
-    OperationResult result;
+    ServiceResult result;
 
     //2 ways to sign
     if (verificationId != null && smsCode != null) {
@@ -53,10 +53,10 @@ class AuthRepositoryImpl implements AuthRepository {
     AuthUser? authUser = await cacheAuthUser();
     if (authUser == null) {
       await signOut(); //just to be certain
-      return OperationResult(
+      return ServiceResult(
           errorOccurred: true, errorMessage: failedToCacheAuthUser);
     }
-    return OperationResult(data: authUser);
+    return ServiceResult(data: authUser);
   }
 
   @override
@@ -67,7 +67,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   Future<AuthUser?> cacheAuthUser() async {
     try {
-      OperationResult result = remoteAuth.getAuthUser();
+      ServiceResult result = remoteAuth.getAuthUser();
       if (result.data is AuthUser) {
         AuthUser user = result.data as AuthUser;
         await localAuth.cacheAuthUser(authUser: user);

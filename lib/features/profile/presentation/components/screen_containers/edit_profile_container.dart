@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
-import 'package:redting/core/components/screens/screen_container.dart';
+import 'package:redting/core/components/screens/scaffold_wrapper.dart';
 import 'package:redting/features/profile/presentation/components/app_bars/build_edit_profile_appbar.dart';
 import 'package:redting/res/dimens.dart';
 
@@ -15,7 +15,7 @@ class EditProfileContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    return ScreenContainer(
+    return ScaffoldWrapper(
         child: Scaffold(
             extendBodyBehindAppBar: false,
             appBar: buildEditProfileAppBar(onSaveProfile: onSaveProfile),

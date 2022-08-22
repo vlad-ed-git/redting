@@ -7,7 +7,7 @@ class UploadProfilePhotoUseCase {
   final ProfileRepository profileRepository;
   UploadProfilePhotoUseCase({required this.profileRepository});
 
-  Future<OperationResult> execute(
+  Future<ServiceResult> execute(
       {required File file, required String filename}) async {
     return await profileRepository.uploadProfilePhoto(
         file: file, filename: filename);

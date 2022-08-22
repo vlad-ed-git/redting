@@ -22,7 +22,7 @@ class FireChat implements RemoteChatSource {
   final Map<String, DocumentSnapshot<Object?>> _chatRoomLastDocFetched = {};
 
   @override
-  Future<OperationResult> setIdAndSendMessage(Message message) async {
+  Future<ServiceResult> setIdAndSendMessage(Message message) async {
     try {
       var doc = _fireStore
           .collection(chatsCollection)
@@ -31,12 +31,12 @@ class FireChat implements RemoteChatSource {
           .doc();
       message.uid = doc.id;
       await doc.set(message.toJson());
-      return OperationResult();
+      return ServiceResult();
     } catch (e) {
       if (kDebugMode) {
         print("================ setIdAndSendMessage exc $e ===========");
       }
-      return OperationResult(errorOccurred: true);
+      return ServiceResult(errorOccurred: true);
     }
   }
 
@@ -90,7 +90,7 @@ class FireChat implements RemoteChatSource {
   }
 
   @override
-  resetChatRoomPaginatorTracker(String chatRoomId) {
+  resetChatRoomPageTracker(String chatRoomId) {
     if (_chatRoomLastDocFetched.containsKey(chatRoomId)) {
       _chatRoomLastDocFetched.remove(chatRoomId);
     }
@@ -98,8 +98,8 @@ class FireChat implements RemoteChatSource {
 
   @override
   Stream<List<OperationRealTimeResult>> listenToChatStreamBetweenUsers(
-      String chatRoomId,
-      {bool loadMore = false}) {
+    String chatRoomId,
+  ) {
     try {
       Query<Map<String, dynamic>> query = _fireStore
           .collection(chatsCollection)

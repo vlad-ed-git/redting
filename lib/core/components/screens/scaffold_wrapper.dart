@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ScreenContainer extends StatelessWidget {
+class ScaffoldWrapper extends StatelessWidget {
   final Widget child;
   final Color? statusBarColor;
-  const ScreenContainer({
+  const ScaffoldWrapper({
     Key? key,
     required this.child,
     this.statusBarColor,

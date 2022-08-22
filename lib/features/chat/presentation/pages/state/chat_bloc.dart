@@ -22,7 +22,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _onSendMessageEvent(
       SendMessageEvent event, Emitter<ChatState> emit) async {
-    OperationResult? result;
+    ServiceResult? result;
     if (event.message != null) {
       emit(SendingMessageState());
       result = await chatUseCases.sendTxtMessageUseCase.execute(

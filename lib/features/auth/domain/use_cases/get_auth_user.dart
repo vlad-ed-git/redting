@@ -5,7 +5,7 @@ class GetAuthenticatedUserCase {
   final AuthRepository repository;
   GetAuthenticatedUserCase({required this.repository});
 
-  Future<OperationResult> execute() async {
+  Future<ServiceResult> execute() async {
     return await repository.getCachedAuthUser();
   }
 }

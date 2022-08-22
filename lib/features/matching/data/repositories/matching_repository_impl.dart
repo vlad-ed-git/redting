@@ -16,42 +16,41 @@ import 'package:redting/res/strings.dart';
 
 class MatchingRepositoryImpl implements MatchingRepository {
   final ProfileRepository _profileRepository;
-  final LocalMatchingDataSource localDataSource;
-  final RemoteMatchingDataSource remoteDataSource;
+  final LocalMatchingDataSource _localDataSource;
+  final RemoteMatchingDataSource _remoteDataSource;
   final List<String> icebreakersCacheMessages = [];
   MatchingRepositoryImpl(
-      this._profileRepository, this.localDataSource, this.remoteDataSource);
+      this._profileRepository, this._localDataSource, this._remoteDataSource);
 
   @override
-  Future<OperationResult> getProfilesToMatchWith(
-      UserProfile userProfile) async {
+  Future<ServiceResult> getProfilesToMatchWith(UserProfile userProfile) async {
     List<UserProfile>? profilesToMatchOrNull =
-        await remoteDataSource.getProfilesToMatchWith(userProfile);
+        await _remoteDataSource.getProfilesToMatchWith(userProfile);
     if (profilesToMatchOrNull == null) {
-      return OperationResult(errorOccurred: true);
+      return ServiceResult(errorOccurred: true);
     }
     //removed liked users
-    Map<dynamic, dynamic> likedUsers = localDataSource.getLikedUsersCache();
+    Map<dynamic, dynamic> likedUsers = _localDataSource.getLikedUsersCache();
     profilesToMatchOrNull.removeWhere((e) => likedUsers.containsKey(e.userId));
-    return OperationResult(data: profilesToMatchOrNull);
+    return ServiceResult(data: profilesToMatchOrNull);
   }
 
   @override
-  Future<OperationResult> getThisUserInfo() async {
+  Future<ServiceResult> getThisUserInfo() async {
     UserProfile? userProfile = await _profileRepository.getCachedUserProfile();
-    return OperationResult(
+    return ServiceResult(
         errorOccurred: userProfile == null,
         errorMessage: userProfile == null ? loadingAuthUserErr : '',
         data: userProfile);
   }
 
   @override
-  Future<OperationResult> likeUser(String thisUserId, String likedUserId,
+  Future<ServiceResult> likeUser(String thisUserId, String likedUserId,
       String likedUserName, String likedUserProfilePhotoUrl) async {
     try {
       String iceBreaker = await _getRandomIceBreakerMessage();
       if (iceBreaker.isEmpty) {
-        return OperationResult(
+        return ServiceResult(
             errorMessage: likingUserFailed, errorOccurred: true);
       }
 
@@ -61,7 +60,7 @@ class MatchingRepositoryImpl implements MatchingRepository {
           likedUserId: likedUserId);
       MatchingProfiles matchingProfiles = MatchingProfilesEntity(
           userAUserBIdsConcatNSorted:
-              MatchingProfiles.concatUser1User2IdsSortAndSetAsId(
+              MatchingProfiles.concatUser1User2IdsSortAndGetAsId(
                   thisUserId, likedUserId),
           iceBreakers: [iceBreaker],
           likers: [thisUserId],
@@ -73,19 +72,18 @@ class MatchingRepositoryImpl implements MatchingRepository {
           //add self
           );
 
-      OperationResult result =
-          await remoteDataSource.likeUser(likedUser, matchingProfiles);
+      ServiceResult result =
+          await _remoteDataSource.likeUser(likedUser, matchingProfiles);
       if (!result.errorOccurred) {
         //cache liked user
-        await localDataSource.cacheLikedUser(likedUserId);
+        await _localDataSource.cacheLikedUser(likedUserId);
       }
       return result;
     } catch (e) {
       if (kDebugMode) {
-        print("=============== repo likeUser $e ==========");
+        print("=============== repository likeUser $e ==========");
       }
-      return OperationResult(
-          errorOccurred: true, errorMessage: likingUserFailed);
+      return ServiceResult(errorOccurred: true, errorMessage: likingUserFailed);
     }
   }
 
@@ -93,7 +91,7 @@ class MatchingRepositoryImpl implements MatchingRepository {
     try {
       if (icebreakersCacheMessages.isEmpty) {
         IceBreakerMessages? icebreakers =
-            localDataSource.getIceBreakerMessages();
+            await _localDataSource.getIceBreakerMessages();
         icebreakersCacheMessages.addAll(icebreakers!.messages);
       }
 
@@ -101,7 +99,7 @@ class MatchingRepositoryImpl implements MatchingRepository {
     } catch (e) {
       if (kDebugMode) {
         print(
-            "=============== repo getRandomIceBreakerMessage() $e ==========");
+            "=============== repository getRandomIceBreakerMessage() $e ==========");
       }
       return "";
     }
@@ -111,15 +109,15 @@ class MatchingRepositoryImpl implements MatchingRepository {
   Future<bool> loadIceBreakerMessagesToCache() async {
     try {
       IceBreakerMessages? icebreakers =
-          await remoteDataSource.getIceBreakerMessages();
-      localDataSource.cacheIceBreakersAndGet(icebreakers!);
+          await _remoteDataSource.getIceBreakerMessages();
+      _localDataSource.cacheIceBreakersAndGet(icebreakers!);
       icebreakersCacheMessages.clear();
       icebreakersCacheMessages.addAll(icebreakers.messages);
       return true;
     } catch (e) {
       if (kDebugMode) {
         print(
-            "=============== repo getRandomIceBreakerMessage() $e ==========");
+            "=============== repository getRandomIceBreakerMessage() $e ==========");
       }
       return false;
     }
@@ -128,11 +126,11 @@ class MatchingRepositoryImpl implements MatchingRepository {
   @override
   Future<bool> loadLikedUsersToCache() async {
     try {
-      OperationResult result = await remoteDataSource.getUsersILike();
+      ServiceResult result = await _remoteDataSource.getUsersILike();
       if (result.data is List) {
         List<LikedUser> users = result.data as List<LikedUser>;
         for (LikedUser user in users) {
-          await localDataSource.cacheLikedUser(user.likedUserId);
+          await _localDataSource.cacheLikedUser(user.likedUserId);
         }
       }
       return true;
@@ -145,14 +143,19 @@ class MatchingRepositoryImpl implements MatchingRepository {
   }
 
   @override
-  Future<OperationResult> sendDailyFeedback(
+  Future<ServiceResult> sendDailyFeedback(
       String userId, String feedback, int rating) async {
-    return await remoteDataSource.sendDailyFeedback(
+    return await _remoteDataSource.sendDailyFeedback(
         DailyUserFeedbackEntity(feedback, rating, DateTime.now(), userId));
   }
 
   @override
   Stream<List<OperationRealTimeResult>> listenToMatches() {
-    return remoteDataSource.listenToMatches();
+    return _remoteDataSource.listenToMatches();
+  }
+
+  @override
+  Future<IceBreakerMessages?> getCachedIceBreakers() async {
+    return await _localDataSource.getIceBreakerMessages();
   }
 }

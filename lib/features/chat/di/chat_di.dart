@@ -10,33 +10,33 @@ import 'package:redting/features/chat/domain/use_cases/send_photo_usecase.dart';
 import 'package:redting/features/chat/domain/use_cases/send_text_usecase.dart';
 import 'package:redting/features/chat/presentation/pages/state/chat_bloc.dart';
 
-GetIt init(GetIt coreDiInstance) {
-  final GetIt chatDiInstance = GetIt.instance;
+GetIt init() {
+  final GetIt diInstance = GetIt.instance;
 
-  chatDiInstance.registerFactory<ChatBloc>(() => ChatBloc(chatDiInstance()));
+  diInstance.registerFactory<ChatBloc>(() => ChatBloc(diInstance()));
 
-  chatDiInstance.registerLazySingleton<ChatUseCases>(() => ChatUseCases(
-      listenToChatUseCase: chatDiInstance(),
-      sendPhotoUseCase: chatDiInstance(),
-      sendTxtMessageUseCase: chatDiInstance(),
-      loadOlderMessagesUseCase: chatDiInstance()));
+  diInstance.registerLazySingleton<ChatUseCases>(() => ChatUseCases(
+      listenToChatUseCase: diInstance(),
+      sendPhotoUseCase: diInstance(),
+      sendTxtMessageUseCase: diInstance(),
+      loadOlderMessagesUseCase: diInstance()));
 
-  chatDiInstance.registerLazySingleton<ListenToLatestMessagesUseCase>(
-      () => ListenToLatestMessagesUseCase(chatDiInstance()));
+  diInstance.registerLazySingleton<ListenToLatestMessagesUseCase>(
+      () => ListenToLatestMessagesUseCase(diInstance()));
 
-  chatDiInstance.registerLazySingleton<SendPhotoUseCase>(
-      () => SendPhotoUseCase(chatDiInstance()));
+  diInstance.registerLazySingleton<SendPhotoUseCase>(
+      () => SendPhotoUseCase(diInstance()));
 
-  chatDiInstance.registerLazySingleton<SendTxtMessageUseCase>(
-      () => SendTxtMessageUseCase(chatDiInstance()));
+  diInstance.registerLazySingleton<SendTxtMessageUseCase>(
+      () => SendTxtMessageUseCase(diInstance()));
 
-  chatDiInstance.registerLazySingleton<LoadOlderMessagesUseCase>(
-      () => LoadOlderMessagesUseCase(chatDiInstance()));
+  diInstance.registerLazySingleton<LoadOlderMessagesUseCase>(
+      () => LoadOlderMessagesUseCase(diInstance()));
 
-  chatDiInstance.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(
-      remoteSource: chatDiInstance(), imageCompressor: coreDiInstance()));
+  diInstance.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(
+      remoteSource: diInstance(), imageCompressor: diInstance()));
 
-  chatDiInstance.registerLazySingleton<RemoteChatSource>(() => FireChat());
+  diInstance.registerLazySingleton<RemoteChatSource>(() => FireChat());
 
-  return chatDiInstance;
+  return diInstance;
 }

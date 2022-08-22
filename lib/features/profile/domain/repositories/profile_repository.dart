@@ -8,10 +8,10 @@ import 'package:redting/features/profile/domain/models/user_verification_video.d
 import 'package:redting/features/profile/domain/utils/dating_pic.dart';
 
 abstract class ProfileRepository {
-  Future<OperationResult> loadUserProfileFromRemoteIfExists();
+  Future<ServiceResult> loadUserProfileFromRemoteIfExists();
   Future<UserProfile?> getCachedUserProfile();
 
-  Future<OperationResult> createUserProfile({
+  Future<ServiceResult> createUserProfile({
     required String name,
     required String userId,
     required String profilePhotoUrl,
@@ -24,19 +24,19 @@ abstract class ProfileRepository {
     required UserVerificationVideo? verificationVideo,
   });
 
-  Future<OperationResult> uploadProfilePhoto({
+  Future<ServiceResult> uploadProfilePhoto({
     required File file,
     required String filename,
   });
 
-  Future<OperationResult> uploadVerificationVideo(
+  Future<ServiceResult> uploadVerificationVideo(
       {required File file, required String verificationCode});
-  Future<OperationResult> generateVerificationWord();
-  Future<OperationResult> deleteVerificationVideo();
+  Future<ServiceResult> generateVerificationWord();
+  Future<ServiceResult> deleteVerificationVideo();
 
-  Future<OperationResult> addDatingPhoto(
+  Future<ServiceResult> addDatingPhoto(
       File photo, String filename, String userId);
-  Future<OperationResult> setDatingInfo(
+  Future<ServiceResult> setDatingInfo(
       UserProfile profile,
       List<DatingPic> datingPics,
       int minAgePreference,
@@ -46,7 +46,7 @@ abstract class ProfileRepository {
       bool makeMyOrientationPublic,
       bool onlyShowMeOthersOfSameOrientation);
 
-  Future<OperationResult> updateUserProfile({
+  Future<ServiceResult> updateUserProfile({
     required UserProfile profile,
     required String name,
     required String profilePhotoUrl,

@@ -9,7 +9,7 @@ abstract class MatchingProfiles {
 
   Map<String, dynamic> toJson();
   MatchingProfiles fromJson(Map<String, dynamic> json);
-  static String concatUser1User2IdsSortAndSetAsId(String user1, user2) {
+  static String concatUser1User2IdsSortAndGetAsId(String user1, user2) {
     String concatUser1User2 = "$user1$user2";
     final concatUser1User2List = concatUser1User2.split("");
     concatUser1User2List.sort((a, b) => a.compareTo(b));

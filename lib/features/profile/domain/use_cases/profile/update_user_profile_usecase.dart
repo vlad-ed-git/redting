@@ -7,7 +7,7 @@ class UpdateUserProfileUseCase {
   final ProfileRepository repository;
   UpdateUserProfileUseCase(this.repository);
 
-  Future<OperationResult> execute({
+  Future<ServiceResult> execute({
     required UserProfile profile,
     required String name,
     required String profilePhotoUrl,

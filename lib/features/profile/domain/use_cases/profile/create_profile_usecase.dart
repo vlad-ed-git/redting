@@ -7,7 +7,7 @@ class CreateProfileUseCase {
   final ProfileRepository profileRepository;
   CreateProfileUseCase({required this.profileRepository});
 
-  Future<OperationResult> execute({
+  Future<ServiceResult> execute({
     required String name,
     required String userId,
     required String profilePhotoUrl,

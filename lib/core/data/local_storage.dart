@@ -28,6 +28,7 @@ class LocalStorage {
     await _openBoxAuthUser();
     await _openBoxUserProfile();
     await _openMatchingDataBox();
+    await _openCanMakeBlindDatesBox();
     //todo other boxes
   }
 
@@ -64,5 +65,10 @@ class LocalStorage {
   static Future _openMatchingDataBox() async {
     await Hive.openBox<Map<dynamic, dynamic>?>(likedUsersBox);
     await Hive.openBox<IceBreakerMessages?>(iceBreakersBox);
+  }
+
+  /// blind data setup status
+  static Future _openCanMakeBlindDatesBox() async {
+    await Hive.openBox<bool?>(canMakeBlindDatesBox);
   }
 }

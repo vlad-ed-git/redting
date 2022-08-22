@@ -111,7 +111,7 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
   }
 
   @override
-  Future<OperationResult> getUsersILike() async {
+  Future<ServiceResult> getUsersILike() async {
     try {
       var doc = await _fireStore
           .collection(likedUsersCollection)
@@ -121,17 +121,17 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
       List<LikedUser> found = doc.docs
           .map((e) => LikedUserEntity.fromJson(e.data()))
           .toList(growable: false);
-      return OperationResult(data: found);
+      return ServiceResult(data: found);
     } catch (e) {
       if (kDebugMode) {
         print("=============== getUsersILike exc $e ==========");
       }
-      return OperationResult(errorOccurred: true);
+      return ServiceResult(errorOccurred: true);
     }
   }
 
   @override
-  Future<OperationResult> likeUser(
+  Future<ServiceResult> likeUser(
       LikedUser likedUser, MatchingProfiles matchingProfiles) async {
     try {
       await _fireStore
@@ -155,13 +155,12 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
         errorOccurred = !added;
       }
 
-      return OperationResult(errorOccurred: errorOccurred);
+      return ServiceResult(errorOccurred: errorOccurred);
     } catch (e) {
       if (kDebugMode) {
         print("=============== likeUser() exc $e ==========");
       }
-      return OperationResult(
-          errorOccurred: true, errorMessage: likingUserFailed);
+      return ServiceResult(errorOccurred: true, errorMessage: likingUserFailed);
     }
   }
 
@@ -317,19 +316,19 @@ class FireMatchingDataSource implements RemoteMatchingDataSource {
 
   /// user feedback
   @override
-  Future<OperationResult> sendDailyFeedback(
+  Future<ServiceResult> sendDailyFeedback(
       DailyUserFeedback dailyUserFeedback) async {
     try {
       await _fireStore
           .collection(dailyUserFeedbackCollection)
           .doc()
           .set(dailyUserFeedback.toJson());
-      return OperationResult();
+      return ServiceResult();
     } catch (e) {
       if (kDebugMode) {
         print("================= sendDailyFeedback $e =============== ");
       }
-      return OperationResult(errorOccurred: true);
+      return ServiceResult(errorOccurred: true);
     }
   }
 

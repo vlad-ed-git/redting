@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
 import 'package:redting/core/components/progress/circular_progress.dart';
-import 'package:redting/core/components/screens/screen_container.dart';
+import 'package:redting/core/components/screens/scaffold_wrapper.dart';
 import 'package:redting/features/auth/domain/models/auth_user.dart';
 import 'package:redting/features/profile/domain/models/user_profile.dart';
 import 'package:redting/features/splash/presentation/state/current_user_bloc.dart';
@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
             }
           }
         },
-        child: ScreenContainer(
+        child: ScaffoldWrapper(
             child: Scaffold(
           extendBodyBehindAppBar: true,
           body: Container(

@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '309040849360',
     projectId: 'redting-d5504',
     storageBucket: 'redting-d5504.appspot.com',
+    androidClientId: '309040849360-gdiqkfnqtqd1cc5r0jbjglmofhp1je3h.apps.googleusercontent.com',
     iosClientId: '309040849360-ajflptqec7341i58rg3np5755gsi6ksc.apps.googleusercontent.com',
     iosBundleId: 'com.redting.developers.redting',
   );

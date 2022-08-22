@@ -5,8 +5,8 @@ class PassOnUserUseCase {
   final MatchingRepository repository;
   PassOnUserUseCase(this.repository);
 
-  Future<OperationResult> execute(String dislikedUserId) async {
-    return OperationResult();
+  Future<ServiceResult> execute(String dislikedUserId) async {
+    return ServiceResult();
 
     ///TODO IMPLEMENT?
   }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/progress/circular_progress.dart';
-import 'package:redting/core/components/screens/screen_container.dart';
+import 'package:redting/core/components/screens/scaffold_wrapper.dart';
 import 'package:redting/core/components/snack/snack.dart';
 import 'package:redting/core/utils/service_result.dart';
 import 'package:redting/features/chat/domain/models/message.dart';
@@ -52,8 +52,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+  Widget build(BuildContext cxt) {
+    final Size size = MediaQuery.of(cxt).size;
     double screenWidth = size.width;
     double screenHeight = size.height;
     return BlocProvider(
@@ -67,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
               if (state is ChatInitialState) {
                 _onInitState(blocContext);
               }
-              return ScreenContainer(
+              return ScaffoldWrapper(
                   child: Scaffold(
                 appBar: chatAppBar(chattingWithUser: widget.thatUser),
                 body: StreamBuilder<List<OperationRealTimeResult>>(
@@ -81,33 +81,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         constraints: BoxConstraints(
                             minHeight: screenHeight, minWidth: screenWidth),
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: paddingMd,
-                              left: paddingStd,
-                              right: paddingStd),
+                          padding: const EdgeInsets.all(paddingStd),
                           child: Stack(
                             children: [
-                              ListView(
-                                  physics: const BouncingScrollPhysics(),
-                                  controller: _messagesScrollController,
-                                  reverse: true,
-                                  children: [
-                                    const SizedBox(
-                                      height: 64,
-                                    ),
-                                    ..._messages.values
-                                        .map((msg) => buildMessageWidget(msg,
-                                            widget.thisUser, widget.thatUser))
-                                        .toList(),
-                                    if (_isLoadingMessages)
-                                      Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: paddingStd),
-                                          child: const Center(
-                                              child: CircularProgress())),
-                                    IceBreakerMsg(
-                                        iceBreaker: widget.iceBreaker),
-                                  ]),
+                              _buildMessagesContainer(),
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: SendMessage(
@@ -279,5 +256,31 @@ class _ChatScreenState extends State<ChatScreen> {
         isError: isError,
       ).create(context));
     }
+  }
+
+  _buildMessagesContainer() {
+    return Column(
+      children: [
+        IceBreakerMsg(iceBreaker: widget.iceBreaker),
+        if (_isLoadingMessages)
+          Container(
+              margin: const EdgeInsets.symmetric(vertical: paddingStd),
+              child: const Center(child: CircularProgress())),
+        Expanded(
+            child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          controller: _messagesScrollController,
+          reverse: true,
+          itemCount: _messages.values.length,
+          itemBuilder: (BuildContext context, int index) {
+            Message msg = _messages.values.toList()[index];
+            return buildMessageWidget(msg, widget.thisUser, widget.thatUser);
+          },
+        )),
+        const SizedBox(
+          height: 64,
+        )
+      ],
+    );
   }
 }

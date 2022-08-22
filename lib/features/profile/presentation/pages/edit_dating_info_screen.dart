@@ -165,7 +165,7 @@ class _EditDatingInfoScreenState extends State<EditDatingInfoScreen> {
                         child: Container(
                           constraints: const BoxConstraints(maxWidth: 200),
                           child: MainElevatedBtn(
-                            onPressed: () {
+                            onClick: () {
                               _onSaveProfile(blocContext);
                             },
                             primaryBg: true,

@@ -35,7 +35,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       LoadUserProfileFromRemoteEvent event,
       Emitter<UserProfileState> emit) async {
     emit(LoadingUserProfileState());
-    OperationResult result =
+    ServiceResult result =
         await profileUseCases.getProfileFromRemoteUseCase.execute();
     if (result.errorOccurred) {
       emit(ErrorLoadingUserProfileState(
@@ -62,7 +62,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   FutureOr<void> _onChangeProfilePhotoEvent(
       ChangeProfilePhotoEvent event, Emitter<UserProfileState> emit) async {
     emit(UpdatingProfilePhotoState(event.photoFile));
-    OperationResult result = await profileUseCases.uploadProfilePhotoUseCase
+    ServiceResult result = await profileUseCases.uploadProfilePhotoUseCase
         .execute(file: event.photoFile, filename: event.filename);
 
     if (result.errorOccurred) {
@@ -78,7 +78,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       Emitter<UserProfileState> emit) async {
     emit(LoadingVerificationVideoCodeState());
 
-    OperationResult result =
+    ServiceResult result =
         await profileUseCases.generateVideoVerificationCodeUseCase.execute();
 
     if (result.errorOccurred) {
@@ -93,8 +93,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       Emitter<UserProfileState> emit) async {
     emit(UpdatingVerificationVideoState(event.videoFile));
 
-    OperationResult result =
-        await profileUseCases.uploadVerificationVideoUseCase.execute(
+    ServiceResult result = await profileUseCases.uploadVerificationVideoUseCase
+        .execute(
             file: event.videoFile, verificationCode: event.verificationCode);
     if (result.errorOccurred) {
       emit(UpdatingVerificationVideoFailedState(
@@ -108,7 +108,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       DeleteVerificationVideoEvent event,
       Emitter<UserProfileState> emit) async {
     emit(DeletingVerificationVideoState());
-    OperationResult result =
+    ServiceResult result =
         await profileUseCases.deleteVerificationVideoUseCase.execute();
 
     if (result.errorOccurred) {
@@ -123,7 +123,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       CreateUserProfileEvent event, Emitter<UserProfileState> emit) async {
     emit(CreatingUserProfileState());
 
-    OperationResult result = await profileUseCases.createProfileUseCase.execute(
+    ServiceResult result = await profileUseCases.createProfileUseCase.execute(
         name: event.name,
         userId: event.userId,
         profilePhotoUrl: event.profilePhotoUrl,
@@ -146,7 +146,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       SetDatingInfoEvent event, Emitter<UserProfileState> emit) async {
     emit(SettingDatingInfoState());
 
-    OperationResult result = await profileUseCases.setDatingInfoUseCase.execute(
+    ServiceResult result = await profileUseCases.setDatingInfoUseCase.execute(
         event.profile,
         event.datingPics,
         event.minAgePreference,
@@ -168,7 +168,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       UpdateUserProfileEvent event, Emitter<UserProfileState> emit) async {
     emit(UpdatingUserProfileState());
 
-    OperationResult result = await profileUseCases.updateUserProfileUseCase
+    ServiceResult result = await profileUseCases.updateUserProfileUseCase
         .execute(
             profile: event.profile,
             name: event.name,

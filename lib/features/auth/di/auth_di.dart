@@ -15,38 +15,37 @@ import 'package:redting/features/auth/presentation/state/auth_user_bloc.dart';
 ///  SINGLETON - only a single instance is created
 
 GetIt init() {
-  final GetIt authDiInstance = GetIt.instance;
+  final GetIt diInstance = GetIt.instance;
   //auth bloc
-  authDiInstance
-      .registerFactory(() => AuthUserBloc(authUseCases: authDiInstance()));
+  diInstance.registerFactory(() => AuthUserBloc(authUseCases: diInstance()));
 
   //auth useCases
-  authDiInstance.registerLazySingleton(() => AuthUseCases(
-      getAuthenticatedUser: authDiInstance(),
-      sendVerificationCodeUseCase: authDiInstance(),
-      signUserInUseCase: authDiInstance()));
+  diInstance.registerLazySingleton(() => AuthUseCases(
+      getAuthenticatedUser: diInstance(),
+      sendVerificationCodeUseCase: diInstance(),
+      signUserInUseCase: diInstance()));
 
   //get auth use case
-  authDiInstance.registerLazySingleton(
-      () => GetAuthenticatedUserCase(repository: authDiInstance()));
+  diInstance.registerLazySingleton(
+      () => GetAuthenticatedUserCase(repository: diInstance()));
 
   //get sendVerificationUseCase
-  authDiInstance.registerLazySingleton(
-      () => SendVerificationCodeUseCase(repository: authDiInstance()));
+  diInstance.registerLazySingleton(
+      () => SendVerificationCodeUseCase(repository: diInstance()));
 
   //get SignUserInUseCase
-  authDiInstance.registerLazySingleton(
-      () => SignUserInUseCase(repository: authDiInstance()));
+  diInstance
+      .registerLazySingleton(() => SignUserInUseCase(repository: diInstance()));
 
   //auth repository
-  authDiInstance.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
-      remoteAuth: authDiInstance(), localAuth: authDiInstance()));
+  diInstance.registerLazySingleton<AuthRepository>(() =>
+      AuthRepositoryImpl(remoteAuth: diInstance(), localAuth: diInstance()));
 
   //remote data source
-  authDiInstance.registerLazySingleton<RemoteAuthSource>(() => FireAuth());
+  diInstance.registerLazySingleton<RemoteAuthSource>(() => FireAuth());
 
   //local data source
-  authDiInstance.registerLazySingleton<LocalAuthSource>(() => AuthUserHive());
+  diInstance.registerLazySingleton<LocalAuthSource>(() => AuthUserHive());
 
-  return authDiInstance;
+  return diInstance;
 }

@@ -4,7 +4,7 @@ import 'package:redting/res/fonts.dart';
 import 'package:redting/res/theme.dart';
 
 class MainElevatedBtn extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback onClick;
   final bool showLoading;
   final String lbl;
   final String? loadingLbl;
@@ -12,7 +12,7 @@ class MainElevatedBtn extends StatelessWidget {
   final IconData? suffixIcon;
   const MainElevatedBtn(
       {Key? key,
-      required this.onPressed,
+      required this.onClick,
       required this.showLoading,
       required this.lbl,
       this.loadingLbl,
@@ -23,7 +23,7 @@ class MainElevatedBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: onClick,
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(primaryBg
               ? appTheme.colorScheme.primary

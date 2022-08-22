@@ -83,7 +83,7 @@ class _RateAppCardState extends State<RateAppCard> {
                   margin: const EdgeInsets.only(top: paddingMd),
                   constraints: const BoxConstraints(maxWidth: 200),
                   child: MainElevatedBtn(
-                      onPressed: () {
+                      onClick: () {
                         if (!widget.isSendingFeedback) {
                           widget.onSubmitFeedback(_rating, _feedback);
                         }

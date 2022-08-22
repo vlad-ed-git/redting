@@ -23,8 +23,15 @@ class HiveMatchingDataSource implements LocalMatchingDataSource {
   }
 
   @override
-  IceBreakerMessages? getIceBreakerMessages() {
-    return _iceBreakersHiveBox.get(iceBreakersKey);
+  Future<IceBreakerMessages?> getIceBreakerMessages() async {
+    try {
+      return _iceBreakersHiveBox.get(iceBreakersKey, defaultValue: null);
+    } catch (e) {
+      if (kDebugMode) {
+        print("========== getIceBreakerMessages $e ==========");
+      }
+      return null;
+    }
   }
 
   @override

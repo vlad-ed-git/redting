@@ -16,55 +16,52 @@ import 'package:redting/features/matching/domain/use_cases/sync_with_remote.dart
 import 'package:redting/features/matching/presentation/state/matches_listener/matches_listener_bloc.dart';
 import 'package:redting/features/matching/presentation/state/matching_bloc.dart';
 
-GetIt init(GetIt profileDiInstance) {
-  GetIt matchingDiInstance = GetIt.instance;
+GetIt init() {
+  GetIt diInstance = GetIt.instance;
 
-  matchingDiInstance
-      .registerFactory<MatchingBloc>(() => MatchingBloc(matchingDiInstance()));
+  diInstance.registerFactory<MatchingBloc>(() => MatchingBloc(diInstance()));
 
-  matchingDiInstance.registerFactory<MatchesListenerBloc>(
-      () => MatchesListenerBloc(matchingDiInstance()));
+  diInstance.registerFactory<MatchesListenerBloc>(
+      () => MatchesListenerBloc(diInstance()));
 
-  matchingDiInstance.registerLazySingleton<MatchingUseCases>(() =>
-      MatchingUseCases(
-          syncWithRemote: matchingDiInstance(),
-          fetchProfilesToMatch: matchingDiInstance(),
-          likeUserUseCase: matchingDiInstance(),
-          passOnUserUseCase: matchingDiInstance(),
-          sendUserDailyFeedback: matchingDiInstance(),
-          listenToMatchUseCase: matchingDiInstance(),
-          getThisUsersInfoUseCase: matchingDiInstance()));
+  diInstance.registerLazySingleton<MatchingUseCases>(() => MatchingUseCases(
+      syncWithRemote: diInstance(),
+      fetchProfilesToMatch: diInstance(),
+      likeUserUseCase: diInstance(),
+      passOnUserUseCase: diInstance(),
+      sendUserDailyFeedback: diInstance(),
+      listenToMatchUseCase: diInstance(),
+      getThisUsersInfoUseCase: diInstance()));
 
-  matchingDiInstance.registerLazySingleton<SyncWithRemote>(
-      () => SyncWithRemote(matchingDiInstance()));
+  diInstance.registerLazySingleton<SyncWithRemote>(
+      () => SyncWithRemote(diInstance()));
 
-  matchingDiInstance.registerLazySingleton<FetchProfilesToMatch>(
-      () => FetchProfilesToMatch(matchingDiInstance()));
+  diInstance.registerLazySingleton<FetchProfilesToMatch>(
+      () => FetchProfilesToMatch(diInstance()));
 
-  matchingDiInstance.registerLazySingleton<LikeUserUseCase>(
-      () => LikeUserUseCase(matchingDiInstance()));
+  diInstance.registerLazySingleton<LikeUserUseCase>(
+      () => LikeUserUseCase(diInstance()));
 
-  matchingDiInstance.registerLazySingleton<PassOnUserUseCase>(
-      () => PassOnUserUseCase(matchingDiInstance()));
+  diInstance.registerLazySingleton<PassOnUserUseCase>(
+      () => PassOnUserUseCase(diInstance()));
 
-  matchingDiInstance.registerLazySingleton<SendUserDailyFeedback>(
-      () => SendUserDailyFeedback(matchingDiInstance()));
+  diInstance.registerLazySingleton<SendUserDailyFeedback>(
+      () => SendUserDailyFeedback(diInstance()));
 
-  matchingDiInstance.registerLazySingleton<ListenToMatchUseCase>(
-      () => ListenToMatchUseCase(matchingDiInstance()));
+  diInstance.registerLazySingleton<ListenToMatchUseCase>(
+      () => ListenToMatchUseCase(diInstance()));
 
-  matchingDiInstance.registerLazySingleton<GetThisUsersInfoUseCase>(
-      () => GetThisUsersInfoUseCase(matchingDiInstance()));
+  diInstance.registerLazySingleton<GetThisUsersInfoUseCase>(
+      () => GetThisUsersInfoUseCase(diInstance()));
 
-  matchingDiInstance.registerLazySingleton<MatchingRepository>(() =>
-      MatchingRepositoryImpl(
-          profileDiInstance(), matchingDiInstance(), matchingDiInstance()));
+  diInstance.registerLazySingleton<MatchingRepository>(
+      () => MatchingRepositoryImpl(diInstance(), diInstance(), diInstance()));
 
-  matchingDiInstance.registerLazySingleton<RemoteMatchingDataSource>(
+  diInstance.registerLazySingleton<RemoteMatchingDataSource>(
       () => FireMatchingDataSource());
 
-  matchingDiInstance.registerLazySingleton<LocalMatchingDataSource>(
+  diInstance.registerLazySingleton<LocalMatchingDataSource>(
       () => HiveMatchingDataSource());
 
-  return matchingDiInstance;
+  return diInstance;
 }

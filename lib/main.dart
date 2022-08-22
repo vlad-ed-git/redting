@@ -28,11 +28,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appName,
-      darkTheme: darkTheme,
-      theme: lightTheme,
-      routes: appRoutes,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      child: MaterialApp(
+        title: appName,
+        darkTheme: darkTheme,
+        theme: lightTheme,
+        routes: appRoutes,
+      ),
     );
   }
 }

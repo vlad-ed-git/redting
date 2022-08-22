@@ -3,12 +3,12 @@ import 'package:redting/features/profile/data/utils/compressors/image_compressor
 import 'package:redting/features/profile/data/utils/compressors/video_compressor.dart';
 
 GetIt init() {
-  final GetIt coreDiInstance = GetIt.instance;
+  final GetIt diInstance = GetIt.instance;
 //compressor
-  coreDiInstance
+  diInstance
       .registerLazySingleton<ImageCompressor>(() => ImageCompressorImpl());
-  coreDiInstance
+  diInstance
       .registerLazySingleton<VideoCompressor>(() => VideoCompressorImpl());
 
-  return coreDiInstance;
+  return diInstance;
 }

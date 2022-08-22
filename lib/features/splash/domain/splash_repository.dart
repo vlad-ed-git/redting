@@ -14,7 +14,7 @@ class SplashRepository {
   );
 
   Future<CurrentUserStatus> fetchCurrentUserStatus() async {
-    OperationResult result = await authRepository.getCachedAuthUser();
+    ServiceResult result = await authRepository.getCachedAuthUser();
     if (result.errorOccurred) {
       //an error occurred
       return CurrentUserStatus(errorFetchingStatus: true);
@@ -23,7 +23,7 @@ class SplashRepository {
     if (result.data is! AuthUser) return CurrentUserStatus();
 
     AuthUser authUser = result.data as AuthUser;
-    OperationResult profileResult =
+    ServiceResult profileResult =
         await profileRepository.loadUserProfileFromRemoteIfExists();
     if (profileResult.errorOccurred) {
       //an error occurred

@@ -6,17 +6,20 @@ class OutlinedTxtField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final TextInputAction? txtInputAction;
+  final String? prefixText, hintTxt;
   const OutlinedTxtField(
       {Key? key,
       required this.controller,
       required this.keyboardType,
-      this.txtInputAction})
+      this.txtInputAction,
+      this.prefixText,
+      this.hintTxt})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     TextStyle? txtStyle = keyboardType == TextInputType.phone
-        ? appTextTheme.headline5?.copyWith(letterSpacing: 2)
+        ? appTextTheme.headline6?.copyWith(letterSpacing: 2)
         : appTextTheme.bodyText1;
     return TextField(
       textInputAction: txtInputAction ?? TextInputAction.next,
@@ -27,6 +30,12 @@ class OutlinedTxtField extends StatelessWidget {
       style: txtStyle,
       decoration: InputDecoration(
           isDense: true,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+          prefixStyle: txtStyle,
+          prefixText: prefixText,
+          hintText: hintTxt,
+          hintStyle: appTextTheme.caption?.copyWith(color: Colors.black),
           focusedBorder: _getBorder(isFocused: true),
           disabledBorder: _getBorder(isDisabled: true),
           errorBorder: _getBorder(isError: true),
@@ -48,7 +57,7 @@ class OutlinedTxtField extends StatelessWidget {
                 ? colorScheme.error
                 : Colors.black45;
     return OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(8),
         borderSide:
             BorderSide(color: borderColor, width: isFocused ? 2.0 : 1.0));
   }

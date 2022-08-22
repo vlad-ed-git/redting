@@ -3,19 +3,16 @@ import 'package:redting/features/splash/domain/splash_repository.dart';
 import 'package:redting/features/splash/domain/usecases/fetch_current_user.dart';
 import 'package:redting/features/splash/presentation/state/current_user_bloc.dart';
 
-void init(
-  GetIt authDiInstance,
-  GetIt profileDiInstance,
-) {
-  final GetIt splashDiInstance = GetIt.instance;
+void init() {
+  final GetIt diInstance = GetIt.instance;
   //auth bloc
-  splashDiInstance.registerFactory<CurrentUserBloc>(
-      () => CurrentUserBloc(splashDiInstance()));
+  diInstance
+      .registerFactory<CurrentUserBloc>(() => CurrentUserBloc(diInstance()));
 
   //useCases
-  splashDiInstance.registerLazySingleton<FetchCurrentUserUseCase>(
-      () => FetchCurrentUserUseCase(splashDiInstance()));
+  diInstance.registerLazySingleton<FetchCurrentUserUseCase>(
+      () => FetchCurrentUserUseCase(diInstance()));
 
-  splashDiInstance.registerLazySingleton<SplashRepository>(
-      () => SplashRepository(authDiInstance(), profileDiInstance()));
+  diInstance.registerLazySingleton<SplashRepository>(
+      () => SplashRepository(diInstance(), diInstance()));
 }

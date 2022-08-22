@@ -9,7 +9,7 @@ class AddDatingPicUseCase {
     this.repository,
   );
 
-  Future<OperationResult> execute(
+  Future<ServiceResult> execute(
       File photo, String filename, String userId) async {
     return await repository.addDatingPhoto(photo, filename, userId);
   }

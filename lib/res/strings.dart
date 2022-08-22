@@ -11,7 +11,7 @@ const loadingAuthUserErr =
 
 //login screen
 const loginTitle = "Login";
-const phoneNumberLbl = "Your mobile number";
+const yourPhoneNumberLbl = "Your mobile number";
 const phoneNumberErr = "Invalid mobile number";
 const unknownCodeSendingErr = "Failed to send verification code!";
 const loginBtn = 'Continue';
@@ -157,3 +157,37 @@ const updateProfileSuccess = "Your changes have been saved";
 const updateProfileFail = "Failed to save your changes";
 const updateProfileBtn = "Update Profile";
 const selectFromCountryLbl = "From Country";
+
+//settings
+const editDatingPreferencesSemanticLbl = "edit dating preferences";
+const blindDateSetupSemanticLbl = "click to setup a blind date";
+
+//blind date
+const blindDatesScreenNavTitle = "Blind Dates";
+const blindDateInstructionsStep1 = "Enter their phone numbers below.";
+const blindDateInstructionsStep2 = "Choose an ice-breaker";
+const blindDateInstructionsStep3 = "They will automatically be matched!";
+const friend1PhoneNumberLbl = "friend 1 phone number";
+const friend2PhoneNumberLbl = "friend 2 phone number";
+const blindDateHint =
+    "*You can only use this feature twice (i.e. connect 4 people at most). Blind Redting is anonymous, and the pair won't be notified that you connected them.";
+const blindDateSetupSubtitle = "Know a perfect match that should be redting?";
+const blindDateSetupTitle = "Blind Redting";
+const blindDateIceBreakerLbl = "a fun ice breaker";
+const blindDateIceBreakerHint = "suggest something fun, respectful, & playful";
+const blindDateSetupBtn = "Match Make";
+const blindDateSetupNotSignedIn =
+    "This user has not joined RedTing yet. Invite them to install the app";
+const blindDateSetupUnknownErr =
+    "Something went wrong! check your internet & retry";
+const blindDateSetupSuccess = "Awesome! You have setup a blind date.";
+const cannotSetupBlindDateWithSelfErr = ""
+    "You cannot match make yourself!";
+const phoneNumbersMissingCountryCodeErr =
+    "Please include a country code on each phone number";
+const funIceBreakerMissingErr =
+    "Please include a fun ice breaker. It's okay to be cheesy!";
+const phoneNumbersInvalid = "Please enter valid phone numbers";
+const cannotSetupBlindDateMaxReached =
+    "Looks like you have already matched 4 people!";
+const blindDateOtherUserName = "anon";

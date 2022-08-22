@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:redting/core/components/buttons/main_elevated_btn.dart';
 import 'package:redting/core/components/gradients/primary_gradients.dart';
-import 'package:redting/core/components/screens/screen_container.dart';
+import 'package:redting/core/components/screens/scaffold_wrapper.dart';
 import 'package:redting/core/components/snack/snack.dart';
 import 'package:redting/core/components/text/app_name_std_style.dart';
 import 'package:redting/core/components/text_input/unstyled_input_txt.dart';
@@ -94,7 +94,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               if (state is UserProfileInitialState) {
                 _onInitState(blocContext);
               }
-              return ScreenContainer(
+              return ScaffoldWrapper(
                   child: Scaffold(
                       extendBodyBehindAppBar: true,
                       appBar: AppBar(
@@ -237,7 +237,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       margin: const EdgeInsets.symmetric(horizontal: paddingMd),
       constraints: const BoxConstraints(maxWidth: 400),
       child: MainElevatedBtn(
-        onPressed: () {
+        onClick: () {
           _createProfile(buildContext);
         },
         lbl: createProfileBtn,
