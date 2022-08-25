@@ -20,7 +20,7 @@ doc/api/
 *.js.deps
 *.js.map
 .idea/workspace.xml
-.idea/workspace.xml
 .flutter-plugins-dependencies
-.idea/workspace.xml
-.idea/workspace.xml
+
+/key.properties
+
